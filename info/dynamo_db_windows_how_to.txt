@@ -1,0 +1,38 @@
+
+
+launch
+	d:\_clojure\dynamo:\> 
+	                      java "-Djava.library.path=./DynamoDBLocal_lib" -jar DynamoDBLocal.jar -sharedDb
+
+GUI
+	http://localhost:8000/shell/
+	control-space for suggestions
+
+// list tables
+dynamodb.listTables().eachPage(function(e, d) {
+    if (e) { ppJson(e); } else if (d) { ppJson(d); } });
+
+//list table
+var p = { TableName: 'try2'};
+docClient.scan(p, function(e, d) { if (e) ppJson(e); else ppJson(d);});
+
+
+// delete items
+dynamodb.deleteItem({
+    "TableName": "apple", 
+    "Key" : { "id":{ "N": "11"} }
+}, function (err, data) {
+    if (err) {  console.log('FAIL:  Error deleting item from dynamodb - ' + err); }
+    else { console.log("DEBUG:  deleteItem worked. "); }
+});
+
+// delete table
+var params = {
+    TableName: 'apple',
+};
+dynamodb.deleteTable(params, function(err, data) {
+    if (err) ppJson(err); // an error occurred
+    else ppJson(data); // successful response
+});
+
+

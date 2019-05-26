@@ -1,0 +1,6 @@
+
+
+
+for windows enviroment variables 
+	C:\> echo %MONGODB_USER_PASS_URI%	
+

@@ -1,0 +1,18 @@
+
+; NB this file should be up one folder outside the project to follow https://12factor.net/config
+
+{
+		:amazonica-localhost {:access-key "local-access"
+                        :secret-key "local-secret"
+                        :endpoint   "http://localhost:8000"}
+
+  :mongolabs-heroku {
+									 :MONGODB_USER_PASS_URI "mongodb://heroku_abcedfgh:ijklmnopqrstuvwxyz12345678@abcdefgh.mlab.com:12345/heroku_abcdefgh"
+  }
+
+  :mongolabs-localhost {
+	        :MONGODB_USER_PASS_URI "mongodb://localhost:27017/local"
+  }   
+		   
+}
+

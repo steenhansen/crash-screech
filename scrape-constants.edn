@@ -1,0 +1,32 @@
+
+
+
+
+
+{
+
+:cron-seconds 1000
+:cron-run-always false     
+:cron-save-db false
+:cron-read-real false
+
+
+
+
+:error-length 55
+
+:db-table-name  "try8"
+
+:config-suffix ".config.edn"
+
+
+
+
+  :the-check-pages [
+       { :check-page "www.sffaudio.com"                :enlive-keys[:article :div.blog-item-wrap]  :count-at-least 5}
+  	  { :check-page "sffaudio.herokuapp.com_rsd_rss"  :enlive-keys[:item]                         :count-at-least 5}
+  					
+  ]
+
+
+}
