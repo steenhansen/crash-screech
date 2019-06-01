@@ -12,8 +12,32 @@
                   [clojure.java-time "0.3.2"]
                   [clj-http "3.10.0"]
                   [compojure "1.6.1"]
-                   [ring/ring-jetty-adapter "1.4.0"]
-                   [enlive "1.1.6"]
+
+
+
+
+
+
+
+
+                   ;[ring/ring-jetty-adapter "1.4.0"]
+                 
+
+
+
+
+
+
+
+
+
+
+                  [enlive "1.1.6"]
+
+                  [ring "1.6.3"]
+     [net.cgrand/moustache "1.2.0-alpha2"]
+
+                   [com.draines/postal "2.0.3"]
                                         ]
   :main ^:skip-aot sffaudio.web-stat
   :target-path "target/%s"

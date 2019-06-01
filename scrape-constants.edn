@@ -6,8 +6,8 @@
 {
 
 :cron-seconds 1000
-:cron-run-always false     
-:cron-save-db false
+:cron-run-always true     
+:cron-save-db false              ;; not used, as it is injected in (cron-init-2)
 :cron-read-real false
 
 
@@ -15,11 +15,14 @@
 
 :error-length 55
 
-:db-table-name  "try8"
+:db-table-name  "t1"        ; amazondb 3 chars
+
+
+
 
 :config-suffix ".config.edn"
 
-
+:server-port 3000
 
 
   :the-check-pages [

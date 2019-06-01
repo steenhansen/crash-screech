@@ -25,16 +25,29 @@
               environment-val ( System/getenv str-name)]]
       {env-key environment-val}))
 
-( defn the-project-name [config-suffix]
-  ( str "../"
+
+( defn project-file-name [config-suffix]
+   (str 
     ( -> (aquire-project-file) 
          (clj-str/split   #"\.")
         (last)
         )
-    config-suffix ) )           
+    config-suffix )  )
+
+( defn read-project-file [config-suffix]
+   (let [config-file-name (project-file-name config-suffix)
+         outside-passwords ( str "../" config-file-name)  
+         inside-passwords ( str "" config-file-name)]
+    (try 
+ 					(edn-read/load-file outside-passwords)
+ 					(catch Exception e 
+ 					     (println "Warning missing " outside-passwords " file, now trying " inside-passwords)
+  					    (try 
+ 					         (edn-read/load-file inside-passwords)
+               (catch Exception e (str " Missing cofig file: " inside-passwords (.getMessage e))))))))           
 
  (defn load-config [start-args config-suffix]
-   ( let [ config-vars (edn-read/load-file (the-project-name config-suffix))       ]
+   ( let [ config-vars (read-project-file config-suffix)       ]
 														(if (= 0 (count start-args))
 																			(throw (Exception. " NO DB-CLIENT first run arg"))
 

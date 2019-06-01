@@ -1,6 +1,6 @@
 
 
-
+(load "home-page")  
 ;; mongolabs-build
 (defn mongolabs-create [mongolabs-config my-collection pages-to-check error-length]     
 
@@ -32,28 +32,21 @@
 							 last-string (last date-vector)
         last-number (read-string last-string) 
 							 last-plus1 (+ last-number 1)
+        last-padded (left-pad last-plus1 2)
         but-last (pop date-vector)
-        plus1-vector (conj   but-last last-plus1)
+        plus1-vector (conj   but-last last-padded)
         date-plus1   (clj-str/join "-" plus1-vector)
     ]
     date-plus1))
 
-(comment  ((:begins-all my-db-obj) "2019")         )
-(defn begins-all-mongolabs 
-  " ((:date-begins-amazonica my-db-obj) ``2019``)                  
-				((:the-date-begins my-db-obj) ``2019-05``)
-				((:the-date-begins my-db-obj) ``2019-05-18``)
-  "
- [begins-with]
+(comment  "" ((:begins-all my-db-obj) "2019-05")         )
+(defn begins-all-mongolabs "" [begins-with]
     (let [ date-plus1(date-plus-1 begins-with) ]
+    (println "mon" begins-with "---" date-plus1)
        (mong-coll/find-maps db my-collection {:_id { $gte begins-with $lt date-plus1 }}) ))
 
-(defn begins-one-mongolabs 
-  " ((:date-begins-amazonica my-db-obj) ``2019``)                 
-				((:the-date-begins my-db-obj) ``2019-05``)
-				((:the-date-begins my-db-obj) ``2019-05-18``)
-  "
- [begins-with page-to-check]
+(comment  "year of www.sffaudio" ((:date-begins-amazonica my-db-obj) "2019" "www.sffaudio.com")         )
+(defn begins-one-mongolabs "" [begins-with page-to-check]
     (let [  date-plus1   (date-plus-1 begins-with) ]
 	         (mong-coll/find-maps db my-collection { $and [{:_id { $gte begins-with $lt date-plus1 }}
                                                          {:check-url page-to-check}] })))

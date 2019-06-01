@@ -6,10 +6,10 @@
 )
 
 
-(defn leftpad
+(defn left-pad
   "Left pad string with spaces, making it at least len long."
   [mystr len]
-  (format (str "%" len "s") mystr))
+  (format "%02d" mystr))
 
 
 
@@ -18,8 +18,8 @@
 	(let [last-year (- the-year 1)
 						 last-month (- the-month 1) 
 
-       the-month-pad (leftpad 2 the-month)
-       last-month-pad (leftpad 2 last-month)
+       the-month-pad (left-pad the-month 2)
+       last-month-pad (left-pad last-month 2)
 						 ] 
      ( if (= 0 last-month)
           [(str last-year "-12") (str the-year "-01")] 
@@ -28,16 +28,19 @@
 
 
 
-(comment  "to check" (data-2-months my-db-obj 2019 5)         )
+(comment  "all pages 2019-04 and 2019-05" (data-2-months my-db-obj 2019 5)         )
 (defn data-2-months [my-db-obj the-year the-month ]
  ( let [ [start-ym end-ym] (last-2-months the-year the-month)
 
 
-          start-data ((:begins-all my-db-obj)  start-ym) 
+          start-data ((:begins-all my-db-obj)  start-ym)                   ;;;   ({map})
           end-data ((:begins-all my-db-obj)  end-ym) 
-       ]   
-       (println "asdfasdf" end-ym)
-          end-data
+          months-2-data (merge start-data end-data)
+              sorted-matches (sort-by :_id    months-2-data)              ;;;; 	qbert amazonica does not use :_id
+          ]
+       
+      (println "asdfasdf" start-ym "xxx" end-ym "iii")
+          sorted-matches
     )
 
 

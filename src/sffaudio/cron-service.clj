@@ -10,43 +10,7 @@
 
 
 
-(def cron--job--queue (atom []))
-
-  (defn add-cron-job-to-queue [new-cron-job]
-  (swap! cron--job--queue conj new-cron-job )
-)
-
-
-(defn stop-cron-jobs []
-(let [cron-job-queue @cron--job--queue]
-(println "-------------------------------")	
-(println "cron-job-queue" (type cron-job-queue))	
-(println "*******************************")	
-
-						( doseq [ cron-job cron-job-queue ]
-											(println "KILLING - " cron-job) 
-	          (at-at/stop cron-job) ) )
-)
-
- (defn ensure-one-cron-job []
- (println "@cron--job--queue 1111 " @cron--job--queue)
- 		   ( if (= (count @cron--job--queue) 2)
-																		      ( let [  old-cron (first @cron--job--queue)
-                                 new-cron (second @cron--job--queue)
-																		                 ;return-swap (swap! cron--job--queue second )
-																		                 ] 
-																		                 (reset! cron--job--queue [new-cron])
-																		              ;   (println "-------------------------------")	
-                          (println "@cron--job--queue 2222 " @cron--job--queue)
-;(println "*******************************")	
-;(println "-------------------------------")																		                 
-;(println "old-cron" old-cron)																		                 
-;(println "return-swap" return-swap)																		                 
-;(println "@cron--job--queue" @cron--job--queue)																		                 
-																		               (at-at/stop old-cron)
-																		      )
-																		   )
-)
+(load "singular-service")
 
 
 
@@ -112,7 +76,7 @@
               (slurp (str "./test/" check-page ))))
 
 (defn scrape-pages [my-db-obj pages-to-check cron-save-db cron-read-real time-fn] 
-     (ensure-one-cron-job)
+(println "i be scraping")
      (doseq [ check-page-obj pages-to-check
             :let  [ {check-page :check-page enlive-keys :enlive-keys count-at-least :count-at-least} check-page-obj
 				    start-timer (System/currentTimeMillis)
@@ -130,16 +94,20 @@
 				   	( if cron-save-db
 				       	 ((:put-item my-db-obj) check-record11 ))))
 
-(defn cron-type [cron-run-always cron-seconds the-cron-func my-pool]     
+(defn cron-type [cron-run-always cron-seconds the-cron-func my-pool]   
+(println "cron-run-always" cron-run-always)  
    (if cron-run-always
         (at-at/every cron-seconds the-cron-func my-pool)
         (at-at/after cron-seconds the-cron-func my-pool)))
 
-(defn start-cron [my-db-obj pages-to-check cron-info] 
+
+
+
+(defn start-cron-2 [my-db-obj cron-job cron-info] 
   (let [ {cron-seconds :cron-seconds cron-run-always :cron-run-always cron-save-db :cron-save-db
-          cron-read-real :cron-read-real} cron-info ] 
+          cron-read-real :cron-read-real pages-to-check :pages-to-check} cron-info ] 
 	   (defn the-cron-func [] 
-	        (scrape-pages my-db-obj pages-to-check cron-save-db cron-read-real instant-time-fn))											 					
+	        (cron-job my-db-obj pages-to-check cron-save-db cron-read-real instant-time-fn))											 					
 
   (let [ my-pool (at-at/mk-pool) 
   
@@ -147,10 +115,28 @@
   
 						(defn stop-cron []
 								(try (at-at/stop-and-reset-pool! my-pool)
-             (catch Exception e (str " -- caught exception: " )))      ;; (stop-cron)
+             (catch Exception e (str " -- caught exception: " )))    
 								 "cron job stopped via my-pool"		)
 
     at-at-stop-ref ))   )   
 
 
+
+
+(defn cron-init-2 [constant-file start-args cron-job cron-info]
+         (defn kill-cron [cron-ref] 
+         (at-at/stop cron-ref)
+          (println "just tried to stop " cron-ref)
+         )
+
+
+         (off-service cron-job kill-cron)    
+
+
+  ( let [  [my-db-obj] ( db-handle constant-file start-args)
+    new-cron-ref  (start-cron-2 my-db-obj cron-job cron-info ) ]    
+    (add-cron-job-to-queue2 new-cron-ref cron-job kill-cron)
+  )	 
+  "cron-init-2 !!!"
+)
 

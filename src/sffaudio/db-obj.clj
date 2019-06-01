@@ -32,6 +32,8 @@
 
            put-item (get  my-db-funcs :put-item) ]
 
+
+																			(comment  "" ((:put-many my-db-obj) my-test-objs-a)         )
 																		 (defn put-many [url-checks] 
 																		 							( doseq [ url-check url-checks ] 
 																		         ( put-item url-check ) ) )

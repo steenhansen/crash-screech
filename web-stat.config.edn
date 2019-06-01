@@ -2,8 +2,8 @@
 ; NB this file should be up one folder outside the project to follow https://12factor.net/config
 
 {
-		:amazonica-localhost {:access-key "local-access"
-                        :secret-key "local-secret"
+		:amazonica-localhost {:access-key "local-access-inside"
+                        :secret-key "local-secret-inside"
                         :endpoint   "http://localhost:8000"}
 
   :mongolabs-heroku {

@@ -72,7 +72,7 @@
                                            {:check-url {:attribute-value-list [page-to-check]      :comparison-operator "EQ"}
                                              :the-date {:attribute-value-list [begins-with] :comparison-operator "BEGINS_WITH"}})
 								     					  plain-items (get page-matches :items) ]
-								     					;  (println "plain items" page-to-check ":::" plain-items)
+								     					  (println "9999999999999999999999plain items" page-to-check ":::" begins-with)
 								       plain-items) )
 
 (defn begins-all-amazonica 
