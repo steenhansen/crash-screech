@@ -6,10 +6,15 @@
 )
 
 
+
+;;; this stuff should be in check-sites.clj
+
 (defn left-pad
   "Left pad string with spaces, making it at least len long."
   [mystr len]
   (format "%02d" mystr))
+
+
 
 
 
@@ -36,7 +41,17 @@
           start-data ((:begins-all my-db-obj)  start-ym)                   ;;;   ({map})
           end-data ((:begins-all my-db-obj)  end-ym) 
           months-2-data (merge start-data end-data)
-              sorted-matches (sort-by :_id    months-2-data)              ;;;; 	qbert amazonica does not use :_id
+              
+;              sorted-matches (sort-by :_id    months-2-data)              ;;;; 	qbert amazonica does not use :_id
+              sorted-matches (sort-by :check-date    months-2-data)              ;;;;  both have check-date
+
+
+
+;;;;; WE SHOULD NEVER HAVE TO SORT BY :check-date as we will show 2 different tables, this-month & last-month
+;;;;; this function should return [this-month last-month]
+
+
+
           ]
        
       (println "asdfasdf" start-ym "xxx" end-ym "iii")

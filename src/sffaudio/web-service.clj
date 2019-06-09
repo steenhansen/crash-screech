@@ -5,35 +5,15 @@
   (:require [monger.core :as mong-core])           
   (:require [monger.collection :as mong-coll])   
   (:require [monger.operators :refer :all])
-  (:require [clj-http.client :as httpsff-client])     
   (:require [java-time :as jav-time])             
   (:require [overtone.at-at :as at-at])       
- ; (:require [compojure.core :refer [defroutes GET]] )
-  
-
-   (:require [compojure.core :refer [routes GET POST PUT DELETE ANY]])
-    (:require         [compojure.route :as route])
-    (:require         [compojure.handler :as handler])
-
   (:require [ring.adapter.jetty :as ring])
   (:require [net.cgrand.enlive-html :as html])
-
-
- (:require
-   [ring.adapter.jetty :refer [run-jetty]]
-   [ring.middleware.reload :refer [wrap-reload]])
-
- (:use [net.cgrand.moustache :only [app]] )
-
- 
-(:require  [ring.middleware.reload :as ring-reload] )
-
+  (:require  [ring.middleware.reload :as ring-reload] )
 )
 
 
 (load "singular-service")
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -47,7 +27,18 @@
 
 (defn request-handler [request]
 
- ( let [the-str (friends-list "Chas" ["Christophe" "Brian"] "programmer") ] 
+ ( let [the-str (friends-list "Chas" ["Christophe2" "Brian"] "programmer") ] 
+  (println (:uri request))
+  {:status 200
+   :headers {"Content-Type" "text/html"}
+   :body the-str })
+ )
+
+
+
+(defn request-handler-extra [request]
+
+ ( let [the-str (friends-list "Chas" ["Bobbereno2" "Vinnie"] "programmer") ] 
   (println (:uri request))
   {:status 200
    :headers {"Content-Type" "text/html"}
@@ -64,36 +55,13 @@
   (let [reload-jetty! (jetty-reloader ["src"] true)]
      (reload-jetty!)))
 
+(defn kill-web [web-ref] 
+  (println "Killing web-service:" web-ref)
+  (.stop web-ref))
 
-
-(defn web-init-2 [ constant-file ]
-
-    (defn kill-web-fn [web-ref] 
-         (.stop web-ref) )
-
-
-
-
-  (off-service "THE-WEB-SERVICE" kill-web-fn)
+(defn web-init [server-port request-hander]
+  (remove-service request-hander kill-web)
   (web-reload)
-  ( let [ const-valss (load-constants constant-file)
- 		 	     server-port (get const-valss :server-port)
-          an-web-server (ring/run-jetty request-handler {:port server-port :join? false})]
+  (let [web-server (ring/run-jetty request-hander {:port server-port :join? false}) ]
+     (add-service request-hander kill-web web-server)))
 
-
- ; (println "server-port" server-port)
-       (add-cron-job-to-queue2 an-web-server "THE-WEB-SERVICE" kill-web-fn)
-
-					(defn stop-web []
-								(try (kill-web-fn an-web-server)
-             (catch Exception e (str " -- caught exception: " )))    
-								 "web-server job stopped "		)
-
-
-       )
-
-
-
-
-  "web-service"
-)

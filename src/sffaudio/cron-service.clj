@@ -1,24 +1,24 @@
 
 
+;; q*bert
+
+
 (ns sffaudio.web-stat
   (:require [overtone.at-at :as at-at])       
   (:require [java-time :as jav-time])             
  (:require [net.cgrand.enlive-html :as html])
   (:require [clojure.string :as clj-str])   
+    (:require [clj-http.client :as http-client])    
 )
-
-
-
 
 (load "singular-service")
 
 
+(def ^:const CRON-SECONDS 1000)          ; cron-milliseconds
+(def ^:const CRON-CONTINUOUS true)       
+(def ^:const CRON-SAVE false)      
+(def ^:const CRON-READ false)   
 
-
-;; "2015-09-26T05:25:48.667Z"
-(defn instant-time-fn []
-  (str (jav-time/instant) )
-)
 
 (defn get-the-name [accum item]
      (let [ [head-name head-value] item]
@@ -26,15 +26,10 @@
 								       head-value 
 								       accum )))
 
-(defn test-page-bytes-fn [_]
-    (rand-int 30))
-
-
-
-(defn matching-css-sections[check-html css-match]    
+(defn matching-css-sections[pages-html css-match]    
     (map html/text
        (html/select
-             (-> check-html 
+             (-> pages-html 
              java.io.StringReader. 
              html/html-resource)
               css-match))
@@ -44,15 +39,14 @@
     ( let [actual-sections (matching-css-sections the-html css-match)
            actual-matches (count actual-sections)]
    (if (> actual-matches wanted-matches)
-       { :actual-matches actual-matches :page-ok true}    
-        { :actual-matches actual-matches :page-ok false}
+       { :actual-matches actual-matches :the-status true}    
+        { :actual-matches actual-matches :the-status false}
         )
    )
 )
 
-(defn remove-tags [the-html page-ok]
-  (if page-ok "ok"
- ; (if false "ok"
+(defn remove-tags [the-html the-status]
+  (if the-status "ok"
    (let [ no-head (clj-str/replace the-html #"<head[\w\W]+?</head>" "")
           no-styles (clj-str/replace no-head #"<style[\w\W]+?</style>" "")
           no-js (clj-str/replace no-styles #"<script[\w\W]+?</script>" "")
@@ -63,80 +57,106 @@
       no-multi-spaces
   )))
 
-(defn test-time-fn []
-  "2019-05-20T01:54:03.841Z" )
-
 (defn real-slash-url [check-page]
   (clj-str/replace check-page #"_" "/"))
 
-(defn read-html [cron-read-real check-page]
-      ( if cron-read-real
+(defn read-htmlX [check-page]
+      ( if CRON-READ
                 (let [ under-to-slashes (clj-str/replace check-page #"_" "/") ]
-                         (:body (clj-http.client/get (str "https://" under-to-slashes))))
-              (slurp (str "./test/" check-page ))))
+                         (:body (http-client/get (str "https://" under-to-slashes))))
+              (slurp (str "./test/" check-page ))
 
-(defn scrape-pages [my-db-obj pages-to-check cron-save-db cron-read-real time-fn] 
+
+              )
+      )
+
+(defn scrape-pages [my-db-obj pages-to-check time-fn] 
 (println "i be scraping")
      (doseq [ check-page-obj pages-to-check
-            :let  [ {check-page :check-page enlive-keys :enlive-keys count-at-least :count-at-least} check-page-obj
-				    start-timer (System/currentTimeMillis)
-				    the-html (read-html cron-read-real check-page)
-				    {actual-matches :actual-matches page-ok :page-ok }			 (enough-sections? the-html enlive-keys count-at-least)
-				    tag-free (remove-tags  the-html page-ok)
-				    end-timer (System/currentTimeMillis)
-				    time-spent (- end-timer start-timer)
-				    url-with-slash (real-slash-url check-page)
-				    check-record11 { :check-url url-with-slash
-				                    	:the-date (time-fn)
-					                    :the-html tag-free
-					                    :page-ok page-ok
-					                    :time-took time-spent } ] ] 
-				   	( if cron-save-db
-				       	 ((:put-item my-db-obj) check-record11 ))))
+            :let  [ {check-page :check-page enlive-keys :enlive-keys at-least :at-least} check-page-obj
+				                start-timer (System/currentTimeMillis)
+				  
+				    the-html (read-htmlX check-page)
+				  
+				   {actual-matches :actual-matches the-status :the-status }			 (enough-sections? the-html enlive-keys at-least)
+				  
+				     tag-free (remove-tags  the-html the-status)
+				     end-timer (System/currentTimeMillis)
+				     time-spent (- end-timer start-timer)
+				     url-with-slash (real-slash-url check-page)
+				     check-record { :the-url url-with-slash
+				                     	:the-date (time-fn)
+					                     :the-html tag-free
+					                     :the-status the-status
+					                     :the-time time-spent } 
+					                     ] 
+					                     ] 
+				   	 ( if CRON-SAVE
+				        	 ((:put-item my-db-obj) check-record ))
+				    )
 
-(defn cron-type [cron-run-always cron-seconds the-cron-func my-pool]   
-(println "cron-run-always" cron-run-always)  
-   (if cron-run-always
-        (at-at/every cron-seconds the-cron-func my-pool)
-        (at-at/after cron-seconds the-cron-func my-pool)))
-
-
-
-
-(defn start-cron-2 [my-db-obj cron-job cron-info] 
-  (let [ {cron-seconds :cron-seconds cron-run-always :cron-run-always cron-save-db :cron-save-db
-          cron-read-real :cron-read-real pages-to-check :pages-to-check} cron-info ] 
-	   (defn the-cron-func [] 
-	        (cron-job my-db-obj pages-to-check cron-save-db cron-read-real instant-time-fn))											 					
-
-  (let [ my-pool (at-at/mk-pool) 
-  
-     at-at-stop-ref (cron-type cron-run-always cron-seconds the-cron-func my-pool) ]
-  
-						(defn stop-cron []
-								(try (at-at/stop-and-reset-pool! my-pool)
-             (catch Exception e (str " -- caught exception: " )))    
-								 "cron job stopped via my-pool"		)
-
-    at-at-stop-ref ))   )   
+     )
 
 
 
 
-(defn cron-init-2 [constant-file start-args cron-job cron-info]
-         (defn kill-cron [cron-ref] 
-         (at-at/stop cron-ref)
-          (println "just tried to stop " cron-ref)
-         )
 
 
-         (off-service cron-job kill-cron)    
 
 
-  ( let [  [my-db-obj] ( db-handle constant-file start-args)
-    new-cron-ref  (start-cron-2 my-db-obj cron-job cron-info ) ]    
-    (add-cron-job-to-queue2 new-cron-ref cron-job kill-cron)
-  )	 
-  "cron-init-2 !!!"
+
+;; q*bert   above
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(defn scrape-pages-extra [my-db-obj pages-to-check time-fn] 
+  (println "i be scraping EXTRA")
 )
+
+(defn cron-type [cron-func my-pool]   
+   (if CRON-CONTINUOUS
+        (at-at/every CRON-SECONDS cron-func my-pool)
+        (at-at/after CRON-SECONDS cron-func my-pool)))   ;after
+
+  (defn kill-cron [cron-ref] 
+         (println "Killing cron-service:" cron-ref)
+         (at-at/stop cron-ref))
+
+(defn start-cron [my-db-obj cron-job pages-to-check] 
+
+	 (defn cron-func [] 
+	   (cron-job my-db-obj pages-to-check instant-time-fn))											 					
+
+  (let [thread-pool (at-at/mk-pool) 
+        scheduled-task (cron-type cron-func thread-pool)]
+     					
+    (defn remove-crons []
+			   (println "Removing all cron-services")
+					 (try (at-at/stop-and-reset-pool! thread-pool)
+        (catch Exception e (println " -- caught exception " (.getMessage e)))))
+
+  scheduled-task))
+
+(defn cron-init[cron-job table-name pages-to-check start-args config-file]
+  (let [ my-db-obj (db-handle table-name pages-to-check start-args config-file)
+        scheduled-task (start-cron my-db-obj cron-job pages-to-check)]
+    (remove-service cron-job kill-cron)    
+    (add-service cron-job kill-cron scheduled-task)))
 

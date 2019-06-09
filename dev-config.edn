@@ -5,12 +5,11 @@
 		:amazonica-localhost {:access-key "local-access-inside"
                         :secret-key "local-secret-inside"
                         :endpoint   "http://localhost:8000"}
-
-  :mongolabs-heroku {
+  :monger-heroku {
 									 :MONGODB_USER_PASS_URI "mongodb://heroku_abcedfgh:ijklmnopqrstuvwxyz12345678@abcdefgh.mlab.com:12345/heroku_abcdefgh"
   }
 
-  :mongolabs-localhost {
+ :monger-localhost {
 	        :MONGODB_USER_PASS_URI "mongodb://localhost:27017/local"
   }   
 		   
