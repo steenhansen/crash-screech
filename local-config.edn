@@ -1,0 +1,52 @@
+
+
+{
+
+
+; (-main "./local-config.edn" "amazonica")
+		:amazonica-localhost {:access-key "local-access"
+                        :secret-key "local-secret"
+                        :endpoint   "http://localhost:8000"}
+
+
+
+
+; (-main "./local-config.edn" "monger")
+ :monger-localhost {
+	        :MONGODB_URI "mongodb://localhost:27017/local"
+	        :PORT 8082
+  }
+
+
+
+; C:\> SET MONGODB_URI="mongodb://localhost:27017/local"
+; C:\> echo %MONGODB_URI%	
+; (System/getenv "%MONGODB_URI%")
+
+; C:\> SET PORT="8080"
+; C:\> echo %PORT%	
+; (System/getenv "%PORT%")
+
+; C:\> SET MONGODB_URI=          // to unset
+
+
+; (-main "monger" "localhost")            ; port 8080         port = process.env.PORT || 80
+
+; (System/getenv "MY_VAR")
+
+
+	
+; Environment Variables
+;  User variables for Me
+;   Variable     Value
+;    MONGODB_URI mongodb://localhost:27017/local
+;    PORT        8080
+
+; (System/getenv "MONGODB_URI")
+; (System/getenv "PORT")
+
+
+
+
+}
+

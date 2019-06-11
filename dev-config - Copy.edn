@@ -1,0 +1,51 @@
+
+; NB this file should be up one folder outside the project to follow https://12factor.net/config
+
+{
+		:amazonica-localhost {:access-key "local-access-inside"
+                        :secret-key "local-secret-inside"
+                        :endpoint   "http://localhost:8000"}
+  :monger-heroku {
+									 :MONGODB_URI "mongodb://heroku_abcedfgh:ijklmnopqrstuvwxyz12345678@abcdefgh.mlab.com:12345/heroku_abcdefgh"
+  }
+
+; C:\> SET MONGODB_URI="mongodb://localhost:27017/local"
+; C:\> echo %MONGODB_URI%	
+; (System/getenv "%MONGODB_URI%")
+
+; C:\> SET PORT="8080"
+; C:\> echo %PORT%	
+; (System/getenv "%PORT%")
+
+; C:\> SET MONGODB_URI=          // to unset
+
+
+; (-main "monger" "localhost")            ; port 8080         port = process.env.PORT || 80
+
+; (System/getenv "MY_VAR")
+
+
+ :monger-localhost {
+	        :MONGODB_URI "mongodb://localhost:27017/local"
+	        :PORT 8082
+  }   
+	
+; Environment Variables
+;  User variables for Me
+;   Variable     Value
+;    MONGODB_URI mongodb://localhost:27017/local
+;    PORT        8080
+
+; (System/getenv "MONGODB_URI")
+; (System/getenv "PORT")
+
+	:autodyne-heroku{:AUTODYNE_AWS_ACCESS_KEY_ID "ABCDEFGHIJKLMNOPQRST"
+                              :AUTODYNE_AWS_DEFAULT_REGION "us-east-1"
+                              :AUTODYNE_AWS_SECRET_ACCESS_KEY "abcdefghijklmnopqrstuvwxyz1234567890ABCD"
+							  :AUTODYNE_TABLE_NAME "autodyne-float-12345"
+							  } 
+
+
+
+}
+

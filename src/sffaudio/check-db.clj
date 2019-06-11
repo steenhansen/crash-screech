@@ -17,6 +17,8 @@
 (defn get-db-conn [db-conn-params]
   (let [{db-type :db-type db-location :db-location the-config :the-config 
  	       table-name :table-name pages-to-check :pages-to-check } db-conn-params] 
+
+
     (try 
  					(case db-type :amazonica (dynamo-build the-config  table-name pages-to-check) 
                        :monger (mongolabs-build the-config  table-name pages-to-check))
@@ -30,6 +32,8 @@
            db-conn-params { :db-type db-type :db-location db-location :the-config the-config 
  	                          :table-name table-name :pages-to-check pages-to-check }
            my-db-funcs (get-db-conn db-conn-params)]
+
+
       { :delete-table (get my-db-funcs :delete-table) 
              :get-all (get my-db-funcs :get-all)     
              :get-url (get my-db-funcs :get-url)

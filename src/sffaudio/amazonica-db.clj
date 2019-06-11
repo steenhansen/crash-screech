@@ -73,6 +73,10 @@
   "
   (defn get-all-amazonica [begins-with]
 								
+
+
+
+
 				(defn get-the-pages [items-vector check-page-obj]
 				  (let [{check-page :check-page } check-page-obj
 								    plain-items (get-url-amazonica begins-with check-page)]
@@ -81,6 +85,9 @@
     (let [all-matches (reduce get-the-pages [] pages-to-check) 
           sorted-matches (sort-by :check-url all-matches)]
       sorted-matches))
+
+
+
 
 		(defn delete-table-amazonica []         
     (aws-dyn/delete-table

@@ -17,7 +17,7 @@
 [me.raynes/fs "1.4.6"]
 
 
-
+[environ "1.1.0"]
 
 
                    ;[ring/ring-jetty-adapter "1.4.0"]
@@ -39,7 +39,12 @@
 
                    [com.draines/postal "2.0.3"]
                                         ]
-  :main ^:skip-aot sffaudio.web-stat
+
+                                        :uberjar-name "sffaudio-web-stat-standalone.jar"
+
+
+  ;:main ^:skip-aot sffaudio.web-stat
+  :main sffaudio.web-stat
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
 
