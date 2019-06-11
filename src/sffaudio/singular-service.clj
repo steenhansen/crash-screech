@@ -4,7 +4,11 @@
 
 (defn- func-name
   [fn-object]
-  (let [long-name (clojure.repl/demunge (str fn-object))
+;;  (let [long-name (clojure.repl/demunge (str fn-object))
+
+
+
+  (let [long-name (clj-main/demunge (str fn-object))
         short-name (second (re-find #"(.*\/[^@]*)" long-name))]
     (if short-name short-name long-name)))
 

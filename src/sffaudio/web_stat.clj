@@ -6,7 +6,12 @@
 (ns sffaudio.web-stat
   (:gen-class)
 	 (:require [amazonica.aws.dynamodbv2 :as aws-dyn])  
-  (:require [clojure.string :as clj-str])         
+  (:require [clojure.string :as clj-str])    
+
+(:require [clojure.main :as clj-main])    
+
+
+
   (:require [edn-config.core :as edn-read])  
 
 

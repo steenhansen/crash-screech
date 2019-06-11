@@ -31,7 +31,6 @@
 
 
 
-
                   [enlive "1.1.6"]
 
                   [ring "1.6.3"]
@@ -40,8 +39,13 @@
                    [com.draines/postal "2.0.3"]
                                         ]
 
-                                        :uberjar-name "sffaudio-web-stat-standalone.jar"
+:plugins [[lein-heroku "0.5.3"]]
 
+:heroku {:app-name "your-heroku-app-name"}
+
+
+                                        :uberjar-name "sffaudio-web-stat-standalone.jar"
+ :min-lein-version "2.0.0"
 
   :main ^:skip-aot sffaudio.web-stat
   :target-path "target/%s"
