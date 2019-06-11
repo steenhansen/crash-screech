@@ -43,8 +43,7 @@
                                         :uberjar-name "sffaudio-web-stat-standalone.jar"
 
 
-  ;:main ^:skip-aot sffaudio.web-stat
-  :main sffaudio.web-stat
+  :main ^:skip-aot sffaudio.web-stat
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
 
