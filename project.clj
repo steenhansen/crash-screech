@@ -47,7 +47,12 @@
 [lein-tar "3.2.0"]
            [lein-heroku "0.5.3"] ]
 
-:heroku {:app-name "your-heroku-app-name"}
+:heroku {
+  :app-name "your-heroku-app-name"
+  :jdk-version "1.8"
+  :include-files ["target/uberjar/sff-audio-web-stat-standalone.jar"]
+  :process-types { "web" "java -jar target/uberjar/sff-audio-web-stat-standalone.jar" }
+ }
 
 
                                         :uberjar-name "sff-audio-web-stat-standalone.jar"

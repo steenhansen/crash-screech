@@ -1,1 +1,1 @@
-web: java $JVM_OPTS -cp target/sffaudio-web-stat-standalone.jar main -m sff-audio.web-stat
+web: lein with-profile production trampoline run -m sff-audio.web-stat monger ../heroku-config.edn 8080 use-environment
