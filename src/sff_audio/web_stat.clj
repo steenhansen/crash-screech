@@ -54,7 +54,7 @@
  
 
   ( let [       [my-db-obj web-port] (build-db TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
-
+										int-port (Integer/parseInt web-port)
                     my-test-objs-a [ {:the-url "www.sffaudio.com"    
                         ;  :the-date "2019-06-19-01:54:03.800Z"
                           :the-html "blah 1111"
@@ -99,7 +99,7 @@
 
 
 ;  (web-init SERVER-PORT-1 request-handler)    !!!!!!!!!!!
- (web-init web-port request-handler)           
+ (web-init int-port request-handler)           
 
 
 

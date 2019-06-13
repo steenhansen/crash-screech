@@ -1,7 +1,7 @@
 
 
 
-(def ^:const CRON-SECONDS 1000)          ; cron-milliseconds
+(def ^:const CRON-SECONDS 1000000)          ; cron-milliseconds
 (def ^:const CRON-CONTINUOUS true)       
 (def ^:const CRON-SAVE false)      
 (def ^:const CRON-READ false)   
