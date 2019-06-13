@@ -1,6 +1,7 @@
 
 
 (load "home-page") 
+(load "check-data") 
 
 
 
@@ -26,9 +27,7 @@
          {:keys [conn db]} (mong-core/connect-via-uri mongodb-user-pass-uri)]
 
 
-(println "mongo uri " mongolabs-config)
-
-											; put-items-monger
+										; put-items-monger
 											    (defn put-items-monger [ check-records]
 											     ( let [ fixed-dates ( prepare-data check-records )            ]
 																      (mong-coll/insert-batch db my-collection fixed-dates)))

@@ -1,18 +1,5 @@
 
 
-;; q*bert
-
-
-(ns sffaudio.web-stat
-  (:require [overtone.at-at :as at-at])       
-  (:require [java-time :as jav-time])             
- (:require [net.cgrand.enlive-html :as html])
-  (:require [clojure.string :as clj-str])   
-    (:require [clj-http.client :as http-client])    
-)
-
-(load "singular-service")
-
 
 (def ^:const CRON-SECONDS 1000)          ; cron-milliseconds
 (def ^:const CRON-CONTINUOUS true)       
@@ -122,7 +109,8 @@
 
 
 
-
+(defn instant-time-fn22 []
+  (str (jav-time/instant)))
 
 
 
@@ -142,7 +130,7 @@
 (defn start-cron [my-db-obj cron-job pages-to-check] 
 
 	 (defn cron-func [] 
-	   (cron-job my-db-obj pages-to-check instant-time-fn))											 					
+	   (cron-job my-db-obj pages-to-check instant-time-fn22))											 					
 
   (let [thread-pool (at-at/mk-pool) 
         scheduled-task (cron-type cron-func thread-pool)]
@@ -154,8 +142,8 @@
 
   scheduled-task))
 
-(defn cron-init[cron-job table-name pages-to-check start-args config-file]
-  (let [ my-db-obj (db-handle table-name pages-to-check start-args config-file)
+(defn cron-init[cron-job table-name pages-to-check db-type config-file environment-utilize]
+  (let [ my-db-obj (build-db table-name pages-to-check db-type config-file environment-utilize)
         scheduled-task (start-cron my-db-obj cron-job pages-to-check)]
     (remove-service cron-job kill-cron)    
     (add-service cron-job kill-cron scheduled-task)))

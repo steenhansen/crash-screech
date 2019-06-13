@@ -39,15 +39,21 @@
                    [com.draines/postal "2.0.3"]
                                         ]
 
-:plugins [[lein-heroku "0.5.3"]]
+ :ring {:handler sff-audio.web-stat/handler}
+
+
+:plugins [ [lein-beanstalk "0.2.7"]
+           [lein-ring "0.12.5"]
+[lein-tar "3.2.0"]
+           [lein-heroku "0.5.3"] ]
 
 :heroku {:app-name "your-heroku-app-name"}
 
 
-                                        :uberjar-name "sffaudio-web-stat-standalone.jar"
+                                        :uberjar-name "sff-audio-web-stat-standalone.jar"
  :min-lein-version "2.0.0"
 
-  :main ^:skip-aot sffaudio.web-stat
+  :main ^:skip-aot sff-audio.web-stat
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
 

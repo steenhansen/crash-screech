@@ -1,0 +1,48 @@
+
+
+
+
+
+
+
+
+CIDER in EMACS:  (-main "monger" "../heroku-config.edn" "8080" "use-environment")  
+  COMMAND LINE: lein run monger   ../heroku-config.edn   8080   use-environment
+
+
+
+CIDER in EMACS:  (-main "amazonica" "./local-config.edn" "8080" "no-environment")   
+  COMMAND LINE: lein run amazonica   ./local-config.edn   8080   no-environment
+
+
+ COMMAND LINE: lein run monger ./local-config.edn 8080 no-environment     WORKS
+
+
+
+
+
+
+
+lein uberjar
+
+ java -jar sff-audio-web-stat-standalone.jar monger ../local-config.edn 8080   use-environment
+
+
+ java -jar web-stat-0.1.0-SNAPSHOT.jar monger ../local-config.edn 8080   use-environment
+
+
+lein beanstalk deploy development
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+

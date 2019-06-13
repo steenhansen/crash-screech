@@ -3,7 +3,7 @@
 ; https://github.com/mcohen01/amazonica   put-item
 ; https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
 
-; (-main "amazonica" "localhost")
+(load "check-data") 
 
 
 (def ^:const MAX-R-W-RECORDS 50)

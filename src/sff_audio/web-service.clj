@@ -1,16 +1,4 @@
-(ns sffaudio.web-stat
-	 (:require [amazonica.aws.dynamodbv2 :as aws-dyn])  
-  (:require [clojure.string :as clj-str])         
-  (:require [edn-config.core :as edn-read])        
-  (:require [monger.core :as mong-core])           
-  (:require [monger.collection :as mong-coll])   
-  (:require [monger.operators :refer :all])
-  (:require [java-time :as jav-time])             
-  (:require [overtone.at-at :as at-at])       
-  (:require [ring.adapter.jetty :as ring])
-  (:require [net.cgrand.enlive-html :as html])
-  (:require  [ring.middleware.reload :as ring-reload] )
-)
+
 
 
 (load "singular-service")

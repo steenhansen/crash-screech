@@ -3,31 +3,26 @@
 
 
 
-(ns sffaudio.web-stat
+
+(ns sff-audio.web-stat
   (:gen-class)
-	 (:require [amazonica.aws.dynamodbv2 :as aws-dyn])  
+
+  (:refer-clojure :exclude [any?])
+  (:require [amazonica.aws.dynamodbv2 :as aws-dyn])  
   (:require [clojure.string :as clj-str])    
-
-(:require [clojure.main :as clj-main])    
-
-
-
+  (:require [clojure.main :as clj-main])    
   (:require [edn-config.core :as edn-read])  
-
-
   (:require [overtone.at-at :as at-at])       
-  ;(:require [compojure.core :refer [defroutes GET]] )
   (:require [ring.adapter.jetty :as ring])            ;; ring-jetty
   (:require [net.cgrand.enlive-html :as html])        ;; enlive-html
-  (:require [monger.core :as mong-core])           
+  (:require [monger.core :as mong-core])      
   (:require [monger.collection :as mong-coll])   
   (:require [monger.operators :refer :all])
   (:require [clj-http.client :as http-client])     
-
   (:require  [environ.core :refer [env]])     
-
-
-   ;(:use [net.cgrand.moustache :only [app]] )
+  (:require [me.raynes.fs :as fs])
+  (:require  [ring.middleware.reload :as ring-reload] )
+  (:require [java-time :as jav-time])
 )  
 
 (def ^:const SERVER-PORT-1 8080)
@@ -40,38 +35,26 @@
   	 {:check-page "sffaudio.herokuapp.com_rsd_rss" :enlive-keys[:item]                         :at-least 5}	
   ])
 
-(comment  "to start" (-main "monger" "localhost")         )
-(comment  "to start" (-main "amazonica" "localhost")         )
+ (comment  "to start" (-main "monger" "localhost")         )
+ (comment  "to start" (-main "amazonica" "localhost")         )
 
-(load "config-args")  
-(load "check-db")       
-(load "home-page")    
-
-
-(load "cron-service")  
-(load "web-service")  
-
+ (load "config-args")   
+ (load "home-page")     
+ (load "web-service")  
+ (load "check-data")  
+ (load "check-db")    
+ (load "cron-service") 
 
 
+; (-main "monger" "./local-config.edn" "8080" "use-environment")   "use-" is default
+; (-main "amazonica" "./local-config.edn" "8080" "no-environment")   !!!!!!!!!!!!!!!!!!
 
 
-; (defn -tm []
-;  ( let [ start-args '("monger" "localhost")
-;         [my-db-obj pages-to-check]  ( db-handle "./scrape-constants.edn" start-args)
-;     (scrape-pages my-db-obj pages-to-check true false test-time-fn)  ;!!! WORKS
-;   )
-; )
+(defn -main [db-type config-file web-port environment-utilize]
+ 
 
-
-; (main "../heroku-config.edn" "monger" "heroku")
-
-; (-main "./local-config.edn" "amazonica")
-; (-main "./local-config.edn" "monger")
-
-;(defn -main [& start-args]
-(defn -main [config-file & start-args]
-  ( let [ ;config-file "../prod-config.edn"
-          my-db-obj (db-handle TABLE-NAME THE-CHECK-PAGES start-args config-file)
+  ( let [ int-port (Integer/parseInt web-port)
+          my-db-obj (build-db TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
 
                     my-test-objs-a [ {:the-url "www.sffaudio.com"    
                         ;  :the-date "2019-06-19-01:54:03.800Z"
@@ -99,28 +82,33 @@
 																		        :the-time 1234 }
 ]
 
-((:put-items my-db-obj) my-test-objs-a)        
+
+
+
+
+
+
+
+
+;((:put-items my-db-obj) my-test-objs-a)        
 ((:put-item my-db-obj)one-iteme)        
  
 
-   (println "***" ((:get-all my-db-obj) "2019-06") )
+ ;  (println "***" ((:get-all my-db-obj) "2019-06") )
  
-  (web-init SERVER-PORT-1 request-handler)
+;(println "dddd" int-port (type int-port))
+
+
+;  (web-init SERVER-PORT-1 request-handler)    !!!!!!!!!!!
+ (web-init int-port request-handler)           
+
+
+
   ;(web-init SERVER-PORT-2 request-handler-extra)
-  ;(cron-init scrape-pages TABLE-NAME THE-CHECK-PAGES start-args config-file) 
-  ;(cron-init scrape-pages-extra TABLE-NAME THE-CHECK-PAGES start-args config-file) 
+  (cron-init scrape-pages TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
+  ;(cron-init scrape-pages-extra TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
   "I am outta web-stat !!!"
 )
 
 )
     
-
-
-
-;    (-main "./local-config.edn" "monger" )
-
-
-;    (-main "../heroku-config.edn" "monger"   "heroku")
-;    (-main "../heroku-config.edn" "autodyne" "heroku")
-
-

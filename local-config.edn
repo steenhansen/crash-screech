@@ -4,7 +4,7 @@
 
 
 ; (-main "./local-config.edn" "amazonica")
-		:amazonica-localhost {:access-key "local-access"
+		:amazonica {:access-key "local-access"
                         :secret-key "local-secret"
                         :endpoint   "http://localhost:8000"}
 
@@ -12,9 +12,8 @@
 
 
 ; (-main "./local-config.edn" "monger")
- :monger-localhost {
+ :monger {
 	        :MONGODB_URI "mongodb://localhost:27017/local"
-	        :PORT 8082
   }
 
 
