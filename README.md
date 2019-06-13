@@ -7,12 +7,16 @@
 
 
 
+https://devcenter.heroku.com/articles/clojure-support
+
+
+Procfile
+
+web: lein with-profile production trampoline run -m sff-audio.web-stat monger ../heroku-config.edn use-environment
 
 
 
-
-
-
+: Error R10 (Boot timeout) -> Web process failed to bind to $PORT within 60 seconds of launch
 
 
 

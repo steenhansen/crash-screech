@@ -14,6 +14,7 @@
 ; (-main "./local-config.edn" "monger")
  :monger {
 	        :MONGODB_URI "mongodb://localhost:27017/local"
+	        :PORT 8080
   }
 
 

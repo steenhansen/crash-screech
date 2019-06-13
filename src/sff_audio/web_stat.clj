@@ -46,15 +46,14 @@
  (load "cron-service") 
 
 
-; (-main "monger" "./local-config.edn" "8080" "use-environment")   "use-" is default
-; (-main "amazonica" "./local-config.edn" "8080" "no-environment")   !!!!!!!!!!!!!!!!!!
+; (-main "monger" "./local-config.edn" "use-environment")   
+; (-main "amazonica" "./local-config.edn" "no-environment")  
 
 
-(defn -main [db-type config-file web-port environment-utilize]
+(defn -main [db-type config-file environment-utilize]
  
 
-  ( let [ int-port (Integer/parseInt web-port)
-          my-db-obj (build-db TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
+  ( let [       [my-db-obj web-port] (build-db TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
 
                     my-test-objs-a [ {:the-url "www.sffaudio.com"    
                         ;  :the-date "2019-06-19-01:54:03.800Z"
@@ -82,7 +81,7 @@
 																		        :the-time 1234 }
 ]
 
-
+(println "dddddddd" web-port my-db-obj)
 
 
 
@@ -100,7 +99,7 @@
 
 
 ;  (web-init SERVER-PORT-1 request-handler)    !!!!!!!!!!!
- (web-init int-port request-handler)           
+ (web-init web-port request-handler)           
 
 
 
