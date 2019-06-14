@@ -7,7 +7,7 @@
 ; home-page/last-2-month
 
 (defn instant-time-fn []
-  (str (jav-time/instant)))
+  (str (java-time/instant)))
 
 (defn adjusted-date [the-date]
   (clj-str/replace the-date #"T|:" "-"))

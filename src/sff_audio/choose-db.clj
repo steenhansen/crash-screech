@@ -1,20 +1,14 @@
 
-
-
-(load "amazonica-db")  
-(load "monger-db") 
+(load "dynamo-db")  
+(load "mongo-db") 
 
 (defn get-db-conn [table-name pages-to-check db-type the-config]
 
 ( let [ db-keyword (keyword db-type)]
     (try 
- 					(case db-keyword :amazonica (dynamo-build the-config table-name pages-to-check) 
-                       :monger (mongolabs-build the-config  table-name pages-to-check))
-(catch Exception e (println " get-db-conn - " db-keyword " -caught exception: " (.getMessage e)))
-      )
-
-    )
-)
+ 					(case db-keyword :amazonica-db (dynamo-build the-config table-name pages-to-check) 
+                       :monger-db (mongolabs-build the-config  table-name pages-to-check))
+      (catch Exception e (println " get-db-conn - " db-keyword " -caught exception: " (.getMessage e))))))
 
 (defn build-db [table-name pages-to-check db-type config-file environment-utilize]
     (let [ the-config (make-config db-type config-file environment-utilize)

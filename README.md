@@ -12,24 +12,20 @@ https://devcenter.heroku.com/articles/clojure-support
 
 Procfile
 
-web: lein with-profile production trampoline run -m sff-audio.web-stat monger ../heroku-config.edn use-environment
-
-
-
-: Error R10 (Boot timeout) -> Web process failed to bind to $PORT within 60 seconds of launch
+web: lein with-profile production trampoline run -m sff-audio.web-stat monger-db ../heroku-config.edn use-environment
 
 
 
 
 
+we need a command for heroku to run a cron job on temporize
 
 
 
+ignore-environment
 
 
-
-
-
+choose-db.clj is new name for check-db.clj
 
 
 
@@ -37,8 +33,7 @@ web: lein with-profile production trampoline run -m sff-audio.web-stat monger ..
 
 
 
-
-
+if exception on bind already in use, then show message 'End Java Processes'
 
 
 
