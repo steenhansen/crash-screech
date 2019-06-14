@@ -4,6 +4,25 @@
 (load "choose-db")
 
 
+; UTC time is +7 Vancouver time
+
+
+; 
+
+
+
+; every day    23:10 
+
+;    https://fathomless-woodland-85635.herokuapp.com/temporize-call
+
+; GET
+
+; 5 retries
+
+
+
+
+
 
 ;;;   NB we have to save a copy of my-db-obj as the passed in my-db-obj is garbage collected!!
 

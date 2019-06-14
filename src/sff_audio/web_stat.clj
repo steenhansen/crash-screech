@@ -34,11 +34,13 @@
  (load "home-page")     
  (load "web-service")  
  (load "check-data")  
- (load "choose-db")    
+
+ ;(load "choose-db")    
+ 
  (load "cron-service") 
 
 
- (load "temporize-event") 
+; (load "temporize-event") 
 
 
 (defn -main [db-type config-file environment-utilize]
@@ -68,7 +70,6 @@
                           :the-status true
 																		        :the-time 1234 } 
 
-; temporize-func (run-once scrape-pages-fn TABLE-NAME 
  temporize-func (single-cron-fn scrape-pages-fn TABLE-NAME 
                     THE-CHECK-PAGES db-type config-file
                     environment-utilize) 
