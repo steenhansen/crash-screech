@@ -35,46 +35,51 @@
  (load "web-service")  
  (load "check-data")  
 
- ;(load "choose-db")    
  
  (load "cron-service") 
+ 
+ ;(load "test") 
 
 
-; (load "temporize-event") 
+(defn -mainXX []
+			(print (apply str (mshp dummy-content)))
+ )
 
 
 (defn -main [db-type config-file environment-utilize]
   ( let [ [my-db-obj web-port] (build-db TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
 
-
-
 										int-port (Integer/parseInt web-port)
-                    my-test-objs-a [ {:the-url "www.sffaudio.com"    
+                    my-test-objs-a [ {:the-url "www.sffaudio.com" 
+                          :the-date "2019-06-19-01:54:03.800Z"   
                           :the-html "blah 1111"
                           :the-status true
 																		        :the-time 1234 }
-																								{:the-url "sffaudio.herokuapp.com_rsd_rss" 		
+																								{:the-url "sffaudio.herokuapp.com_rsd_rss"
+																								:the-date "2019-06-19-01:54:03.800Z" 		
                           :the-html "bluh 2222"
                           :the-status true
 					   												        :the-time 12346 }
 																						 {:the-url "www.sffaudio.com" 
+																						 :the-date "2019-05-19-01:54:03.800Z"
                           :the-html "blah 3333"
                           :the-status true
 																		        :the-time 1234 }
-																								{:the-url "sffaudio.herokuapp.com_rsd_rss" 		
+																								{:the-url "sffaudio.herokuapp.com_rsd_rss" 
+																								:the-date "2019-05-19-01:54:03.800Z"		
                           :the-html "bluhss 4444"
                           :the-status false
 			   												        :the-time 12346 } ]
 											   one-iteme {:the-url "www.sffaudio.com"    
+											              :the-date "2019-06-19-01:54:03.800Z"
                           :the-html "blah 5555"
                           :the-status true
 																		        :the-time 1234 } 
 
- temporize-func (single-cron-fn scrape-pages-fn TABLE-NAME 
-                    THE-CHECK-PAGES db-type config-file
-                    environment-utilize) 
+ temporize-func (single-cron-fn scrape-pages-fn THE-CHECK-PAGES) 
 
-request-handler (make-request-fn temporize-func)
+request-handler (make-request-fn temporize-func 
+                       TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize)
 
 																		        ]
 
@@ -87,19 +92,11 @@ request-handler (make-request-fn temporize-func)
 ;(println "***" ((:get-all my-db-obj) "2019-06") )
  
 
- (web-init int-port request-handler temporize-func )           
+ (web-init int-port request-handler)           
 
 
 
- ; (cron-init scrape-pages TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
-  ;(cron-init scrape-pages-extra TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
-
-
-; (println "xxxxxxxxxxxxxxx")
-; (println " 11111  (:put-item my-db-obj)" (:put-item my-db-obj))
-; (println "yyyyyyyyyyyyyyyyyyyy")
-
-
+ ; (cron-init single-cron-fn TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
 
   "I am outta web-stat !!!"
   )

@@ -1,10 +1,36 @@
 
-(def ^:const ERROR-LENGTH 55)
+(def ^:const ERROR-LENGTH 200)
 
 
 ;(defn year-this-month [])   ; "2019-01"
 ;(defn year-last-month [])   ; "2018 12"  
 ; home-page/last-2-month
+
+
+ ;  (java-time/minus  (java-time/local-date) (java-time/months 1))
+
+
+(defn year-month-str[ymd-date]
+  (let [ymd-str (str ymd-date)
+								date-vector (clj-str/split ymd-str #"-") 
+								ym-vector (pop date-vector)
+        ym-str (clj-str/join "-" ym-vector)]
+  ym-str))
+
+
+(defn last-y-m []
+  (let [last-month (java-time/minus (java-time/local-date) (java-time/months 1))
+        ym-str (year-month-str last-month)]
+  		ym-str))
+
+
+(defn this-y-m []
+  (let [this-month (java-time/local-date)
+        ym-str (year-month-str this-month)]
+  		ym-str))
+
+
+
 
 (defn instant-time-fn []
   (str (java-time/instant)))
@@ -35,7 +61,7 @@
 					             	  :check-date dashed-date   
                      :check-bytes total-bytes     
                      :check-html  trunc-html     
-                     :check-status the-status        
+                     :check-ok the-status        
 																	 	  :check-time the-time}]		
     new-record))			
 

@@ -1,4 +1,33 @@
  
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+how to serve on Heroku
+
+- lein deps
+- lein uberjar       ; if this fails so will Heroku deploy
+
+
+
+
+
+
+
+
+
+
+
+
     heroku logs --tail -a fathomless-woodland-85635   

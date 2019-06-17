@@ -27,15 +27,14 @@
          { :actual-matches actual-matches :the-status true}    
          { :actual-matches actual-matches :the-status false})))
 
-(defn remove-tags [the-html the-status]
-  (if the-status "ok"
+(defn remove-tags [the-html]
       (let [ no-head (clj-str/replace the-html #"<head[\w\W]+?</head>" "")
              no-styles (clj-str/replace no-head #"<style[\w\W]+?</style>" "")
              no-js (clj-str/replace no-styles #"<script[\w\W]+?</script>" "")
  									   no-end-tags (clj-str/replace no-js #"</[\w\W]+?>" "")
              no-start-tags (clj-str/replace no-end-tags #"<[\w\W]+?>" "")
              no-multi-spaces (clj-str/replace no-start-tags #"\s\s+" ".") ]
-      no-multi-spaces)))
+      no-multi-spaces))
 
 (defn real-slash-url [check-page]
   (clj-str/replace check-page #"_" "/"))
@@ -51,9 +50,9 @@
   (doseq [ check-page-obj pages-to-check
            :let [ {check-page :check-page enlive-keys :enlive-keys at-least :at-least} check-page-obj
 				               start-timer (System/currentTimeMillis)
-				               the-html (read-html check-page)
-				               {actual-matches :actual-matches the-status :the-status}	(enough-sections? the-html enlive-keys at-least)
-				               tag-free (remove-tags  the-html the-status)
+				               web-html (read-html check-page)
+				               {actual-matches :actual-matches the-status :the-status}	(enough-sections? web-html enlive-keys at-least)
+				               tag-free (remove-tags web-html)
 				               end-timer (System/currentTimeMillis)
 				               time-spent (- end-timer start-timer)
 				               url-with-slash (real-slash-url check-page)
@@ -62,14 +61,8 @@
 					                            :the-html tag-free
 					                            :the-status the-status
 					                            :the-time time-spent } ] ]
-
-
-
 			 (if CRON-SAVE
-				  	 ((:put-item my-db-obj) check-record ))
-    "my return"
-
-			 ))
+				  	 ((:put-item my-db-obj) check-record ))))
 
 (defn scrape-pages-extra [my-db-obj pages-to-check time-fn] 
   (println "i be scraping EXTRA")
@@ -104,24 +97,3 @@
         scheduled-task (start-cron my-db-obj cron-job pages-to-check)]
     (remove-service cron-job kill-cron)    
     (add-service cron-job kill-cron scheduled-task)))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-; ; below is for temporize calls, that are url cron jobs
-; (defn make-call [my-db-obj cron-job-fn pages-to-check] 
-;   	   (defn cron-call [] 
-; 	       (cron-job-fn my-db-obj pages-to-check instant-time-fn))											 					
-;   cron-call)
-
-
-; ; single-cron-call
-; ;(defn run-once[cron-job-fn table-name pages-to-check db-type config-file environment-utilize]
-; (defn single-cron-fn[cron-job-fn table-name pages-to-check db-type config-file environment-utilize]
-;   (let [ my-db-obj (build-db table-name pages-to-check db-type config-file environment-utilize)
-;         callable-cron (make-call my-db-obj cron-job-fn pages-to-check)]
-;     callable-cron))
-
-
-; ; url-func-call
-; ; cron-via-url
-
