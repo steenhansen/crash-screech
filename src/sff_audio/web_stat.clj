@@ -41,9 +41,6 @@
  ;(load "test") 
 
 
-(defn -mainXX []
-			(print (apply str (mshp dummy-content)))
- )
 
 
 (defn -main [db-type config-file environment-utilize]
