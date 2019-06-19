@@ -11,6 +11,11 @@
 (load "check-data") 
 
 (defn dynamo-build [amazonica-config my-table-name pages-to-check]
+  ; (let [connection-opts amazonica-config]
+
+    ; (let [connection-opts {:access-key (:access-key amazonica-config)
+  ;                        :secret-key (:secret-key amazonica-config)
+  ;                         :endpoint  (:endpoint amazonica-config)}]
   (let [connection-opts {:access-key (get amazonica-config :access-key)
                          :secret-key (get amazonica-config :secret-key)
                           :endpoint  (get amazonica-config :endpoint)}]
@@ -60,6 +65,7 @@
                          :key-conditions 
                          {:check-url {:attribute-value-list [page-to-check] :comparison-operator "EQ"}
                                       :_id {:attribute-value-list [begins-with] :comparison-operator "BEGINS_WITH"}})
+;								  plain-items (:items page-matches)]
 								  plain-items (get page-matches :items)]
 						  plain-items))
 

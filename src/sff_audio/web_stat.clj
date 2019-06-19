@@ -93,7 +93,7 @@ request-handler (make-request-fn temporize-func
 
 
 
- ; (cron-init single-cron-fn TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
+ (cron-init single-cron-fn TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
 
   "I am outta web-stat !!!"
   )

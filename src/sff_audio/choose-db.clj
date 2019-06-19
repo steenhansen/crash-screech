@@ -13,7 +13,13 @@
 (defn build-db [table-name pages-to-check db-type config-file environment-utilize]
     (let [ the-config (make-config db-type config-file environment-utilize)
            my-db-funcs (get-db-conn table-name pages-to-check db-type the-config     )
+           ;web-port (:PORT the-config)
            web-port (get the-config :PORT)
+           ; my-db-obj { :delete-table (:delete-table my-db-funcs) 
+           ;             :get-all (:get-all my-db-funcs)     
+           ;             :get-url (:get-url my-db-funcs)
+           ;             :put-item (:put-item my-db-funcs)          
+           ;             :put-items (:put-items my-db-funcs)}  ]
            my-db-obj { :delete-table (get my-db-funcs :delete-table) 
                        :get-all (get my-db-funcs :get-all)     
                        :get-url (get my-db-funcs :get-url)

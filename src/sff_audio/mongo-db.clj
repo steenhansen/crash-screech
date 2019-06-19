@@ -15,7 +15,9 @@
     date-plus1))
 
 (defn mongolabs-build [mongolabs-config my-collection pages-to-check ]    
-  (let [ mongodb-user-pass-uri (get mongolabs-config :MONGODB_URI) 
+  (let [
+;         mongodb-user-pass-uri (:MONGODB_URI mongolabs-config) 
+         mongodb-user-pass-uri (get mongolabs-config :MONGODB_URI) 
          {:keys [_conn db]} (mong-core/connect-via-uri mongodb-user-pass-uri)
          db-handle db]
 				(defn put-items-monger [ check-records]

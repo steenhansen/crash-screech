@@ -48,12 +48,18 @@
 (defn trunc-string [the-string num-chars]
   (subs the-string 0 (min (count the-string) num-chars)))
 
-(defn derive-data [check-record]                                   
-  (let [{the-url :the-url       
+(defn derive-data [check-record]     
+  (let [
+      ;  {:keys [the-url the-date the-html the-status the-time]} check-record]                              
+        
+        {the-url :the-url       
          the-date :the-date
          the-html :the-html
          the-status :the-status               
 							  the-time :the-time} check-record    
+        
+        
+        
          total-bytes (count the-html)
 								 trunc-html (trunc-string the-html ERROR-LENGTH)          
 							  dashed-date (adjusted-date the-date)
@@ -66,7 +72,10 @@
     new-record))			
 
 (defn uniquely-id [many-index many-item]
-  (let [the-date (get many-item :check-date)
+  (let [
+      ; the-date (:check-date many-item)  
+        
+        the-date (get many-item :check-date)
   					 extended-date (str the-date "+" many-index)
   					 unique-item (assoc-in many-item [:_id] extended-date)]
     unique-item))

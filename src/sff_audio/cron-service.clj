@@ -1,7 +1,7 @@
 
 
 
-(def ^:const CRON-MILL-SECS 1000000)      
+(def ^:const CRON-MILL-SECS 600000)          ; 1000 =sec               60000 =min   600000 = 10 min
 (def ^:const CRON-CONTINUOUS true)       
 (def ^:const CRON-SAVE true)      
 (def ^:const CRON-READ true)   
@@ -48,11 +48,18 @@
 (defn scrape-pages-fn [my-db-obj pages-to-check time-fn] 
 (println "i be scraping")
   (doseq [ check-page-obj pages-to-check
-           :let [ {check-page :check-page enlive-keys :enlive-keys at-least :at-least} check-page-obj
+           :let [ 
+                 
+                   ;  {:keys [check-page enlive-keys at-least]} check-page-obj]                              
+                 {check-page :check-page enlive-keys :enlive-keys at-least :at-least} check-page-obj
 				               start-timer (System/currentTimeMillis)
 				               web-html (read-html check-page)
+                   
+                   
+;				              {:keys [actual-matches the-status}	(enough-sections? web-html enlive-keys at-least)
 				               {actual-matches :actual-matches the-status :the-status}	(enough-sections? web-html enlive-keys at-least)
-				               tag-free (remove-tags web-html)
+				               
+                   tag-free (remove-tags web-html)
 				               end-timer (System/currentTimeMillis)
 				               time-spent (- end-timer start-timer)
 				               url-with-slash (real-slash-url check-page)
