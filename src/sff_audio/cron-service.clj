@@ -1,7 +1,7 @@
 
 
 
-(def ^:const CRON-MILL-SECS 600000)          ; 1000 =sec               60000 =min   600000 = 10 min
+(def ^:const CRON-MILL-SECS 600000)          ; 1000 =sec      10000 =10sec         60000 =min   600000 = 10 min
 (def ^:const CRON-CONTINUOUS true)       
 (def ^:const CRON-SAVE true)      
 (def ^:const CRON-READ true)   
@@ -49,33 +49,26 @@
 (println "i be scraping")
   (doseq [ check-page-obj pages-to-check
            :let [ 
-                 
-                   ;  {:keys [check-page enlive-keys at-least]} check-page-obj]                              
-                 {check-page :check-page enlive-keys :enlive-keys at-least :at-least} check-page-obj
-				               start-timer (System/currentTimeMillis)
+                  {:keys [check-page enlive-keys at-least]} check-page-obj                              
+                   start-timer (System/currentTimeMillis)
 				               web-html (read-html check-page)
-                   
-                   
-;				              {:keys [actual-matches the-status}	(enough-sections? web-html enlive-keys at-least)
-				               {actual-matches :actual-matches the-status :the-status}	(enough-sections? web-html enlive-keys at-least)
-				               
-                   tag-free (remove-tags web-html)
+ 				              {:keys [actual-matches the-status]}	(enough-sections? web-html enlive-keys at-least)
 				               end-timer (System/currentTimeMillis)
-				               time-spent (- end-timer start-timer)
-				               url-with-slash (real-slash-url check-page)
-				               check-record { :the-url url-with-slash
-				                            	:the-date (time-fn)
-					                            :the-html tag-free
-					                            :the-status the-status
-					                            :the-time time-spent } ] ]
-			 (if CRON-SAVE
-				  	 ((:put-item my-db-obj) check-record ))))
+                   the-url (real-slash-url check-page)
+                   the-date (time-fn)
+                   the-html (remove-tags web-html)
+                   the-time (- end-timer start-timer)
+                   check-record (compact-hash the-url the-date the-html the-status the-time)
+                  ]]
+			  (if CRON-SAVE
+	    	 ((:put-item my-db-obj) check-record))))
 
 (defn scrape-pages-extra [my-db-obj pages-to-check time-fn] 
-  (println "i be scraping EXTRA")
+  (println "i be scraping EXTRA"  my-db-obj "ddd")
 )
 
 (defn cron-type [cron-func my-pool]   
+  (println "crontype" CRON-CONTINUOUS)
    (if CRON-CONTINUOUS
         (at-at/every CRON-MILL-SECS cron-func my-pool)
         (at-at/after CRON-MILL-SECS cron-func my-pool)))  
@@ -87,6 +80,7 @@
 (defn start-cron [my-db-obj cron-job pages-to-check] 
 
 	 (defn cron-func [] 
+
 	   (cron-job my-db-obj pages-to-check instant-time-fn))											 					
 
   (let [thread-pool (at-at/mk-pool) 
@@ -99,8 +93,8 @@
 
   scheduled-task))
 
-(defn cron-init[cron-job table-name pages-to-check db-type config-file environment-utilize]
-  (let [ my-db-obj (build-db table-name pages-to-check db-type config-file environment-utilize)
-        scheduled-task (start-cron my-db-obj cron-job pages-to-check)]
+
+(defn cron-init[cron-job my-db-obj pages-to-check ]
+  (let [scheduled-task (start-cron my-db-obj cron-job pages-to-check)]
     (remove-service cron-job kill-cron)    
     (add-service cron-job kill-cron scheduled-task)))

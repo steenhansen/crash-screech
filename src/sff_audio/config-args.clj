@@ -31,7 +31,10 @@
 
 
 
-
+(defmacro compact-hash [& vars]
+  (list `zipmap
+    (mapv keyword vars)
+    (vec vars)))
 						
  
 

@@ -15,12 +15,16 @@
   (:require [me.raynes.fs :as file-sys])
   (:require  [ring.middleware.reload :as ring-reload] )
   (:require [java-time])
+
+  ;  (:require  [com.draines.postal :as email-postal] )
+  
+  
 )  
 
 
 
 
-(def ^:const TABLE-NAME "ddd4")
+(def ^:const TABLE-NAME "eee2")
 
 (def ^:const THE-CHECK-PAGES   [
     {:check-page "www.sffaudio.com"               :enlive-keys[:article :div.blog-item-wrap]  :at-least 5}    
@@ -32,13 +36,12 @@
 
  (load "config-args")   
  (load "home-page")     
- (load "web-service")  
+ (load "web-service")  ()
  (load "check-data")  
 
- 
+ ()
  (load "cron-service") 
  
- ;(load "test") 
 
 
 
@@ -74,27 +77,32 @@
 																		        :the-time 1234 } 
 
  temporize-func (single-cron-fn scrape-pages-fn THE-CHECK-PAGES) 
+request-handler (make-request-fn temporize-func my-db-obj)
 
-request-handler (make-request-fn temporize-func 
-                       TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize)
 
-																		        ]
+             ]
+
+
 
 ;((:put-items my-db-obj) my-test-objs-a)        
 
 
-;((:put-item my-db-obj)one-iteme)        
+;((:put-item my-db-obj) one-iteme)        
 
 
-;(println "***" ((:get-all my-db-obj) "2019-06") )
- 
 
  (web-init int-port request-handler)           
 
 
 
- (cron-init single-cron-fn TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
 
+ (cron-init scrape-pages-fn my-db-obj THE-CHECK-PAGES) 
+ 
+ 
+ 
+ 
+ 
+ 
   "I am outta web-stat !!!"
   )
 

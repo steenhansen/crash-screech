@@ -11,14 +11,10 @@
 (load "check-data") 
 
 (defn dynamo-build [amazonica-config my-table-name pages-to-check]
-  ; (let [connection-opts amazonica-config]
-
-    ; (let [connection-opts {:access-key (:access-key amazonica-config)
-  ;                        :secret-key (:secret-key amazonica-config)
-  ;                         :endpoint  (:endpoint amazonica-config)}]
-  (let [connection-opts {:access-key (get amazonica-config :access-key)
-                         :secret-key (get amazonica-config :secret-key)
-                          :endpoint  (get amazonica-config :endpoint)}]
+  
+  
+  (let [ {:keys[access-key secret-key endpoint]} amazonica-config
+       connection-opts (compact-hash access-key secret-key endpoint) ]
 
 		  (defn list-tables []  
 		    (->> connection-opts
@@ -39,7 +35,7 @@
 							                                           {:attribute-name "_id":attribute-type "S"}] 
 							                   :provisioned-throughput {:read-capacity-units MAX-R-W-RECORDS :write-capacity-units MAX-R-W-RECORDS})]))
 
-		  (defn put-item-amazonica [check-record]                                    
+		  (defn put-item [check-record]                                    
       (when-not (table-exist? my-table-name) (make-table))
 		    (let [fixed-dates (prepare-data [check-record] )
 		          fixed-item (first fixed-dates)]
@@ -47,7 +43,7 @@
 								                  :table-name my-table-name
 								                  :item fixed-item)))	
 
-		  (defn put-items-amazonica [check-records]                                      
+		  (defn put-items [check-records]                                      
       (when-not (table-exist? my-table-name) (make-table))
       (let [fixed-dates (prepare-data check-records)
             has-puts (for [fixed-date fixed-dates] 
@@ -58,37 +54,33 @@
 								                          :request-items {my-table-name
 								                          has-puts})))			
 			
-    (defn get-url-amazonica [begins-with page-to-check]
+    (defn get-url [begins-with page-to-check]
  	    (let [page-matches (aws-dyn/query 
                          connection-opts
            	             :table-name my-table-name
                          :key-conditions 
                          {:check-url {:attribute-value-list [page-to-check] :comparison-operator "EQ"}
                                       :_id {:attribute-value-list [begins-with] :comparison-operator "BEGINS_WITH"}})
-;								  plain-items (:items page-matches)]
-								  plain-items (get page-matches :items)]
+								  plain-items (:items page-matches)]
 						  plain-items))
 
-    (defn get-all-amazonica [begins-with]
+    (defn get-all [begins-with]
 								
 				    (defn get-the-pages [items-vector check-page-obj]
 				      (let [{check-page :check-page } check-page-obj
-								        plain-items (get-url-amazonica begins-with check-page)]
+								        plain-items (get-url begins-with check-page)]
 						      (concat items-vector plain-items)))
 
       (let [all-matches (reduce get-the-pages [] pages-to-check) 
             sorted-matches (sort-by :check-url all-matches)]
         sorted-matches))
 
-		  (defn delete-table-amazonica []         
+		  (defn delete-table []         
       (aws-dyn/delete-table connection-opts
                             :table-name my-table-name))
-
-    {:delete-table delete-table-amazonica
-     :get-all get-all-amazonica              
-     :get-url get-url-amazonica                
-     :put-item put-item-amazonica            
-     :put-items put-items-amazonica}))
+    
+      (compact-hash delete-table get-all get-url put-item put-items)
+    ))
 
 
 

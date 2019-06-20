@@ -6,7 +6,9 @@
 ; (-main "./local-config.edn" "amazonica-db")
 		:amazonica-db {:access-key "local-access"
                         :secret-key "local-secret"
-                        :endpoint   "http://localhost:8000"}
+                        :endpoint   "http://localhost:8000"
+                        :PORT "8080"
+                        }
 
 
 

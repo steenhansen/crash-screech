@@ -16,38 +16,36 @@
 
 (defn mongolabs-build [mongolabs-config my-collection pages-to-check ]    
   (let [
-;         mongodb-user-pass-uri (:MONGODB_URI mongolabs-config) 
-         mongodb-user-pass-uri (get mongolabs-config :MONGODB_URI) 
+         mongodb-user-pass-uri (:MONGODB_URI mongolabs-config) 
          {:keys [_conn db]} (mong-core/connect-via-uri mongodb-user-pass-uri)
          db-handle db]
-				(defn put-items-monger [ check-records]
+    
+				(defn put-items [ check-records]
 				  (let [ fixed-dates ( prepare-data check-records)]
 						  (mong-coll/insert-batch db-handle my-collection fixed-dates)))
 
-				(defn delete-table-monger []
+				(defn delete-table []
 		    (mong-coll/remove db-handle my-collection))
 												
-				(defn put-item-monger [check-record]
+				(defn put-item [check-record]
 	     (let [ fixed-dates ( prepare-data [check-record] )
              fixed-rec (first fixed-dates)	]
+        (println "hi from mongo")
          (mong-coll/insert db-handle my-collection fixed-rec)))
 
 				(comment  "" ((:get-all-monger my-db-obj) "2019-05")         )
-				(defn get-all-monger "" [begins-with]
+				(defn get-all "" [begins-with]
 		    (let [ date-plus1(date-plus-1 begins-with) ]
 				    (println "mon" begins-with "---" date-plus1)
 	       (mong-coll/find-maps db-handle my-collection {:_id { $gte begins-with $lt date-plus1 }}) ))
 
    	(comment  "year of www.sffaudio" ((:get-url-monger my-db-obj) "2019" "www.sffaudio.com")         )
-				(defn get-url-monger "" [begins-with page-to-check]
+				(defn get-url [begins-with page-to-check]
 				  (let [date-plus1 (date-plus-1 begins-with)]
 				    (mong-coll/find-maps db-handle my-collection { $and [{:_id { $gte begins-with $lt date-plus1 }}
 											                                                         {:check-url page-to-check}] }))))
-
-    {:delete-table delete-table-monger
-			  :get-all get-all-monger 
-     :get-url get-url-monger 
-     :put-item put-item-monger
-     :put-items put-items-monger})
+    
+     (compact-hash delete-table get-all get-url put-item put-items)
+)
 
 

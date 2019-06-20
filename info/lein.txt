@@ -6,12 +6,12 @@
 https://devcenter.heroku.com/articles/clojure-support
 
 
-CIDER in EMACS:  (-main "monger-db" "../heroku-config.edn" "use-environment")  
+/////////////////////////////////////////////////////////////////CIDER in EMACS:  (-main "monger-db" "../heroku-config.edn" "use-environment")  
   COMMAND LINE: lein run monger-db   ../heroku-config.edn   use-environment
 
 
 
-CIDER in EMACS:  (-main "amazonica-db" "./local-config.edn" "ignore-environment")   
+////////////////////////////////////////////////////////////////CIDER in EMACS:  (-main "amazonica-db" "./local-config.edn" "ignore-environment")   
   COMMAND LINE: lein run amazonica-db   ./local-config.edn   ignore-environment
 
 

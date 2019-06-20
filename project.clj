@@ -12,8 +12,9 @@
                   [clj-http "3.10.0"]
 																		[me.raynes/fs "1.4.6"]
                   [enlive "1.1.6"]
+                  
                   [ring "1.6.3"]
-                  [com.draines/postal "2.0.3"] 
+           ;       [com.draines/postal "2.0.3"] 
                   
                    [net.cgrand/moustache "1.2.0-alpha2"] ;; for enlive tut
                  ;  [net.cgrand/moustache "1.1.0"]      ;; for enlive tut

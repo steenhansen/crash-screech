@@ -29,6 +29,37 @@
         ym-str (year-month-str this-month)]
   		ym-str))
 
+(defn fig-month [month-offset]
+  (let [month-names {:0 "December"
+                     :1 "January"
+                     :2 "February"
+                     :3 "March"
+                     :4 "April"
+                     :5 "May"
+                     :6 "June"
+                     :7 "July"
+                     :8 "August"
+                     :9 "September"
+                     :10 "October"
+                     :11 "November"
+                     :12 "December"}
+        this-month (java-time/local-date)
+        ymd-str (str this-month) 
+       	date-vector (clj-str/split ymd-str #"-") 
+        month-str (nth date-vector 1)
+        month-int (Integer/parseInt month-str)
+        adjusted-month (+ month-int month-offset)
+        adjsted-str (str adjusted-month)
+        int-key (keyword adjsted-str)
+        month-name(int-key month-names)]
+  		month-name
+    ))
+
+(defn prev-month []
+  (fig-month -1))
+
+(defn current-month []
+  (fig-month 0))
 
 
 
@@ -50,32 +81,18 @@
 
 (defn derive-data [check-record]     
   (let [
-      ;  {:keys [the-url the-date the-html the-status the-time]} check-record]                              
-        
-        {the-url :the-url       
-         the-date :the-date
-         the-html :the-html
-         the-status :the-status               
-							  the-time :the-time} check-record    
-        
-        
-        
-         total-bytes (count the-html)
-								 trunc-html (trunc-string the-html ERROR-LENGTH)          
-							  dashed-date (adjusted-date the-date)
-					    new-record {:check-url the-url        
-					             	  :check-date dashed-date   
-                     :check-bytes total-bytes     
-                     :check-html  trunc-html     
-                     :check-ok the-status        
-																	 	  :check-time the-time}]		
+        {:keys [the-url the-date the-html the-status the-time]} check-record                              
+         check-url the-url
+         check-ok the-status
+         check-bytes (count the-html)
+        	check-html (trunc-string the-html ERROR-LENGTH)          
+							  check-date (adjusted-date the-date)
+         check-time the-time
+         new-record (compact-hash check-url check-date check-bytes check-html check-ok check-time)]		
     new-record))			
 
 (defn uniquely-id [many-index many-item]
-  (let [
-      ; the-date (:check-date many-item)  
-        
-        the-date (get many-item :check-date)
+  (let [the-date (:check-date many-item)  
   					 extended-date (str the-date "+" many-index)
   					 unique-item (assoc-in many-item [:_id] extended-date)]
     unique-item))
