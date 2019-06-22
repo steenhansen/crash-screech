@@ -2,13 +2,6 @@
 
 
 
-(-main    " uses temporize")
-
-
-(-dev    "uses cron-init")
-
-
-
 
 
 
@@ -24,23 +17,6 @@ web: lein with-profile production trampoline run -m sff-audio.web-stat monger-db
 
 
 
-
-we need a command for heroku to run a cron job on temporize
-
-
-
-ignore-environment
-
-
-choose-db.clj is new name for check-db.clj
-
-
-
-
-
-
-
-if exception on bind already in use, then show message 'End Java Processes'
 
 
 

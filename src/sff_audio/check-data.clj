@@ -1,33 +1,21 @@
-
-(def ^:const ERROR-LENGTH 200)
-
-
-;(defn year-this-month [])   ; "2019-01"
-;(defn year-last-month [])   ; "2018 12"  
-; home-page/last-2-month
-
-
- ;  (java-time/minus  (java-time/local-date) (java-time/months 1))
-
-
 (defn year-month-str[ymd-date]
   (let [ymd-str (str ymd-date)
-								date-vector (clj-str/split ymd-str #"-") 
-								ym-vector (pop date-vector)
+        date-vector (clj-str/split ymd-str #"-") 
+        ym-vector (pop date-vector)
         ym-str (clj-str/join "-" ym-vector)]
-  ym-str))
+    ym-str))
 
 
 (defn last-y-m []
   (let [last-month (java-time/minus (java-time/local-date) (java-time/months 1))
         ym-str (year-month-str last-month)]
-  		ym-str))
+    ym-str))
 
 
 (defn this-y-m []
   (let [this-month (java-time/local-date)
         ym-str (year-month-str this-month)]
-  		ym-str))
+    ym-str))
 
 (defn fig-month [month-offset]
   (let [month-names {:0 "December"
@@ -52,7 +40,7 @@
         adjsted-str (str adjusted-month)
         int-key (keyword adjsted-str)
         month-name(int-key month-names)]
-  		month-name
+    month-name
     ))
 
 (defn prev-month []
@@ -70,7 +58,7 @@
   (clj-str/replace the-date #"T|:" "-"))
 
 (defn ensure-date [check-record]
-	 (if (check-record :the-date)
+  (if (check-record :the-date)
     check-record
     (let [now-date (instant-time-fn)
           dated-check (assoc-in check-record [:the-date] now-date)]
@@ -79,30 +67,36 @@
 (defn trunc-string [the-string num-chars]
   (subs the-string 0 (min (count the-string) num-chars)))
 
+(defn sub-string [the-string start-pos num-chars]
+  (subs the-string start-pos (min (count the-string) num-chars)))
+
+
+
+
 (defn derive-data [check-record]     
   (let [
         {:keys [the-url the-date the-html the-status the-time]} check-record                              
-         check-url the-url
-         check-ok the-status
-         check-bytes (count the-html)
-        	check-html (trunc-string the-html ERROR-LENGTH)          
-							  check-date (adjusted-date the-date)
-         check-time the-time
-         new-record (compact-hash check-url check-date check-bytes check-html check-ok check-time)]		
+        check-url the-url
+        check-ok the-status
+        check-bytes (count the-html)
+        check-html (trunc-string the-html ERROR-KEEP-LENGTH)          
+        check-date (adjusted-date the-date)
+        check-time the-time
+        new-record (compact-hash check-url check-date check-bytes check-html check-ok check-time)]		
     new-record))			
 
 (defn uniquely-id [many-index many-item]
   (let [the-date (:check-date many-item)  
-  					 extended-date (str the-date "+" many-index)
-  					 unique-item (assoc-in many-item [:_id] extended-date)]
+        extended-date (str the-date "+" many-index)
+        unique-item (assoc-in many-item [:_id] extended-date)]
     unique-item))
 
 (defn prepare-data [check-records]
   (let [records-dated (for [check-record check-records] 
-										      						  (ensure-date check-record))
+                        (ensure-date check-record))
         derived-data (for [dated-record records-dated] 
-															      		(derive-data dated-record))
-    				unique-data (map-indexed uniquely-id derived-data)]    
+                       (derive-data dated-record))
+        unique-data (map-indexed uniquely-id derived-data)]    
     unique-data)) 
 
 

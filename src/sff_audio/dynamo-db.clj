@@ -5,9 +5,6 @@
 
 (load "check-data") 
 
-
-(def ^:const MAX-R-W-RECORDS 50)
-
 (load "check-data") 
 
 (defn dynamo-build [amazonica-config my-table-name pages-to-check]

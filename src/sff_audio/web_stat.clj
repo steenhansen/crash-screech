@@ -6,105 +6,69 @@
   (:require [clojure.main :as clj-main])    
   (:require [edn-config.core :as edn-read])  
   (:require [overtone.at-at :as at-at])       
-  (:require [ring.adapter.jetty :as ring-jetty])           
   (:require [net.cgrand.enlive-html :as enlive-html])       
   (:require [monger.core :as mong-core])      
   (:require [monger.collection :as mong-coll])   
   (:require [monger.operators :refer :all])
   (:require [clj-http.client :as http-client])     
   (:require [me.raynes.fs :as file-sys])
+  (:require [ring.adapter.jetty :as ring-jetty])      
   (:require  [ring.middleware.reload :as ring-reload] )
+  (:require  [ring.util.response :as ring-response] )
   (:require [java-time])
+  )  
 
-  ;  (:require  [com.draines.postal :as email-postal] )
-  
-  
-)  
+(load "global-consts")   
+(load "config-args")   
+(load "web-service") 
+(load "check-data")  
+(load "cron-service") 
 
-
-
-
-(def ^:const TABLE-NAME "eee2")
-
-(def ^:const THE-CHECK-PAGES   [
-    {:check-page "www.sffaudio.com"               :enlive-keys[:article :div.blog-item-wrap]  :at-least 5}    
-  	 {:check-page "sffaudio.herokuapp.com_rsd_rss" :enlive-keys[:item]                         :at-least 5}	
-  ])
-
- (comment  "to start" (-main "monger-db" "./local-config.edn" "use-environment")         )
- (comment  "to start" (-main "amazonica-db" "./local-config.edn" "ignore-environment")         )
-
- (load "config-args")   
- (load "home-page")     
- (load "web-service")  ()
- (load "check-data")  
-
- ()
- (load "cron-service") 
- 
-
-
-
-
+                                        ; main called by Heroku, has no cron-init() job, relies on temporize-func()
+(comment "to start" (-main "monger-db" "./local-config.edn" "use-environment")         )
 (defn -main [db-type config-file environment-utilize]
-  ( let [ [my-db-obj web-port] (build-db TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
+  ( let [ [my-db-obj web-port] (build-db DB-TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
+         int-port (Integer/parseInt web-port)
+         temporize-func (single-cron-fn scrape-pages-fn THE-CHECK-PAGES) 
+         request-handler (make-request-fn temporize-func my-db-obj) ]
+   (web-init int-port request-handler)))
 
-										int-port (Integer/parseInt web-port)
-                    my-test-objs-a [ {:the-url "www.sffaudio.com" 
-                          :the-date "2019-06-19-01:54:03.800Z"   
-                          :the-html "blah 1111"
-                          :the-status true
-																		        :the-time 1234 }
-																								{:the-url "sffaudio.herokuapp.com_rsd_rss"
-																								:the-date "2019-06-19-01:54:03.800Z" 		
-                          :the-html "bluh 2222"
-                          :the-status true
-					   												        :the-time 12346 }
-																						 {:the-url "www.sffaudio.com" 
-																						 :the-date "2019-05-19-01:54:03.800Z"
-                          :the-html "blah 3333"
-                          :the-status true
-																		        :the-time 1234 }
-																								{:the-url "sffaudio.herokuapp.com_rsd_rss" 
-																								:the-date "2019-05-19-01:54:03.800Z"		
-                          :the-html "bluhss 4444"
-                          :the-status false
-			   												        :the-time 12346 } ]
-											   one-iteme {:the-url "www.sffaudio.com"    
-											              :the-date "2019-06-19-01:54:03.800Z"
-                          :the-html "blah 5555"
-                          :the-status true
-																		        :the-time 1234 } 
-
- temporize-func (single-cron-fn scrape-pages-fn THE-CHECK-PAGES) 
-request-handler (make-request-fn temporize-func my-db-obj)
-
-
-             ]
-
-
-
-;((:put-items my-db-obj) my-test-objs-a)        
-
-
-;((:put-item my-db-obj) one-iteme)        
-
-
-
- (web-init int-port request-handler)           
-
-
-
-
- (cron-init scrape-pages-fn my-db-obj THE-CHECK-PAGES) 
- 
- 
- 
- 
- 
- 
-  "I am outta web-stat !!!"
-  )
-
-)
-    
+                                        ; dev main, has scrape-pages-fn as an at-at scheduled job
+                                        ; (kill-services) will delete web-server and at-at-scheduled job     
+(comment  "local amazonica db" (-main "amazonica-db" "./local-config.edn" "ignore-environment")         )
+(comment  "local monger db" (-main "monger-db" "./local-config.edn" "ignore-environment")         )
+(comment  "real monger db, config file outside project" (-main "monger-db" "../heroku-config.edn" "ignore-environment")         )
+(defn -main-dev [db-type config-file environment-utilize]
+  ( let [ [my-db-obj web-port] (build-db DB-TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
+         int-port (Integer/parseInt web-port)
+         test-many [ {:the-url "www.sffaudio.com" 
+                      :the-date "2019-06-19-01:54:03.800Z"   
+                      :the-html "blah 1111"
+                      :the-status true
+                      :the-time 1234 }
+                    {:the-url "sffaudio.herokuapp.com_rsd_rss"
+                     :the-date "2019-06-19-01:54:03.800Z" 		
+                     :the-html "bluh 2222"
+                     :the-status true
+                     :the-time 12346 }
+                    {:the-url "www.sffaudio.com" 
+                     :the-date "2019-05-19-01:54:03.800Z"
+                     :the-html "blah 3333"
+                     :the-status true
+                     :the-time 1234 }
+                    {:the-url "sffaudio.herokuapp.com_rsd_rss" 
+                     :the-date "2019-05-19-01:54:03.800Z"		
+                     :the-html "bluhss 4444"
+                     :the-status false
+                     :the-time 12346 } ]
+         temporize-func (single-cron-fn scrape-pages-fn THE-CHECK-PAGES) 
+         request-handler (make-request-fn temporize-func my-db-obj)
+         test-one {:the-url "www.sffaudio.com"    
+                   :the-date "2019-06-19-01:54:03.800Z"
+                   :the-html "blah 5555"
+                   :the-status true
+                   :the-time 1234 } ]
+                                        ;((:put-items my-db-obj) test-many)        
+                                        ;((:put-item my-db-obj) test-one)        
+   (web-init int-port request-handler)           
+   (cron-init scrape-pages-fn my-db-obj THE-CHECK-PAGES)))

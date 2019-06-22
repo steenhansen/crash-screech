@@ -1,0 +1,18 @@
+
+; note this is outside the project
+
+;CIDER in EMACS: (-main "monger-db" "../heroku-config.edn" 8080 "use-environment")  
+;COMMAND LINE: lein run monger-db ../heroku-config.edn 8080 ignore-environment
+
+{
+  :monger-db {
+    :MONGODB_URI "mongodb://heroku_abcdefgh:ijklmnopqrstuvwxyz12345678@90abcdef.mlab.com:12345/heroku_abcdefgh"
+   	:PORT "8080" }
+  
+  :email-errors {
+	[ :PORT "8080" ]
+  }
+  
+  
+}
+

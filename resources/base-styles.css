@@ -1,0 +1,103 @@
+
+
+h2 {
+  margin-bottom: 0px;
+}
+
+
+.status_good{
+	background-color: white;
+
+}
+.status_bad{
+	background-color: red;
+
+}
+
+.speed_bad{
+	background-color: #ff000080;
+}
+
+.speed_average{
+	background-color: #ffeb3ba0;   /* yellow */
+}
+
+.speed_good{
+	background-color: #00ff0080;
+}
+
+
+div.header_titles > div > div  {
+	display: inline-block;
+	text-align: center;
+}
+
+div.month_content > div > div  {
+	display: inline-block;
+}
+
+
+.scrape_ok{
+    width: 60px;
+    text-align: center;
+}
+
+.scrape_time{
+    text-align: right;
+    width: 50px;
+}
+
+.scrape_url{
+	background-color: #cccccc;
+    width: 220px;
+}
+
+.scrape_date{
+    width: 90px;
+}
+
+.scrape_bytes{
+	background-color: #cccccc;
+    text-align: right;
+    width: 60px;
+}
+
+.scrape_html{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: -4px;
+  width: 700px;
+}
+
+.date_01 { background-color: #404040; }
+.date_02 { background-color: #504040; }
+.date_03 { background-color: #505040; }
+.date_04 { background-color: #505050; }
+.date_05 { background-color: #605050; }
+.date_06 { background-color: #606050; }
+.date_07 { background-color: #606060; }
+.date_08 { background-color: #706060; }
+.date_09 { background-color: #707060; }
+.date_10 { background-color: #707070; }
+.date_11 { background-color: #807070; }
+.date_12 { background-color: #808070; }
+.date_13 { background-color: #808080; }
+.date_14 { background-color: #908080; }
+.date_15 { background-color: #909080; }
+.date_16 { background-color: #909090; }
+.date_17 { background-color: #b09090; }
+.date_18 { background-color: #b0b090; }
+.date_19 { background-color: #b0b0b0; }
+.date_20 { background-color: #c0b0b0; }
+.date_21 { background-color: #c0c0b0; }
+.date_22 { background-color: #c0c0c0; }
+.date_23 { background-color: #d0c0c0; }
+.date_24 { background-color: #d0d0c0; }
+.date_25 { background-color: #d0d0d0; }
+.date_26 { background-color: #e0d0d0; }
+.date_27 { background-color: #e0e0d0; }
+.date_28 { background-color: #e0e0e0; }
+.date_29 { background-color: #f0e0e0; }
+.date_30 { background-color: #f0f0e0; }
+.date_31 { background-color: #f0f0f0; }
