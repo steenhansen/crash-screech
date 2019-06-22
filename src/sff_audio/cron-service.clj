@@ -44,14 +44,15 @@
           :let [  {:keys [check-page enlive-keys at-least]} check-page-obj                              
                 start-timer (System/currentTimeMillis)
                 web-html (read-html check-page)
-                {:keys [actual-matches the-status]}	(enough-sections? web-html enlive-keys at-least)
                 end-timer (System/currentTimeMillis)
+                the-time (- end-timer start-timer)
+                {:keys [actual-matches the-status]}	(enough-sections? web-html enlive-keys at-least)
                 the-url (real-slash-url check-page)
                 the-date (time-fn)
                 the-html (remove-tags web-html)
-                the-time (- end-timer start-timer)
                 check-record (compact-hash the-url the-date the-html the-status the-time)
                 ]]
+    (Thread/sleep BETWEEN-URL-WAIT)
     (if CRON-SAVE-TO-DB
       ((:put-item my-db-obj) check-record))))
 
