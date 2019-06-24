@@ -1,0 +1,7 @@
+temporize url cron
+
+
+Cron expression for 17 minutes past every 2 hours, 
+17 */2 * * *         
+
+

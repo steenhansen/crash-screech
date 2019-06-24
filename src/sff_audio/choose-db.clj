@@ -14,7 +14,7 @@
 (defn build-today-error? [get-all]
     
          (defn failed-check [found-error? url-check]
-           (if-not (:check-ok url-check)
+           (if-not (:check-accurate url-check)
               (reduced true)                        ; return early once a failed check is found
               false))
     
@@ -31,6 +31,7 @@
   (let [ the-config (make-config db-type config-file environment-utilize)
         my-db-funcs (get-db-conn table-name pages-to-check db-type the-config     )
         web-port (:PORT the-config)
+        cron-url (:CRON-URL-DIR the-config)
         my-db-obj { :delete-table (:delete-table my-db-funcs) 
                    :get-all (:get-all my-db-funcs)     
                    :get-url (:get-url my-db-funcs)
@@ -38,4 +39,4 @@
                    :put-items (:put-items my-db-funcs)
                    :today-error? (build-today-error? (:get-all my-db-funcs)   )
                    }]
-    [my-db-obj web-port]))
+    [my-db-obj web-port cron-url]))

@@ -16,9 +16,9 @@
 (defn enough-sections? [the-html css-match wanted-matches]   
   (let [actual-sections (matching-css-sections the-html css-match)
         actual-matches (count actual-sections)]
-    (if (> actual-matches wanted-matches)
-      { :actual-matches actual-matches :the-status true}    
-      { :actual-matches actual-matches :the-status false})))
+    (if (>= actual-matches wanted-matches)
+      { :actual-matches actual-matches :the-accurate true}    
+      { :actual-matches actual-matches :the-accurate false})))
 
 (defn remove-tags [the-html]
   (let [ no-head (clj-str/replace the-html #"<head[\w\W]+?</head>" "")
@@ -50,11 +50,11 @@
 									                web-html (read-html check-page)
 									                end-timer (System/currentTimeMillis)
 									                the-time (- end-timer start-timer)
-									                {:keys [actual-matches the-status]}	(enough-sections? web-html enlive-keys at-least)
+									                {:keys [actual-matches the-accurate]}	(enough-sections? web-html enlive-keys at-least)
 									                the-url (real-slash-url check-page)
 									                the-date (time-fn)
 									                the-html (remove-tags web-html)
-									                check-record (compact-hash the-url the-date the-html the-status the-time)
+									                check-record (compact-hash the-url the-date the-html the-accurate the-time)
 									                ]]
 ;									    (Thread/sleep BETWEEN-URL-WAIT)
 									    (if CRON-SAVE-TO-DB

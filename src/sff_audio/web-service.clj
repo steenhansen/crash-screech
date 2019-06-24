@@ -17,11 +17,11 @@
         date-style (str "date_" days) ]
     date-style))
 
-(defn fill-ok [check-ok ]
+(defn fill-accurate [check-accurate ]
   (enlive-html/do->
-   (enlive-html/content (if check-ok  ""
+   (enlive-html/content (if check-accurate  ""
                             "FAIL"))
-   (if check-ok (enlive-html/add-class "status_good")
+   (if check-accurate (enlive-html/add-class "status_good")
        (enlive-html/add-class "status_bad"))))
 
 (defn fill-time [check-time ]
@@ -47,34 +47,34 @@
   (enlive-html/do->
    (enlive-html/content (str check-bytes))))
 
-(defn fill-html[ check-ok check-html ]
+(defn fill-html[ check-accurate check-html ]
   (enlive-html/do->
-   (enlive-html/content (if check-ok  ""
+   (enlive-html/content (if check-accurate  ""
                             check-html))))
 
-(enlive-html/defsnippet link-model2      ;;  row-selector
+(enlive-html/defsnippet row-selector      ;;  row-selector
   BASE-HTML-TEMPLATE
   [[:.month_content (enlive-html/nth-of-type 1)] :> enlive-html/first-child]
-  [ {:keys [check-url check-date check-bytes check-html check-ok check-time]} ]
+  [ {:keys [check-url check-date check-bytes check-html check-accurate check-time]} ]
   
-  [:div.scrape_ok] (fill-ok check-ok)
+  [:div.scrape_accurate] (fill-accurate check-accurate)
   [:div.scrape_time] (fill-time check-time)
   [:div.scrape_date] (fill-date check-date)
   [:div.scrape_url] (fill-url check-url)
   [:div.scrape_bytes] (fill-bytes check-bytes)
-  [:div.scrape_html] (fill-html check-ok check-html))
+  [:div.scrape_html] (fill-html check-accurate check-html))
 
-(enlive-html/defsnippet section-model2         ;;month-selector
+(enlive-html/defsnippet month-selector        
   BASE-HTML-TEMPLATE
   {[:.a_month] [[:.month_content (enlive-html/nth-of-type 1)]]}      
   [{:keys [month-type month-data]} ]                                    
   [:.a_month]   (enlive-html/content month-type)
-  [:.month_content]  (enlive-html/content (map link-model2 month-data))  )
+  [:.month_content]  (enlive-html/content (map row-selector month-data))  )
 
 (enlive-html/deftemplate index-page2 BASE-HTML-TEMPLATE
   [{:keys [page-title month-sections]}]
   [:#title_of_page] (enlive-html/content page-title)
-  [:#two_months]   (enlive-html/content (map #(section-model2 %) month-sections)))
+  [:#two_months]   (enlive-html/content (map #(month-selector %) month-sections)))
 
 (defn get-index [my-db-obj]
   ( let [this-y-m (this-y-m)
@@ -97,15 +97,15 @@
   (ring-response/content-type (ring-response/response (get-index my-db-obj)) "text/html")
   )
 
-(defn make-request-fn [temporize-func my-db-obj]
+(defn make-request-fn [temporize-func my-db-obj cron-url]
   
   (defn request-handler [request]
     ( let [ the-uri (:uri request) ]
-    (if (= the-uri TEMPORIZE-CRON-CALL)
+    (if (= the-uri cron-url)
        (temporize-func my-db-obj))
      (condp = the-uri 
        "/"                  (show-data my-db-obj)  
-       TEMPORIZE-CRON-CALL       (show-data my-db-obj)
+       cron-url       (show-data my-db-obj)
        "/base-styles.css"    (ring-response/resource-response "base-styles.css" {:root ""})
        (ring-response/not-found "404"))))
   request-handler )

@@ -72,14 +72,14 @@
 
 (defn derive-data [check-record]     
   (let [
-        {:keys [the-url the-date the-html the-status the-time]} check-record                              
+        {:keys [the-url the-date the-html the-accurate the-time]} check-record                              
         check-url the-url
-        check-ok the-status
+        check-accurate the-accurate
         check-bytes (count the-html)
         check-html (trunc-string the-html ERROR-KEEP-LENGTH)          
         check-date (adjusted-date the-date)
         check-time the-time
-        new-record (compact-hash check-url check-date check-bytes check-html check-ok check-time)]		
+        new-record (compact-hash check-url check-date check-bytes check-html check-accurate check-time)]		
     new-record))			
 
 (defn uniquely-id [many-index many-item]

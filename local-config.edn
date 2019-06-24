@@ -5,18 +5,19 @@
 
 ; (-main "./local-config.edn" "amazonica-db")
 		:amazonica-db {:access-key "local-access"
-                        :secret-key "local-secret"
-                        :endpoint   "http://localhost:8000"
-                        :PORT "8080"
-                        }
+                 :secret-key "local-secret"
+                 :endpoint   "http://localhost:8000"
+          :PORT "8080"
+          :CRON-URL-DIR "/temporize-call-1234567890"                                  ; /temporize-call  with slash
+}
 
 
 
 
 ; (-main "./local-config.edn" "monger-db")
- :monger-db {
-	        :MONGODB_URI "mongodb://localhost:27017/local"
+ :monger-db {:MONGODB_URI "mongodb://localhost:27017/local"
 	        :PORT "8080"
+         :CRON-URL-DIR "/temporize-call-1234567890"                                  ; /temporize-call  with slash
   }
 
 

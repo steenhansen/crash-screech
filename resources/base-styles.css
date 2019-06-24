@@ -37,7 +37,7 @@ div.month_content > div > div  {
 }
 
 
-.scrape_ok{
+.scrape_accurate{
     width: 60px;
     text-align: center;
 }
@@ -67,7 +67,7 @@ div.month_content > div > div  {
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: -4px;
-  width: 650px;
+  width: 600px;
 }
 
 .date_01 { background-color: #404040; }
