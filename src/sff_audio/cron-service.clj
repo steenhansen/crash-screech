@@ -40,21 +40,39 @@
 
 (defn scrape-pages-fn [my-db-obj pages-to-check time-fn] 
   (println "scrape-pages-fn executing ...")
-  (doseq [ check-page-obj pages-to-check
-          :let [  {:keys [check-page enlive-keys at-least]} check-page-obj                              
-                start-timer (System/currentTimeMillis)
-                web-html (read-html check-page)
-                end-timer (System/currentTimeMillis)
-                the-time (- end-timer start-timer)
-                {:keys [actual-matches the-status]}	(enough-sections? web-html enlive-keys at-least)
-                the-url (real-slash-url check-page)
-                the-date (time-fn)
-                the-html (remove-tags web-html)
-                check-record (compact-hash the-url the-date the-html the-status the-time)
-                ]]
-    (Thread/sleep BETWEEN-URL-WAIT)
-    (if CRON-SAVE-TO-DB
-      ((:put-item my-db-obj) check-record))))
+  
+  
+  ( let [ today-error? ((:today-error? my-db-obj))  ]
+  
+									  (doseq [ check-page-obj pages-to-check
+									          :let [  {:keys [check-page enlive-keys at-least]} check-page-obj                              
+									                start-timer (System/currentTimeMillis)
+									                web-html (read-html check-page)
+									                end-timer (System/currentTimeMillis)
+									                the-time (- end-timer start-timer)
+									                {:keys [actual-matches the-status]}	(enough-sections? web-html enlive-keys at-least)
+									                the-url (real-slash-url check-page)
+									                the-date (time-fn)
+									                the-html (remove-tags web-html)
+									                check-record (compact-hash the-url the-date the-html the-status the-time)
+									                ]]
+;									    (Thread/sleep BETWEEN-URL-WAIT)
+									    (if CRON-SAVE-TO-DB
+									      ((:put-item my-db-obj) check-record)))
+           
+           (if-not today-error?
+              (if-let [ now-error? ((:today-error? my-db-obj)) ]
+                  (if now-error? 
+                      (println "send email")
+                    )
+                )
+             
+             )
+									  
+									  
+  )
+  
+)
 
 (defn scrape-pages-extra [my-db-obj pages-to-check time-fn] 
   (println "i be scraping EXTRA"  my-db-obj "ddd")

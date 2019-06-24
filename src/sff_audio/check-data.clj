@@ -1,3 +1,5 @@
+
+
 (defn year-month-str[ymd-date]
   (let [ymd-str (str ymd-date)
         date-vector (clj-str/split ymd-str #"-") 
@@ -5,33 +7,13 @@
         ym-str (clj-str/join "-" ym-vector)]
     ym-str))
 
-
-(defn last-y-m []
-  (let [last-month (java-time/minus (java-time/local-date) (java-time/months 1))
-        ym-str (year-month-str last-month)]
-    ym-str))
-
-
-(defn this-y-m []
-  (let [this-month (java-time/local-date)
-        ym-str (year-month-str this-month)]
-    ym-str))
-
-(defn fig-month [month-offset]
-  (let [month-names {:0 "December"
-                     :1 "January"
-                     :2 "February"
-                     :3 "March"
-                     :4 "April"
-                     :5 "May"
-                     :6 "June"
-                     :7 "July"
-                     :8 "August"
-                     :9 "September"
-                     :10 "October"
-                     :11 "November"
-                     :12 "December"}
-        this-month (java-time/local-date)
+(defn fig-month
+  
+  ( [month-offset] (fig-month month-offset (java-time/local-date)))
+          
+  ( [month-offset this-month]
+    (let [month-names {:0 "December" :1 "January" :2 "February" :3 "March"     :4 "April"    :5 "May"       :6 "June"
+                                   :7 "July"    :8 "August"   :9 "September" :10 "October" :11 "November" :12 "December" :13 "January"}
         ymd-str (str this-month) 
        	date-vector (clj-str/split ymd-str #"-") 
         month-str (nth date-vector 1)
@@ -40,8 +22,23 @@
         adjsted-str (str adjusted-month)
         int-key (keyword adjsted-str)
         month-name(int-key month-names)]
-    month-name
-    ))
+    month-name))
+  )
+
+(defn last-y-m
+  ( [] (last-y-m (java-time/local-date)))
+  ( [local-date] (let [last-month (java-time/minus local-date (java-time/months 1))
+                       ym-str (year-month-str last-month)]
+    ym-str))
+)
+
+(defn this-y-m
+  ( [] (this-y-m (java-time/local-date)))
+  ( [local-date] (let [ym-str (year-month-str local-date)]
+    ym-str))
+)
+
+
 
 (defn prev-month []
   (fig-month -1))

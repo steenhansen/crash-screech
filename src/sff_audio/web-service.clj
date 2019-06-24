@@ -52,7 +52,7 @@
    (enlive-html/content (if check-ok  ""
                             check-html))))
 
-(enlive-html/defsnippet link-model2 
+(enlive-html/defsnippet link-model2      ;;  row-selector
   BASE-HTML-TEMPLATE
   [[:.month_content (enlive-html/nth-of-type 1)] :> enlive-html/first-child]
   [ {:keys [check-url check-date check-bytes check-html check-ok check-time]} ]
@@ -64,7 +64,7 @@
   [:div.scrape_bytes] (fill-bytes check-bytes)
   [:div.scrape_html] (fill-html check-ok check-html))
 
-(enlive-html/defsnippet section-model2
+(enlive-html/defsnippet section-model2         ;;month-selector
   BASE-HTML-TEMPLATE
   {[:.a_month] [[:.month_content (enlive-html/nth-of-type 1)]]}      
   [{:keys [month-type month-data]} ]                                    

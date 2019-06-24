@@ -1,4 +1,5 @@
 
+
 (ns sff-audio.web-stat
   (:gen-class)
   (:require [amazonica.aws.dynamodbv2 :as aws-dyn])  
@@ -30,7 +31,20 @@
   ( let [ [my-db-obj web-port] (build-db DB-TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
          int-port (Integer/parseInt web-port)
          temporize-func (single-cron-fn scrape-pages-fn THE-CHECK-PAGES) 
-         request-handler (make-request-fn temporize-func my-db-obj) ]
+         request-handler (make-request-fn temporize-func my-db-obj)
+         
+          ; test-one {:the-url "www.sffaudio.com"    
+          ;          :the-date "2019-06-22-02:54:03.800Z"
+          ;          :the-html "blah 5555"
+          ;          :the-status true
+          ;          :the-time 1234 } 
+          ;  
+          ]
+   ;((:put-item my-db-obj) test-one)  
+                      ;( println "****" ((:get-all my-db-obj) "2019-06-19-01-54-03")    )
+
+  ;  ( println "****" ((:today-error? my-db-obj))    )
+   
    (web-init int-port request-handler)))
 
                                         ; dev main, has scrape-pages-fn as an at-at scheduled job
