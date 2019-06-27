@@ -27,9 +27,13 @@
         (mong-coll/insert-batch db-handle my-collection fixed-dates)))
 
     (defn delete-table []
-      (mong-coll/remove db-handle my-collection))
+      (mong-coll/drop db-handle my-collection))
     
-    (defn put-item [check-record]
+    (defn purge-table []
+      (mong-coll/purge-many db-handle [my-collection]))
+
+    
+        (defn put-item [check-record]
       (let [ fixed-dates ( prepare-data [check-record] )
             fixed-rec (first fixed-dates)	]
         (mong-coll/insert db-handle my-collection fixed-rec)))
@@ -51,7 +55,7 @@
         (mong-coll/find-maps db-handle my-collection { $and [{:_id { $gte begins-with $lt date-plus1 }}
                                                              {:check-url page-to-check}] }))))
   
-  (compact-hash delete-table get-all get-url put-item put-items)
-  )
+  (compact-hash delete-table purge-table get-all get-url put-item put-items)
+)
 
 

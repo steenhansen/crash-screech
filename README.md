@@ -1,8 +1,31 @@
 
 
 
+purge-table for amazonica
 
 
+;;;; what about dynamo-db in test???
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+rename project
+
+  site-check
 
 
 

@@ -7,12 +7,13 @@
 {
   :monger-db {
     :MONGODB_URI "mongodb://heroku_abcdefgh:ijklmnopqrstuvwxyz12345678@90abcdef.mlab.com:12345/heroku_abcdefgh"
-   	:PORT "8080" }
+   	:PORT "8080"
+     :CRON-URL-DIR "/temporize-call-1234567890"                                  ; /temporize-call  with slash
+
+     
+      }
   
-  :email-errors {
-	[ :PORT "8080" ]
-  }
-  
+
   
 }
 

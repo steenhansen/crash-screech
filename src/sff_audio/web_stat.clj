@@ -13,11 +13,12 @@
   (:require [monger.operators :refer :all])
   (:require [clj-http.client :as http-client])     
   (:require [me.raynes.fs :as file-sys])
+  (:require [mailgun.mail :as mail-gun]
+            [mailgun.util :refer [to-file]])
   (:require [ring.adapter.jetty :as ring-jetty])      
-  (:require  [ring.middleware.reload :as ring-reload] )
-  (:require  [ring.util.response :as ring-response] )
-  (:require [java-time])
-  )  
+  (:require [ring.middleware.reload :as ring-reload] )
+  (:require [ring.util.response :as ring-response] )
+  (:require [java-time]))  
 
 (load "global-consts")   
 (load "config-args")   
@@ -25,27 +26,47 @@
 (load "check-data")  
 (load "cron-service") 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                         ; main called by Heroku, has no cron-init() job, relies on temporize-func()
 (comment "to start" (-main "monger-db" "./local-config.edn" "use-environment")         )
 (defn -main [db-type config-file environment-utilize]
-  ( let [ [my-db-obj web-port cron-url] (build-db DB-TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
+  ( let [ [my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
          int-port (Integer/parseInt web-port)
-         temporize-func (single-cron-fn scrape-pages-fn THE-CHECK-PAGES) 
+         temporize-func (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data "TEST" ) ;"SFFaudio ERROR"
          request-handler (make-request-fn temporize-func my-db-obj cron-url)
-         
-          ; test-one {:the-url "www.sffaudio.com"    
-          ;          :the-date "2019-06-22-02:54:03.800Z"
-          ;          :the-html "blah 5555"
-          ;          :the-accurate true
-          ;          :the-time 1234 } 
-          ;  
           ]
-   ;((:put-item my-db-obj) test-one)  
+   
                       ;( println "****" ((:get-all my-db-obj) "2019-06-19-01-54-03")    )
-
   ;  ( println "****" ((:today-error? my-db-obj))    )
    
-   (web-init int-port request-handler)))
+   (web-init int-port request-handler)
+   
+  ))
+
+
+
+
+
+
+
+
+
+
+
 
                                         ; dev main, has scrape-pages-fn as an at-at scheduled job
                                         ; (kill-services) will delete web-server and at-at-scheduled job     
@@ -53,7 +74,7 @@
 (comment  "local monger db" (-main "monger-db" "./local-config.edn" "ignore-environment")         )
 (comment  "real monger db, config file outside project" (-main "monger-db" "../heroku-config.edn" "ignore-environment")         )
 (defn -main-dev [db-type config-file environment-utilize]
-  ( let [ [my-db-obj web-port cron-url] (build-db DB-TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
+  ( let [ [my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME THE-CHECK-PAGES db-type config-file environment-utilize) 
          int-port (Integer/parseInt web-port)
          test-many [ {:the-url "www.sffaudio.com" 
                       :the-date "2019-06-19-01:54:03.800Z"   
@@ -75,7 +96,7 @@
                      :the-html "bluhss 4444"
                      :the-accurate false
                      :the-time 12346 } ]
-         temporize-func (single-cron-fn scrape-pages-fn THE-CHECK-PAGES) 
+         temporize-func (single-cron-fn scrape-pages-fn THE-CHECK-PAGES sms-data) 
          request-handler (make-request-fn temporize-func my-db-obj cron-url)
          test-one {:the-url "www.sffaudio.com"    
                    :the-date "2019-06-19-01:54:03.800Z"

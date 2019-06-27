@@ -38,46 +38,39 @@
       (:body (http-client/get (str "https://" under-to-slashes))))
     (slurp (str "./test/" check-page))))
 
-(defn scrape-pages-fn [my-db-obj pages-to-check time-fn] 
+
+(defn first-error-todayXX [prev-today-error? my-db-obj]
+  (let [ now-error? (:today-error? my-db-obj) ]
+    (if-not prev-today-error?
+      (if now-error?
+        true
+        false)
+      false)))
+
+(defn first-error-today [prev-today-error? my-db-obj]
+  (let [ now-error? ((:today-error? my-db-obj)) ]
+    (if prev-today-error?
+        false
+        now-error?)))
+
+(defn scrape-pages-fn [my-db-obj pages-to-check time-fn sms-fn] 
   (println "scrape-pages-fn executing ...")
+  (let [prev-today-error? ((:today-error? my-db-obj))]
+    (doseq [check-page-obj pages-to-check
+					       :let [{:keys [check-page enlive-keys at-least]} check-page-obj                              
+									                 start-timer (System/currentTimeMillis)
+									                 web-html (read-html check-page)
+									                 end-timer (System/currentTimeMillis)
+									                 the-time (- end-timer start-timer)
+									                 {:keys [actual-matches the-accurate]}	(enough-sections? web-html enlive-keys at-least)
+									                 the-url (real-slash-url check-page)
+									                 the-date (time-fn)
+									                 the-html (remove-tags web-html)
+									                 check-record (compact-hash the-url the-date the-html the-accurate the-time)]]
+				 	((:put-item my-db-obj) check-record)
+      (if (first-error-today prev-today-error? my-db-obj)
+        (sms-fn)))))       
   
-  
-  ( let [ today-error? ((:today-error? my-db-obj))  ]
-  
-									  (doseq [ check-page-obj pages-to-check
-									          :let [  {:keys [check-page enlive-keys at-least]} check-page-obj                              
-									                start-timer (System/currentTimeMillis)
-									                web-html (read-html check-page)
-									                end-timer (System/currentTimeMillis)
-									                the-time (- end-timer start-timer)
-									                {:keys [actual-matches the-accurate]}	(enough-sections? web-html enlive-keys at-least)
-									                the-url (real-slash-url check-page)
-									                the-date (time-fn)
-									                the-html (remove-tags web-html)
-									                check-record (compact-hash the-url the-date the-html the-accurate the-time)
-									                ]]
-;									    (Thread/sleep BETWEEN-URL-WAIT)
-									    (if CRON-SAVE-TO-DB
-									      ((:put-item my-db-obj) check-record)))
-           
-           (if-not today-error?
-              (if-let [ now-error? ((:today-error? my-db-obj)) ]
-                  (if now-error? 
-                      (println "send email")
-                    )
-                )
-             
-             )
-									  
-									  
-  )
-  
-)
-
-(defn scrape-pages-extra [my-db-obj pages-to-check time-fn] 
-  (println "i be scraping EXTRA"  my-db-obj "ddd")
-  )
-
 (defn cron-type [cron-func my-pool]   
   (println "crontype" CRON-RUN-CONTINUOUS)
   (if CRON-RUN-CONTINUOUS

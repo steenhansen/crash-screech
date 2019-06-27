@@ -21,10 +21,12 @@
   (let [config-vars (read-config-file config-file)
         db-keyword (keyword db-type)
         db-config (get config-vars db-keyword)
+        heroku-config (:heroku-vars config-vars)
+        program-config (merge heroku-config db-config)
         ignore-environmentals (= environment-utilize IGNORE-ENV-VARS)          
-        has-environmentals (reduce merge-environment {} db-config)]
+        has-environmentals (reduce merge-environment {} program-config)]
     (if ignore-environmentals
-      db-config
+      program-config
       has-environmentals)))
 
 (defmacro compact-hash [& vars]

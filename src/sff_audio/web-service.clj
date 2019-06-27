@@ -52,7 +52,7 @@
    (enlive-html/content (if check-accurate  ""
                             check-html))))
 
-(enlive-html/defsnippet row-selector      ;;  row-selector
+(enlive-html/defsnippet row-selector     
   BASE-HTML-TEMPLATE
   [[:.month_content (enlive-html/nth-of-type 1)] :> enlive-html/first-child]
   [ {:keys [check-url check-date check-bytes check-html check-accurate check-time]} ]
@@ -71,7 +71,7 @@
   [:.a_month]   (enlive-html/content month-type)
   [:.month_content]  (enlive-html/content (map row-selector month-data))  )
 
-(enlive-html/deftemplate index-page2 BASE-HTML-TEMPLATE
+(enlive-html/deftemplate index-page BASE-HTML-TEMPLATE
   [{:keys [page-title month-sections]}]
   [:#title_of_page] (enlive-html/content page-title)
   [:#two_months]   (enlive-html/content (map #(month-selector %) month-sections)))
@@ -90,7 +90,7 @@
                                       :month-data previous-months }
                                     {:month-type cur-name
                                      :month-data current-months }]}
-         page-html (render-parts (index-page2 db-data))]
+         page-html (render-parts (index-page db-data))]
    page-html))
 
 (defn show-data [my-db-obj] 
@@ -100,15 +100,15 @@
 (defn make-request-fn [temporize-func my-db-obj cron-url]
   
   (defn request-handler [request]
-    ( let [ the-uri (:uri request) ]
-    (if (= the-uri cron-url)
-       (temporize-func my-db-obj))
-     (condp = the-uri 
-       "/"                  (show-data my-db-obj)  
-       cron-url       (show-data my-db-obj)
-       "/base-styles.css"    (ring-response/resource-response "base-styles.css" {:root ""})
-       (ring-response/not-found "404"))))
-  request-handler )
+    (let [the-uri (:uri request)]
+      (if (= the-uri cron-url)
+        (temporize-func my-db-obj))
+      (condp = the-uri 
+        "/"                (show-data my-db-obj)  
+        cron-url           (show-data my-db-obj)
+        "/base-styles.css" (ring-response/resource-response "base-styles.css" {:root ""})
+                           (ring-response/not-found "404"))))
+  request-handler)
 
 ;; https://stackoverflow.com/questions/54056579/how-to-avoid-global-state-in-clojure-when-using-wrap-reload
                                         ;     https://github.com/panta82/clojure-webdev/blob/master/src/webdev/core.clj
