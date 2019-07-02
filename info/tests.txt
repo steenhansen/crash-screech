@@ -3,7 +3,7 @@
 
 in CIDER run tests 
 
- ::: load test/com/example/web-stat-test.
+ ::: load test/com/example/the-tests.clj
 
  ::: M-x cider-jack-in
 

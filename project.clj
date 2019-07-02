@@ -1,4 +1,4 @@
-(defproject sffaudio/web-stat "0.1.0-SNAPSHOT"
+(defproject sffaudio/web-server "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
@@ -16,20 +16,22 @@
                   [nilenso/mailgun "0.2.3"]
                   ]
 
-  :ring {:handler sff-audio.web-stat/main}
+  :ring {:handler sff-audio.web-server/main}
   :plugins [ [lein-beanstalk "0.2.7"]
              [lein-ring "0.12.5"]
              [lein-tar "3.2.0"]
-             [lein-heroku "0.5.3"] ]
+             [lein-heroku "0.5.3"]
+             [lein-zprint "0.3.16"] ]
   :heroku {
     :app-name "your-heroku-app-name"
     :jdk-version "1.8"
-    :include-files ["target/uberjar/sff-audio-web-stat-standalone.jar"]
-    :process-types { "web" "java -jar target/uberjar/sff-audio-web-stat-standalone.jar" }
+    :include-files ["target/uberjar/sff-audio-web-server-standalone.jar"]
+    :process-types { "web" "java -jar target/uberjar/sff-audio-web-server-standalone.jar" }
   }
-  :uberjar-name "sff-audio-web-stat-standalone.jar"
+  :zprint {:old? false}
+  :uberjar-name "sff-audio-web-server-standalone.jar"
   :min-lein-version "2.0.0"
-  :main ^:skip-aot sff-audio.web-stat
+  :main ^:skip-aot sff-audio.web-server
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
 

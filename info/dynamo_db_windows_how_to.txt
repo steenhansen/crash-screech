@@ -13,7 +13,7 @@ dynamodb.listTables().eachPage(function(e, d) {
     if (e) { ppJson(e); } else if (d) { ppJson(d); } });
 
 //list table
-var p = { TableName: 'tt1'};
+var p = { TableName: 'zzz2'};
 docClient.scan(p, function(e, d) { if (e) ppJson(e); else ppJson(d);});
 
 

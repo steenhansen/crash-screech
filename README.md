@@ -1,14 +1,59 @@
 
 
 
-purge-table for amazonica
-
-
-;;;; what about dynamo-db in test???
 
 
 
 
+for date testing functions
+(identity "2000-01-01")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+for dynamo testing check 	http://localhost:8000/shell/
+27000 for mongo
+
+
+
+have first-sms be a part of return
+
+
+
+
+
+
+https://hackernoon.com/the-art-of-naming-variables-52f44de00aad
+
+
+
+say on tests if dynamo not running
+
+
+should not have to kill-services
 
 
 

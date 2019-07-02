@@ -6,6 +6,10 @@
 https://devcenter.heroku.com/articles/clojure-support
 
 
+
+If any lein fail, then check to make sure there are no java.exes running in user space
+
+
 /////////////////////////////////////////////////////////////////CIDER in EMACS:  (-main "monger-db" "../heroku-config.edn" "use-environment")  
   COMMAND LINE: lein run monger-db   ../heroku-config.edn   use-environment
 

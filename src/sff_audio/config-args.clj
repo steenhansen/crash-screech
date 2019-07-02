@@ -1,40 +1,31 @@
 
 
-(defn read-config-file [config-file]
+(defn read-config-file
+  [config-file]
   (let [config-path (str (file-sys/absolute config-file))]
-    (println "Trying to load" config-path )
-    (try 
-      (edn-read/load-file config-file)
-      (catch Exception e (println "Failed to load" (.getMessage e))))))
+    (println "Trying to load" config-path)
+    (try (edn-read/load-file config-file)
+         (catch Exception e (println "Failed to load" (.getMessage e))))))
 
-(defn merge-environment [accum-environment env-object]
-  (let [  env-key (key env-object)
+(defn merge-environment
+  [accum-environment env-object]
+  (let [env-key (key env-object)
         plain-key (name env-key)
         the-value (val env-object)
-        system-environment (assoc-in accum-environment [env-key] (System/getenv plain-key))
+        system-environment
+          (assoc-in accum-environment [env-key] (System/getenv plain-key))
         program-environment (assoc-in accum-environment [env-key] the-value)]
-    (if (System/getenv plain-key)
-      system-environment
-      program-environment)))
+    (if (System/getenv plain-key) system-environment program-environment)))
 
-(defn make-config [db-type config-file environment-utilize]
+(defn make-config
+  [db-type config-file environment-utilize]
   (let [config-vars (read-config-file config-file)
         db-keyword (keyword db-type)
         db-config (get config-vars db-keyword)
         heroku-config (:heroku-vars config-vars)
         program-config (merge heroku-config db-config)
-        ignore-environmentals (= environment-utilize IGNORE-ENV-VARS)          
+        ignore-environmentals (= environment-utilize IGNORE-ENV-VARS)
         has-environmentals (reduce merge-environment {} program-config)]
-    (if ignore-environmentals
-      program-config
-      has-environmentals)))
+    (if ignore-environmentals program-config has-environmentals)))
 
-(defmacro compact-hash [& vars]
-  (list `zipmap
-        (mapv keyword vars)
-        (vec vars)))
-
-
-
-
-
+(defmacro compact-hash [& vars] (list `zipmap (mapv keyword vars) (vec vars)))
