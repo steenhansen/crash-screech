@@ -21,7 +21,7 @@
 
     (defn empty-month?
       []
-      (let [yyyy-mm (this-y-m)
+      (let [yyyy-mm (current-yyyy-mm)
             url-checks (get-all yyyy-mm)
             months-checks (count url-checks)]
         (if (= 0 months-checks)
@@ -43,7 +43,7 @@
       )
     (defn today-error?
       []
-      (let [yyyy-mm (this-y-m)
+      (let [yyyy-mm (current-yyyy-mm)
             url-checks (get-all yyyy-mm)
             error-found (reduce failed-check false url-checks)]
         error-found))

@@ -24,6 +24,10 @@
 (load "global-consts")
 
 (load "config-args")
+
+
+(load "years-months")
+(load "scrape-html")
 (load "html-render")
 (load "check-data")
 (load "cron-service")

@@ -50,9 +50,9 @@
 ;   (testing "test-1000 :amazonica-db should send an sms message in sms-send-fn"
 ;            (sms-send-fn_error :amazonica-db)))
 
-;  (deftest test-1001
-;    (testing "test-1001 :monger-db should send an sms message in sms-send-fn"
-;            (sms-send-fn_error :monger-db)))
+ (deftest test-1001
+   (testing "test-1001 :monger-db should send an sms message in sms-send-fn"
+           (sms-send-fn_error :monger-db)))
 
 
 
@@ -61,9 +61,9 @@
 ;   (testing "test-1002 :amazonica-db should send an sms message in sms-send-fn"
 ;            (sms-send-fn_ok :amazonica-db)))
 
-; (deftest test-1003
-;   (testing "test-1003 :monger-db should send an sms message in sms-send-fn"
-;            (sms-send-fn_ok :monger-db)))
+(deftest test-1003
+  (testing "test-1003 :monger-db should send an sms message in sms-send-fn"
+           (sms-send-fn_ok :monger-db)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -81,12 +81,13 @@
          JAN-2001-DATE "2001-01-01-01:01:01.001Z"
          FEB-2001-DATE "2001-02-02-02:02:02.002Z"
 
-                  NOV-2000-MONTH "2000-11"
-                  DEC-2000-MONTH "2000-12"
-                  JAN-2000-MONTH "2001-01"
-                  FEB-2000-MONTH "2001-02"
-        test-many [
-                   {:the-url "november-1", :the-date NOV-2000-DATE}
+                  NOV-2000-MONTH "2000-11"    ; 0 and 1 record
+                  DEC-2000-MONTH "2000-12"    ; 1 and 2 records
+                  JAN-2001-MONTH "2001-01"    ; 2 and 3 records
+                  FEB-2001-MONTH "2001-02"    ;3 and 4 records
+                  MAR-2001-MONTH "2001-03"    ;4 and 0 records
+                  APR-2001-MONTH "2001-04"    ;0 and 0 records
+        test-many [{:the-url "november-1", :the-date NOV-2000-DATE}
 
                    {:the-url "december-2", :the-date DEC-2000-DATE}
                    {:the-url "december-2", :the-date DEC-2000-DATE}
@@ -98,20 +99,23 @@
                    {:the-url "february-4", :the-date FEB-2001-DATE}
                    {:the-url "february-4", :the-date FEB-2001-DATE}
                    {:the-url "february-4", :the-date FEB-2001-DATE}
-                   {:the-url "february-4", :the-date FEB-2001-DATE}
-                   
-                   
-                                      ]] 
+                   {:the-url "february-4", :the-date FEB-2001-DATE}  ]] 
      (purge-table)
-   (put-items test-many) 
-   
-    ( println "****" (get-two-months my-db-obj DEC-2000-MONTH)    )
- 
-   
-   
-   
-   
-   ))
+   (put-items test-many)    
+    ( let [[oct_a_0 nov_a_1] (get-two-months my-db-obj NOV-2000-MONTH)  
+           [nov_b_1 dec_b_2] (get-two-months my-db-obj DEC-2000-MONTH)  
+           [dec_c_2 jan_c_3] (get-two-months my-db-obj JAN-2001-MONTH)  
+           [jan_d_3 feb_d_4] (get-two-months my-db-obj FEB-2001-MONTH)  
+           [feb_e_4 mar_e_0](get-two-months my-db-obj MAR-2001-MONTH)  
+           [mar_f_0 apr_f_0](get-two-months my-db-obj APR-2001-MONTH)
+           actual-counts  [ (count oct_a_0) (count nov_a_1) (count nov_b_1) (count dec_b_2) (count dec_c_2) (count jan_c_3) 
+                            (count jan_d_3) (count feb_d_4) (count feb_e_4) (count mar_e_0) (count mar_f_0) (count apr_f_0)]
+           epected-counts [       0                1       1       2       2       3     
+                                  3                4       4       0       0       0]
+           ]
+      (is (= actual-counts epected-counts)))))
+
+
 
 (deftest test-2000
   (testing "test-2000 :monger-db should send an sms message in sms-send-fn"

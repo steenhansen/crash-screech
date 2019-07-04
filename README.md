@@ -1,7 +1,6 @@
 
 
-
-
+html-render get-index
 
 
 
@@ -9,7 +8,9 @@ for date testing functions
 (identity "2000-01-01")
 
 
+(func-call a-function-param a-var1 a-var2)   function params have 3 parts else 2
 
+my-test-DB
 
 
 

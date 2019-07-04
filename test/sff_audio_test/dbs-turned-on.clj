@@ -1,9 +1,9 @@
-        (try 
-          (http-client/get "http://localhost:8000/shell/")
-         (catch Exception e
-           (throw  (Exception. " **** ERROR DynamoDB is not running on - http://localhost:8000")
+     ;    (try 
+     ;      (http-client/get "http://localhost:8000/shell/")
+     ;     (catch Exception e
+     ;       (throw  (Exception. " **** ERROR DynamoDB is not running on - http://localhost:8000")
            
-           )))
+     ;       )))
     
 
      (try 

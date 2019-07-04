@@ -87,8 +87,8 @@
 (defn get-two-months [my-db-obj yyyy-mm]
     (let [
         get-all (:get-all my-db-obj)
-        this-y-m (this-y-m yyyy-mm)
-        last-y-m (last-y-m yyyy-mm)
+        this-y-m (current-yyyy-mm yyyy-mm)
+        last-y-m (prev-yyyy-mm yyyy-mm)
         this-months (get-all this-y-m)
         last-months (get-all last-y-m)
         current-months (vec this-months)
@@ -98,19 +98,37 @@
   ))
 
 
-(defn get-index
-  [my-db-obj]
-  (let [now-y-m (java-time/local-date)
-        yyyy-mm (year-month-str now-y-m)
+
+
+
+(defn get-index 
+  ([my-db-obj]
+       (get-index my-db-obj (date-to-yyyy-mm (java-time/local-date))))
+   ([my-db-obj yyyy-mm] 
+    (let [
         [previous-months current-months] (get-two-months my-db-obj yyyy-mm)
-        prev-name (prev-month)
-        cur-name (current-month)
+        prev-name (prev-month yyyy-mm)
+        cur-name (current-month yyyy-mm)
         db-data {:page-title "SFFaudio page checks",
                  :month-sections
                    [{:month-type prev-name, :month-data previous-months}
                     {:month-type cur-name, :month-data current-months}]}
         page-html (render-parts (index-page db-data))]
-    page-html))
+    page-html)))
+
+; (defn get-indexOLD
+;   [my-db-obj]
+;   (let [now-y-m (java-time/local-date)
+;         yyyy-mm (date-to-yyyy-mm now-y-m)
+;         [previous-months current-months] (get-two-months my-db-obj yyyy-mm)
+;         prev-name (prev-month)
+;         cur-name (current-month)
+;         db-data {:page-title "SFFaudio page checks",
+;                  :month-sections
+;                    [{:month-type prev-name, :month-data previous-months}
+;                     {:month-type cur-name, :month-data current-months}]}
+;         page-html (render-parts (index-page db-data))]
+;     page-html))
 
 (defn show-data
   [my-db-obj]
@@ -123,7 +141,7 @@
     [request]
     (let [the-uri (:uri request) 
           test 12 ]
-      (if (= the-uri cron-url) (temporize-func my-db-obj))
+      (if (= the-uri cron-url) (temporize-func))
       (condp = the-uri
         "/" (show-data my-db-obj)
         cron-url (show-data my-db-obj)
