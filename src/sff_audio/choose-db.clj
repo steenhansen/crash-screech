@@ -49,6 +49,16 @@
         error-found))
     today-error?))
 
+(defn get-phone-nums
+  "has test"
+  [phone-comma-string]
+  (let [phone-spaces (clj-str/split phone-comma-string #",")
+    phone-numbers (map clj-str/trim phone-spaces)]
+    phone-numbers
+    )
+  )
+
+
 (defn build-db
   [table-name pages-to-check db-type config-file environment-utilize]
   (let [the-config (make-config db-type config-file environment-utilize)
@@ -57,7 +67,11 @@
         cron-url (:CRON-URL-DIR the-config)
         till-username (:TILL_USERNAME the-config)
         till-api-key (:TILL_API_KEY the-config)
-        phone-numbers (:PHONE-NUMBERS the-config)
+        phone-comma-string (:PHONE-NUMBERS the-config)
+        
+        phone-numbers (get-phone-nums phone-comma-string)
+        
+        
         heroku-app-name (:HEROKU_APP_NAME the-config)
         sms-data (compact-hash till-username
                                till-api-key

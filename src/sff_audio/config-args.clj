@@ -3,7 +3,8 @@
 (defn read-config-file
   [config-file]
   (let [config-path (str (file-sys/absolute config-file))]
-    (println "Trying to load" config-path)
+    (if-not (boolean (resolve 'DB-TEST-NAME))
+    			(println "Trying to load" config-path))
     (try (edn-read/load-file config-file)
          (catch Exception e (println "Failed to load" (.getMessage e))))))
 

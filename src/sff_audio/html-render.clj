@@ -138,6 +138,7 @@
                               "text/html")))
 
 (defn make-request-fn
+  "has db test"
   [temporize-func my-db-obj cron-url]
   (defn request-handler
     [request]
@@ -167,8 +168,10 @@
                                          {:port server-port, :join? false})]
     
     (defn kill-web
-  []
-  (println "Killing web-service")
-  (.stop web-server))
+      []
+        (if-not (boolean (resolve 'DB-TEST-NAME))
+    			   (println "Killing web-service"))
+        (.stop web-server))
 
-        (add-service "web-init" kill-web)))
+    (add-service "web-init" kill-web)
+    kill-web))

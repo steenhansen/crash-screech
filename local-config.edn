@@ -20,7 +20,7 @@
               :HEROKU_APP_NAME "https://fathomless-woodland-85635.herokuapp.com/"
               :TILL_USERNAME "abcdefghijklmnopqrstuvwxyz1234"
 	             :TILL_API_KEY "1234567890abcdefghijklmnopqrstuvwxyz1234"
-	             :PHONE-NUMBERS ["11234567890"]}
+	             :PHONE-NUMBERS "11234567890,123234342,123123123"}
 
 
 ; C:\> SET MONGODB_URI="mongodb://localhost:27017/local"

@@ -1,0 +1,1 @@
+(load (str TEST-DIR "choose-db/get-phone-nums-test"))

@@ -1,8 +1,6 @@
 
-
-
  (ns sff-audio.web-server
-     (:gen-class)
+  (:gen-class)
   (:require [amazonica.aws.dynamodbv2 :as aws-dyn])
   (:require [clojure.string :as clj-str])
   (:require [clojure.main :as clj-main])
@@ -14,29 +12,20 @@
   (:require [monger.operators :refer :all])
   (:require [clj-http.client :as http-client])
   (:require [me.raynes.fs :as file-sys])
-  (:require [mailgun.mail :as mail-gun]
-            [mailgun.util :refer [to-file]])
   (:require [ring.adapter.jetty :as ring-jetty])
   (:require [ring.middleware.reload :as ring-reload])
   (:require [ring.util.response :as ring-response])
   (:require [java-time])
-  
- ( :require [clojure.test :refer :all])
- 
-     (:require
-     [clojure.spec.alpha :as spec-alpha]               
-     [clojure.spec.gen.alpha :as spec-gen]          
-     [clojure.spec.test.alpha :as spec-test]     
-    )
-        
-  
+  (:require [clojure.test :refer :all])
+  (:require [clojure.spec.alpha :as spec-alpha]               
+            [clojure.spec.gen.alpha :as spec-gen]          
+            [clojure.spec.test.alpha :as spec-test])
+  (:require [clj-logging-config.log4j :as log-config]
+            [clojure.tools.logging :as log])
   )
 
 (load "global-consts")
-
 (load "config-args")
-
-
 (load "years-months")
 (load "scrape-html")
 (load "html-render")
@@ -44,27 +33,7 @@
 (load "cron-service")
 
 
-
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
-;         (println "*********************************")
+(log/info "This is a test log message.")
 
 
 ; main called by Heroku, has no cron-init() job, relies on temporize-func()
@@ -83,13 +52,9 @@
                                        sms-data
                                     ) 
         request-handler (make-request-fn temporize-func my-db-obj cron-url)]
-    ;( println "****" ((:get-all my-db-obj) "2019-06-19-01-54-03")    )
-    ;  ( println "****" ((:today-error? my-db-obj))    )
     (web-init int-port request-handler)))
 
-
-
- (defn -main-test
+(defn -main-test
    []
    (load "../../test/sff_audio_test/the_tests")
 )

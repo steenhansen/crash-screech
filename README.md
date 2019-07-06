@@ -3,8 +3,8 @@
 
 
 
-
-generative testing
+   :PHONE-NUMBERS "11234567890,22334455,120981203"       then just split it
+   
 
 
 
@@ -72,9 +72,6 @@ https://hackernoon.com/the-art-of-naming-variables-52f44de00aad
 
 
 say on tests if dynamo not running
-
-
-should not have to kill-services
 
 
 

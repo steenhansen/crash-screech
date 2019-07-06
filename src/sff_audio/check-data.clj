@@ -1,4 +1,5 @@
 (defn trunc-string
+  "has test"
   [the-string num-chars]
   (if the-string 
       (subs the-string 0 (min (count the-string) num-chars))
@@ -6,8 +7,9 @@
       ))
 
 (defn sub-string
-  [the-string start-pos num-chars]
-  (subs the-string start-pos (min (count the-string) num-chars)))
+  "has test"
+    [the-string start-pos end-exclusive]
+  (subs the-string start-pos end-exclusive))
 
 (defn derive-data
   [check-record]

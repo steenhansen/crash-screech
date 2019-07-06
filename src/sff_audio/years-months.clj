@@ -30,8 +30,6 @@
                       :11 "November",
                       :12 "December",
                       :13 "January"}
-         ;ymd-str (str this-date)
-       
          date-vector (clj-str/split yyyy-mm #"-")
          month-str (nth date-vector 1)
          month-int (Integer/parseInt month-str)
@@ -48,8 +46,6 @@
 (defn current-month 
   ([] (month-name 0))
    ([yyyy-mm] (month-name 0 yyyy-mm)))
-
-
 
 (defn yyyy-mm-to-ints [yyyy-mm]
   (let [ date-vector (clj-str/split yyyy-mm #"-")
