@@ -4,10 +4,10 @@
 (load "check-data")
 
 
-
 (defn render-parts [html-pieces] (apply str html-pieces))
 
 (defn day-hour-min
+   "has test"
   [check-date]
   (let [dd-hh-mm (sub-string check-date 8 16)
         [days hours minutes] (clj-str/split dd-hh-mm #"-")
@@ -37,9 +37,19 @@
 
 (defn fill-url [check-url] (enlive-html/do-> (enlive-html/content check-url)))
 
+
+
+
+(spec-alpha/fdef fill-bytes :args (spec-alpha/cat :check-bytes number?)
+                            :ret (spec-alpha/fspec :args any?
+                                                   :ret any?))
 (defn fill-bytes
+  "no test"
   [check-bytes]
   (enlive-html/do-> (enlive-html/content (str check-bytes))))
+
+
+
 
 (defn fill-html
   [check-accurate check-html]
@@ -85,6 +95,7 @@
 
 
 (defn get-two-months [my-db-obj yyyy-mm]
+  "has db test"
     (let [
         get-all (:get-all my-db-obj)
         this-y-m (current-yyyy-mm yyyy-mm)
@@ -102,6 +113,7 @@
 
 
 (defn get-index 
+  "has db test"
   ([my-db-obj]
        (get-index my-db-obj (date-to-yyyy-mm (java-time/local-date))))
    ([my-db-obj yyyy-mm] 
@@ -116,31 +128,20 @@
         page-html (render-parts (index-page db-data))]
     page-html)))
 
-; (defn get-indexOLD
-;   [my-db-obj]
-;   (let [now-y-m (java-time/local-date)
-;         yyyy-mm (date-to-yyyy-mm now-y-m)
-;         [previous-months current-months] (get-two-months my-db-obj yyyy-mm)
-;         prev-name (prev-month)
-;         cur-name (current-month)
-;         db-data {:page-title "SFFaudio page checks",
-;                  :month-sections
-;                    [{:month-type prev-name, :month-data previous-months}
-;                     {:month-type cur-name, :month-data current-months}]}
-;         page-html (render-parts (index-page db-data))]
-;     page-html))
 
 (defn show-data
-  [my-db-obj]
-  (ring-response/content-type (ring-response/response (get-index my-db-obj))
-                              "text/html"))
+  "has db test"
+  ([my-db-obj]
+   (show-data my-db-obj (date-to-yyyy-mm (java-time/local-date))))
+  ([my-db-obj yyyy-mm]
+  (ring-response/content-type (ring-response/response (get-index my-db-obj yyyy-mm))
+                              "text/html")))
 
 (defn make-request-fn
   [temporize-func my-db-obj cron-url]
   (defn request-handler
     [request]
-    (let [the-uri (:uri request) 
-          test 12 ]
+    (let [the-uri (:uri request)      ]
       (if (= the-uri cron-url) (temporize-func))
       (condp = the-uri
         "/" (show-data my-db-obj)

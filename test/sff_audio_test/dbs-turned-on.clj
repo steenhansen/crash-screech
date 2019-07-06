@@ -32,9 +32,15 @@
                      (println "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
       )
     
-    
+    (defn  strip-white-space [my-text] 
+          (clj-str/replace my-text #"\s" ""))
  
-
-
+    
+    
+    
+    (defn reset-test-to-actual-data [test-data actual-data]
+    (spit test-data actual-data))
+    
+    
 
 

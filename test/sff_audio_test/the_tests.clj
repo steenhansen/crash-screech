@@ -1,40 +1,70 @@
 
-(ns sff-audio-test.the-tests
-  (:require [clojure.test :refer :all]
-            [sff-audio.web-server :refer :all]
-            :reload-all)
-     (:require [clj-http.client :as http-client])
-       (:require [clojure.string :as clj-str])
- )
+
+
+
 
 (def ^:const TEST-CONFIG-FILE "./local-config.edn")
 (def ^:const SMS-NO-ERROR [])
 (def ^:const DB-TEST-NAME "zzz2")
 
-(load "dbs-turned-on")
-(print-block)
-(load "scrape-html/sms-send-fn-test")
+
+
+(def ^:const TEST-DIR "../../test/sff_audio_test/")
 
 
 
-(load "years-months/date-to-yyyy-mm-test")
-(load "years-months/month-name-test")
-(load "years-months/yyyy-mm-to-ints-test")
-(load "years-months/current-yyyy-mm-test")
-(load "years-months/prev-yyyy-mm-test")
-
-(load "years-months/adjusted-date-test")
-(load "years-months/ensure-date-test")
-
-
-(load "years-months/prev-month-test")
-
-(load "years-months/current-month-test")
-
-
-(load "html-render/get-index-test")
+ (load (str TEST-DIR "dbs-turned-on"))
+ 
+ 
+ 
+ 
+ 
+ (print-block)
+ 
+ 
+ 
+ 
+ (load (str TEST-DIR "scrape-html/sms-send-fn-test"))
 
 
 
+ (load (str TEST-DIR "years-months/date-to-yyyy-mm-test"))
+ (load (str TEST-DIR "years-months/month-name-test"))
+ (load (str TEST-DIR "years-months/yyyy-mm-to-ints-test"))
+ (load (str TEST-DIR "years-months/current-yyyy-mm-test"))
+ (load (str TEST-DIR "years-months/prev-yyyy-mm-test"))
+
+(load (str TEST-DIR "years-months/adjusted-date-test"))
+
+
+(load (str TEST-DIR "years-months/ensure-date-test"))
+
+
+(load (str TEST-DIR "years-months/prev-month-test"))
+
+(load (str TEST-DIR "years-months/current-month-test"))
+
+
+ (load (str TEST-DIR "html-render/get-index-test"))
+
+ 
+
+
+ 
+ 
+(load (str TEST-DIR "html-render/show-data-test"))
+
+
+
+(load (str TEST-DIR "html-render/day-hour-min-test"))
+(load (str TEST-DIR "html-render/day-hour-min-test"))
+
+
+
+
+
+
+(spec-test/instrument) 
 (run-tests)
 
+ ;(spec-test/check 'fill-bytes)

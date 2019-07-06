@@ -19,7 +19,18 @@
   (:require [ring.adapter.jetty :as ring-jetty])
   (:require [ring.middleware.reload :as ring-reload])
   (:require [ring.util.response :as ring-response])
-  (:require [java-time]))
+  (:require [java-time])
+  
+ ( :require [clojure.test :refer :all])
+ 
+     (:require
+     [clojure.spec.alpha :as spec-alpha]               
+     [clojure.spec.gen.alpha :as spec-gen]          
+     [clojure.spec.test.alpha :as spec-test]     
+    )
+        
+  
+  )
 
 (load "global-consts")
 
@@ -32,26 +43,28 @@
 (load "check-data")
 (load "cron-service")
 
-               (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
-        (println "*********************************")
+
+
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
+;         (println "*********************************")
 
 
 ; main called by Heroku, has no cron-init() job, relies on temporize-func()
@@ -74,6 +87,12 @@
     ;  ( println "****" ((:today-error? my-db-obj))    )
     (web-init int-port request-handler)))
 
+
+
+ (defn -main-test
+   []
+   (load "../../test/sff_audio_test/the_tests")
+)
 
 ; dev main, has scrape-pages-fn as an at-at scheduled job
 ; (kill-services) will delete web-server and at-at-scheduled job
@@ -122,3 +141,6 @@
     ;((:put-item my-db-obj) test-one)
 (web-init int-port request-handler)
     (cron-init scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)))
+
+
+

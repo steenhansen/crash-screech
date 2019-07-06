@@ -3,7 +3,8 @@
   :url "http://example.com/FIXME"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
-  :dependencies [ [org.clojure/clojure "1.10.0"]
+  :dependencies [ 
+                 [org.clojure/clojure "1.10.0"]
                   [amazonica "0.3.142"] 
                   [chrisjd/edn-config "0.1.1"]
                   [com.novemberain/monger "3.1.0"]
@@ -17,11 +18,10 @@
                   ]
 
   :ring {:handler sff-audio.web-server/main}
-  :plugins [ [lein-beanstalk "0.2.7"]
-             [lein-ring "0.12.5"]
-             [lein-tar "3.2.0"]
+  :plugins [
              [lein-heroku "0.5.3"]
-             [lein-zprint "0.3.16"] ]
+             [lein-zprint "0.3.16"] 
+             ]
   :heroku {
     :app-name "your-heroku-app-name"
     :jdk-version "1.8"
@@ -33,5 +33,7 @@
   :min-lein-version "2.0.0"
   :main ^:skip-aot sff-audio.web-server
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {
+           ;  :dev {:dependencies [[org.clojure/test.check "0.9.0"]]}
+             :uberjar {:aot :all}})
 
