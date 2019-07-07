@@ -24,8 +24,8 @@
 
 
 
-(load "check-data")
-(load "choose-db")
+; (load "check-data")
+; (load "choose-db")
 
 
 (defn make-api-call

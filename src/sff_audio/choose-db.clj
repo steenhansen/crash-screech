@@ -1,7 +1,7 @@
 
-(load "dynamo-db")
-(load "mongo-db")
-(load "check-data")
+; (load "dynamo-db")
+; (load "mongo-db")
+; (load "check-data")
 
 
 

@@ -3,9 +3,9 @@
 ; https://github.com/mcohen01/amazonica   put-item
 ; https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
 
-(load "check-data")
+; (load "check-data")
 
-(load "check-data")
+; (load "check-data")
 
 
 

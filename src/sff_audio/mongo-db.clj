@@ -1,5 +1,5 @@
 
-(load "check-data")
+;(load "check-data")
 
 
 (defn left-pad2 [my-str] (format "%02d" my-str))

@@ -1,7 +1,7 @@
 
-(load "singular-service")
-(load "temporize-event")
-(load "check-data")
+; (load "singular-service")
+; (load "temporize-event")
+; (load "check-data")
 
 
 (defn render-parts [html-pieces] (apply str html-pieces))

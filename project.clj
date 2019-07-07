@@ -22,21 +22,21 @@
                   
                 ]
 
-  :ring {:handler sff-audio.web-server/main}
+;  :ring {:handler main-sff-audio}
   :plugins [
-             [lein-heroku "0.5.3"]
+          ;   [lein-heroku "0.5.3"]
              [lein-zprint "0.3.16"] 
              ]
-  :heroku {
-    :app-name "your-heroku-app-name"
-    :jdk-version "1.8"
-    :include-files ["target/uberjar/sff-audio-web-server-standalone.jar"]
-    :process-types { "web" "java -jar target/uberjar/sff-audio-web-server-standalone.jar" }
-  }
+  ; :heroku {
+  ;   :app-name "your-heroku-app-name"
+  ;   :jdk-version "1.8"
+  ;   :include-files ["target/uberjar/sff-audio-web-server-standalone.jar"]
+  ;   :process-types { "web" "java -jar target/uberjar/sff-audio-web-server-standalone.jar" }
+  ; }
   ;:zprint {:old? false}
-  :uberjar-name "sff-audio-web-server-standalone.jar"
+  :uberjar-name "main-sff-audio-standalone.jar"
   :min-lein-version "2.0.0"
-  :main ^:skip-aot sff-audio.web-server
+  :main ^:skip-aot main-sff-audio
   :target-path "target/%s"
   :profiles {
            ;  :dev {:dependencies [[org.clojure/test.check "0.9.0"]]}

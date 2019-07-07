@@ -1,19 +1,10 @@
 
-
 {
-   
-; (-main "./local-config.edn" "amazonica-db")
 		:amazonica-db {:access-key "local-access"
                  :secret-key "local-secret"
                  :endpoint   "http://localhost:8000"}
 
-
-
-
-; (-main "./local-config.edn" "monger-db")
  :monger-db {:MONGODB_URI "mongodb://localhost:27017/local"}
-
-
 
 :heroku-vars {:PORT "8080"
               :CRON-URL-DIR "/url-for-cron-execution"                                
@@ -21,36 +12,5 @@
               :TILL_USERNAME "abcdefghijklmnopqrstuvwxyz1234"
 	             :TILL_API_KEY "1234567890abcdefghijklmnopqrstuvwxyz1234"
 	             :PHONE-NUMBERS "11234567890,123234342,123123123"}
-
-
-; C:\> SET MONGODB_URI="mongodb://localhost:27017/local"
-; C:\> echo %MONGODB_URI%	
-; (System/getenv "%MONGODB_URI%")
-
-; C:\> SET PORT="8080"
-; C:\> echo %PORT%	
-; (System/getenv "%PORT%")
-
-; C:\> SET MONGODB_URI=          // to unset
-
-
-; (-main "monger-db" "localhost")            ; port 8080         port = process.env.PORT || 80
-
-; (System/getenv "MY_VAR")
-
-
-	
-; Environment Variables
-;  User variables for Me
-;   Variable     Value
-;    MONGODB_URI mongodb://localhost:27017/local
-;    PORT        8080
-
-; (System/getenv "MONGODB_URI")
-; (System/getenv "PORT")
-
-
-
-
 }
 
