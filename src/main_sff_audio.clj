@@ -37,6 +37,6 @@
 (load "./sff_audio/html-render")
 (load "./sff_audio/scrape-html")
 
-(load "heroku-main") ;  (-heroku-main "monger-db" "./local-config.edn" "use-environment")
+(load "heroku-main") ;  (-main "monger-db" "./local-config.edn" "use-environment")
 (load "local-main")  ;  (-local-main "monger-db" "./local-config.edn" "ignore-environment")
 (load "run-tests")   ;  (-run-tests)
