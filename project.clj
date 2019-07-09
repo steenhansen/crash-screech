@@ -33,7 +33,7 @@
   ;   :include-files ["target/uberjar/sff-audio-web-server-standalone.jar"]
   ;   :process-types { "web" "java -jar target/uberjar/sff-audio-web-server-standalone.jar" }
   ; }
-  ;:zprint {:old? false}
+ ; :zprint {:old? false}     ; does not work if this flag is set on windows?
   :uberjar-name "main-sff-audio-standalone.jar"
   :min-lein-version "2.0.0"
   :main ^:skip-aot main-sff-audio

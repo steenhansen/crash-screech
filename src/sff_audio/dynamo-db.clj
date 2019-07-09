@@ -14,8 +14,7 @@
 
 (defn dynamo-build
   [amazonica-config my-table-name pages-to-check]
-  (let [
-        {:keys [access-key secret-key endpoint]} amazonica-config
+  (let [{:keys [access-key secret-key endpoint]} amazonica-config
         connection-opts (compact-hash access-key secret-key endpoint)]
     (defn list-tables
       []
@@ -85,15 +84,9 @@
         sorted-matches))
     (defn delete-table
       []
-      (aws-dyn/delete-table connection-opts :table-name my-table-name)
-      )
-    
-     (defn purge-table [] 
-       (if (table-exist? my-table-name)
-            (delete-table)
-         )
-       (make-table)
-       )
-    
-    
+      (aws-dyn/delete-table connection-opts :table-name my-table-name))
+    (defn purge-table
+      []
+      (if (table-exist? my-table-name) (delete-table))
+      (make-table))
     (compact-hash delete-table purge-table get-all get-url put-item put-items)))

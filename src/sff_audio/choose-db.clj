@@ -10,7 +10,7 @@
   [table-name pages-to-check db-type the-config]
   (let [db-keyword (keyword db-type)]
     (try (case db-keyword
-           :amazonica-db (dynamo-build the-config table-name pages-to-check)                  
+           :amazonica-db (dynamo-build the-config table-name pages-to-check)
            :monger-db (mongolabs-build the-config table-name pages-to-check))
          (catch Exception e
            (println " get-db-conn - " db-keyword
@@ -18,17 +18,13 @@
 
 (defn build-empty-month?
   [get-all]
-
-    (defn empty-month?
-      []
-      (let [yyyy-mm (current-yyyy-mm)
-            url-checks (get-all yyyy-mm)
-            months-checks (count url-checks)]
-        (if (= 0 months-checks)
-          true
-          false
-          )))
-    empty-month?)
+  (defn empty-month?
+    []
+    (let [yyyy-mm (current-yyyy-mm)
+          url-checks (get-all yyyy-mm)
+          months-checks (count url-checks)]
+      (if (= 0 months-checks) true false)))
+  empty-month?)
 
 
 (defn build-today-error?
@@ -53,10 +49,8 @@
   "has test"
   [phone-comma-string]
   (let [phone-spaces (clj-str/split phone-comma-string #",")
-    phone-numbers (map clj-str/trim phone-spaces)]
-    phone-numbers
-    )
-  )
+        phone-numbers (map clj-str/trim phone-spaces)]
+    phone-numbers))
 
 
 (defn build-db
@@ -68,22 +62,19 @@
         till-username (:TILL_USERNAME the-config)
         till-api-key (:TILL_API_KEY the-config)
         phone-comma-string (:PHONE-NUMBERS the-config)
-        
         phone-numbers (get-phone-nums phone-comma-string)
-        
-        
         heroku-app-name (:HEROKU_APP_NAME the-config)
         sms-data (compact-hash till-username
                                till-api-key
                                phone-numbers
                                heroku-app-name)
         get-all (:get-all my-db-funcs)
-        my-db-obj {:delete-table (:delete-table my-db-funcs)
-                   :purge-table (:purge-table my-db-funcs)
-                   :get-all get-all
+        my-db-obj {:delete-table (:delete-table my-db-funcs),
+                   :purge-table (:purge-table my-db-funcs),
+                   :get-all get-all,
                    :get-url (:get-url my-db-funcs),
                    :put-item (:put-item my-db-funcs),
                    :put-items (:put-items my-db-funcs),
-                   :empty-month? (build-empty-month? get-all)
+                   :empty-month? (build-empty-month? get-all),
                    :today-error? (build-today-error? get-all)}]
     [my-db-obj web-port cron-url sms-data]))

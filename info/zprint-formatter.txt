@@ -1,9 +1,9 @@
 
 
+; :zprint {:old? false}     ; does not work if this flag is set on windows? in project.cli
 
-
+lein zprint src/*.clj
 lein zprint src/sff_audio/*.clj
-
 lein zprint test/sff_audio_test/*.clj
 
 

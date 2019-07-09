@@ -3,6 +3,31 @@
 
 
 
+have tests fail when 
+    memory-tests
+       mongo-tests
+          amazonica-tests
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tests have data-dirs
+
+
    :PHONE-NUMBERS "11234567890,22334455,120981203"       then just split it
    
 

@@ -1,4 +1,4 @@
-(defn date-to-yyyy-mm       
+(defn date-to-yyyy-mm
   [ymd-date]
   (let [ymd-str (str ymd-date)
         date-vector (clj-str/split ymd-str #"-")
@@ -7,15 +7,15 @@
     ym-str))
 
 (defn month-name
-  ([month-offset] 
-   (let[now-yyyy-mm (date-to-yyyy-mm (java-time/local-date))]
-      (println "ddddddddd" (type now-yyyy-mm) "ddddddddd" now-yyyy-mm "ddddddddd")
-      (month-name month-offset now-yyyy-mm)
-     )
-   
-   )
+  ([month-offset]
+   (let [now-yyyy-mm (date-to-yyyy-mm (java-time/local-date))]
+     (println "ddddddddd"
+              (type now-yyyy-mm)
+              "ddddddddd"
+              now-yyyy-mm
+              "ddddddddd")
+     (month-name month-offset now-yyyy-mm)))
   ([month-offset yyyy-mm]
-    
    (let [month-names {:0 "December",
                       :1 "January",
                       :2 "February",
@@ -39,37 +39,29 @@
          month-name (int-key month-names)]
      month-name)))
 
-(defn prev-month 
-  ([] (month-name -1))
-   ([yyyy-mm] (month-name -1 yyyy-mm)))
+(defn prev-month ([] (month-name -1)) ([yyyy-mm] (month-name -1 yyyy-mm)))
 
-(defn current-month 
-  ([] (month-name 0))
-   ([yyyy-mm] (month-name 0 yyyy-mm)))
+(defn current-month ([] (month-name 0)) ([yyyy-mm] (month-name 0 yyyy-mm)))
 
-(defn yyyy-mm-to-ints [yyyy-mm]
-  (let [ date-vector (clj-str/split yyyy-mm #"-")
-         yyyy-int (Integer/parseInt (first date-vector))
-         mm-int (Integer/parseInt (second date-vector))
-         ]
-    [yyyy-int mm-int])
-  )
+(defn yyyy-mm-to-ints
+  [yyyy-mm]
+  (let [date-vector (clj-str/split yyyy-mm #"-")
+        yyyy-int (Integer/parseInt (first date-vector))
+        mm-int (Integer/parseInt (second date-vector))]
+    [yyyy-int mm-int]))
 
-(defn current-yyyy-mm      
+(defn current-yyyy-mm
   ([] (current-yyyy-mm (date-to-yyyy-mm (java-time/local-date))))
-  ([yyyy-mm] 
-            yyyy-mm
-  ))
+  ([yyyy-mm] yyyy-mm))
 
-(defn prev-yyyy-mm   
+(defn prev-yyyy-mm
   ([] (prev-yyyy-mm (date-to-yyyy-mm (java-time/local-date))))
   ([yyyy-mm]
-   (let [
-         [yyyy-int mm-int] (yyyy-mm-to-ints yyyy-mm) 
+   (let [[yyyy-int mm-int] (yyyy-mm-to-ints yyyy-mm)
          local-date (java-time/local-date yyyy-int mm-int)
-         last-month (java-time/minus local-date (java-time/months 1))        
+         last-month (java-time/minus local-date (java-time/months 1))
          ym-str (date-to-yyyy-mm last-month)]
-   ym-str)))
+     ym-str)))
 
 (defn instant-time-fn [] (str (java-time/instant)))
 

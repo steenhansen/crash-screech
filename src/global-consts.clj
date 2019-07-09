@@ -18,8 +18,8 @@
 
 
 
-(def ^:const 	EMPTY-HTML "-")
-(def ^:const 	DATE-MAX-LENGTH 19)
+(def ^:const EMPTY-HTML "-")
+(def ^:const DATE-MAX-LENGTH 19)
 
 
 (def ^:const ERROR-KEEP-LENGTH 200)
@@ -36,21 +36,18 @@
 
 (def ^:const THE-CHECK-PAGES
   [{:check-page "www.sffaudio.com",
-    :enlive-keys [:article :div.blog-item-wrap]
-    :at-least 66} ;6
-   
+    :enlive-keys [:article :div.blog-item-wrap],
+    :at-least 6} ;6
    ;{:check-page "www.jerkersearcher.com",
    ; :enlive-keys [:article.post :h2.entry-title],
-   ; :at-least 10} 
-   
+   ; :at-least 10}
    ;  {:check-page
    ;  "sffaudio-graph-ql.herokuapp.com/media-radio-lists"
    ;  :enlive-keys[:input]  :at-least 5}
-   
-     {:check-page "sffaudio.herokuapp.com_rsd_rss"     :enlive-keys[:item]
-                        :at-least 1}
-   
-   ;  {:check-page "sffaudio.herokuapp.com_podcast_rss" :enlive-keys[:item]
+   {:check-page "sffaudio.herokuapp.com_rsd_rss",
+    :enlive-keys [:item],
+    :at-least 1} ;  {:check-page "sffaudio.herokuapp.com_podcast_rss"
+                 ;  :enlive-keys[:item]
    ;                     :at-least 525}
    ; {:check-page "sffaudio.herokuapp.com_pdf_rss"     :enlive-keys[:item]
    ;                   :at-least 6100}

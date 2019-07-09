@@ -1,3 +1,16 @@
+
+
+
+
+
+(defn count-scrapes
+  [some-html]
+  (let [number-scrapes (count-string some-html #"a_countable_scrape")]
+    number-scrapes))
+
+
+
+
 (defn get-the-name
   [accum item]
   (let [[head-name head-value] item]
@@ -43,14 +56,14 @@
   [prev-errors-today? my-db-obj]
   (let [today-error? (:today-error? my-db-obj)
         now-error? (today-error?)]
-    (if prev-errors-today? false now-error?)))       
+    (if prev-errors-today? false now-error?)))
 
 
 (defn send-first-day-sms?
- [my-db-obj]
+  [my-db-obj]
   (let [empty-month? (:empty-month? my-db-obj)
         first-check-of-month? (empty-month?)]
-    first-check-of-month?))       
+    first-check-of-month?))
 
 (defn scrape-pages-fn
   [my-db-obj pages-to-check time-fn sms-send-fn read-from-web]
@@ -75,11 +88,12 @@
                                              the-accurate
                                              the-time)]]
       (put-item check-record))
-   
     (let [send-err-sms? (first-error-today? prev-errors-today? my-db-obj)
           no-sms-sent []]
       (if send-hello-sms? (sms-send-fn SMS-NEW-MONTH send-hello-sms?))
-      (if send-err-sms? (sms-send-fn SMS-FOUND-ERROR send-hello-sms?) no-sms-sent))))  ; NB return values used
+      (if send-err-sms?
+        (sms-send-fn SMS-FOUND-ERROR send-hello-sms?)
+        no-sms-sent)))); NB return values used
 
 
 

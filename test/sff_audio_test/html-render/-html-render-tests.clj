@@ -6,3 +6,6 @@
 ; (load (str TEST-DIR "html-render/day-hour-min-test"))
 ; (load (str TEST-DIR "html-render/day-hour-min-test"))
 (load (str TEST-DIR "html-render/make-request-fn-test"))
+
+(load (str TEST-DIR "html-render/count-scrapes-test"))
+
