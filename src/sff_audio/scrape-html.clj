@@ -1,15 +1,8 @@
 
-
-
-
-
 (defn count-scrapes
   [some-html]
   (let [number-scrapes (count-string some-html #"a_countable_scrape")]
     number-scrapes))
-
-
-
 
 (defn get-the-name
   [accum item]
@@ -19,10 +12,10 @@
 (defn matching-css-sections
   [pages-html css-match]
   (map enlive-html/text
-    (enlive-html/select (-> pages-html
-                            java.io.StringReader.
-                            enlive-html/html-resource)
-                        css-match)))
+       (enlive-html/select (-> pages-html
+                               java.io.StringReader.
+                               enlive-html/html-resource)
+                           css-match)))
 
 (defn enough-sections?
   [the-html css-match wanted-matches]
@@ -51,13 +44,11 @@
       (:body (http-client/get (str "https://" under-to-slashes))))
     (slurp (str SCRAPED-TEST-DATA check-page))))
 
-
 (defn first-error-today?
   [prev-errors-today? my-db-obj]
   (let [today-error? (:today-error? my-db-obj)
         now-error? (today-error?)]
     (if prev-errors-today? false now-error?)))
-
 
 (defn send-first-day-sms?
   [my-db-obj]
@@ -78,7 +69,7 @@
                   end-timer (System/currentTimeMillis)
                   the-time (- end-timer start-timer)
                   {:keys [actual-matches the-accurate]}
-                    (enough-sections? web-html enlive-keys at-least)
+                  (enough-sections? web-html enlive-keys at-least)
                   the-url (real-slash-url check-page)
                   the-date (time-fn)
                   the-html (remove-tags web-html)

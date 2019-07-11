@@ -15,6 +15,9 @@
   (:require [ring.middleware.reload :as ring-reload])
   (:require [ring.util.response :as ring-response])
   (:require [java-time])
+
+ (:require [cheshire.core :refer :all])
+
   (:require [clojure.test :refer :all])
   (:require [clojure.spec.alpha :as spec-alpha]
             [clojure.spec.gen.alpha :as spec-gen]
@@ -36,6 +39,8 @@
 (load "./sff_audio/html-render")
 (load "./sff_audio/scrape-html")
 
-(load "heroku-main");  (-main "monger-db" "./local-config.edn" "use-environment")
-(load "local-main");  (-local-main "monger-db" "./local-config.edn" "ignore-environment")
-(load "run-tests");  (-run-tests)
+(load "heroku-main")  ;  (-main "monger-db" "./local-config.edn" "use-environment")
+(load "local-main")   ;  (-local-main "monger-db" "./local-config.edn" "ignore-environment")
+
+(load "send-sms")     ;  (-sms-test "monger-db" "../heroku-config.edn" "use-environment") 
+(load "run-tests")    ;  (-run-tests)

@@ -2,25 +2,10 @@
 
 (def ^:const DB-TABLE-NAME "fff2")
 
-;(def ^:const DB-TEST-NAME "zzz2")
-
-
-
-
-
-
-
-
-
 (def ^:const SCRAPED-TEST-DATA "./test/scraped-data/")
-
-
-
-
 
 (def ^:const EMPTY-HTML "-")
 (def ^:const DATE-MAX-LENGTH 19)
-
 
 (def ^:const ERROR-KEEP-LENGTH 200)
 (def ^:const IGNORE-ENV-VARS "ignore-environment"); don't look at Windows environment variables, just in case
@@ -53,4 +38,4 @@
    ;                   :at-least 6100}
    ;   {:check-page "sffaudio-search.herokuapp.com"
    ;   :enlive-keys[:div.book__choice]             :at-least 6400}
-  ])
+   ])

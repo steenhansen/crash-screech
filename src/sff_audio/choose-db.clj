@@ -1,11 +1,3 @@
-
-; (load "dynamo-db")
-; (load "mongo-db")
-; (load "check-data")
-
-
-
-
 (defn get-db-conn
   [table-name pages-to-check db-type the-config]
   (let [db-keyword (keyword db-type)]
@@ -25,7 +17,6 @@
           months-checks (count url-checks)]
       (if (= 0 months-checks) true false)))
   empty-month?)
-
 
 (defn build-today-error?
   [get-all]
@@ -49,9 +40,10 @@
   "has test"
   [phone-comma-string]
   (let [phone-spaces (clj-str/split phone-comma-string #",")
-        phone-numbers (map clj-str/trim phone-spaces)]
-    phone-numbers))
-
+        phone-numbers (map clj-str/trim phone-spaces)
+        phone-vector (into [] phone-numbers)
+        ]
+      phone-vector))
 
 (defn build-db
   [table-name pages-to-check db-type config-file environment-utilize]
@@ -77,4 +69,5 @@
                    :put-items (:put-items my-db-funcs),
                    :empty-month? (build-empty-month? get-all),
                    :today-error? (build-today-error? get-all)}]
+
     [my-db-obj web-port cron-url sms-data]))

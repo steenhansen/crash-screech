@@ -1,9 +1,4 @@
 
-; (load "singular-service")
-; (load "temporize-event")
-; (load "check-data")
-
-
 (defn render-parts [html-pieces] (apply str html-pieces))
 
 (defn day-hour-min
@@ -36,9 +31,6 @@
 
 (defn fill-url [check-url] (enlive-html/do-> (enlive-html/content check-url)))
 
-
-
-
 (spec-alpha/fdef fill-bytes
   :args (spec-alpha/cat :check-bytes
                         number?)
@@ -48,51 +40,47 @@
   [check-bytes]
   (enlive-html/do-> (enlive-html/content (str check-bytes))))
 
-
-
-
 (defn fill-html
   [check-accurate check-html]
   (enlive-html/do-> (enlive-html/content (if check-accurate "" check-html))))
 
 (enlive-html/defsnippet row-selector
-                        BASE-HTML-TEMPLATE
-                        [[:.month_content (enlive-html/nth-of-type 1)] :>
-                         enlive-html/first-child]
-                        [{:keys [check-url check-date check-bytes check-html
-                                 check-accurate check-time]}]
-                        [:div.scrape_accurate]
-                        (fill-accurate check-accurate)
-                        [:div.scrape_time]
-                        (fill-time check-time)
-                        [:div.scrape_date]
-                        (fill-date check-date)
-                        [:div.scrape_url]
-                        (fill-url check-url)
-                        [:div.scrape_bytes]
-                        (fill-bytes check-bytes)
-                        [:div.scrape_html]
-                        (fill-html check-accurate check-html))
+  BASE-HTML-TEMPLATE
+  [[:.month_content (enlive-html/nth-of-type 1)] :>
+   enlive-html/first-child]
+  [{:keys [check-url check-date check-bytes check-html
+           check-accurate check-time]}]
+  [:div.scrape_accurate]
+  (fill-accurate check-accurate)
+  [:div.scrape_time]
+  (fill-time check-time)
+  [:div.scrape_date]
+  (fill-date check-date)
+  [:div.scrape_url]
+  (fill-url check-url)
+  [:div.scrape_bytes]
+  (fill-bytes check-bytes)
+  [:div.scrape_html]
+  (fill-html check-accurate check-html))
 
 (enlive-html/defsnippet month-selector
-                        BASE-HTML-TEMPLATE
-                        {[:.a_month] [[:.month_content
-                                       (enlive-html/nth-of-type 1)]]}
-                        [{:keys [month-type month-data]}]
-                        [:.a_month]
-                        (enlive-html/content month-type)
-                        [:.month_content]
-                        (enlive-html/content (map row-selector month-data)))
+  BASE-HTML-TEMPLATE
+  {[:.a_month] [[:.month_content
+                 (enlive-html/nth-of-type 1)]]}
+  [{:keys [month-type month-data]}]
+  [:.a_month]
+  (enlive-html/content month-type)
+  [:.month_content]
+  (enlive-html/content (map row-selector month-data)))
 
 (enlive-html/deftemplate index-page
-                         BASE-HTML-TEMPLATE
-                         [{:keys [page-title month-sections]}]
-                         [:#title_of_page]
-                         (enlive-html/content page-title)
-                         [:#two_months]
-                         (enlive-html/content (map #(month-selector %)
-                                                month-sections)))
-
+  BASE-HTML-TEMPLATE
+  [{:keys [page-title month-sections]}]
+  [:#title_of_page]
+  (enlive-html/content page-title)
+  [:#two_months]
+  (enlive-html/content (map #(month-selector %)
+                            month-sections)))
 
 (defn get-two-months
   [my-db-obj yyyy-mm]
@@ -106,10 +94,6 @@
         previous-months (vec last-months)]
     [previous-months current-months]))
 
-
-
-
-
 (defn get-index
   "has db test"
   ([my-db-obj] (get-index my-db-obj (date-to-yyyy-mm (java-time/local-date))))
@@ -119,11 +103,10 @@
          cur-name (current-month yyyy-mm)
          db-data {:page-title "SFFaudio page checks",
                   :month-sections
-                    [{:month-type prev-name, :month-data previous-months}
-                     {:month-type cur-name, :month-data current-months}]}
+                  [{:month-type prev-name, :month-data previous-months}
+                   {:month-type cur-name, :month-data current-months}]}
          page-html (render-parts (index-page db-data))]
      page-html)))
-
 
 (defn show-data
   "has db test"

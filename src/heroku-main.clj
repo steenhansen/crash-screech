@@ -10,6 +10,6 @@
                                                          environment-utilize)
         int-port (Integer/parseInt web-port)
         temporize-func
-          (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)
+        (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)
         request-handler (make-request-fn temporize-func my-db-obj cron-url)]
     (web-init int-port request-handler)))

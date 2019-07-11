@@ -1,5 +1,4 @@
 
-
 (defn read-config-file
   [config-file]
   (let [config-path (str (file-sys/absolute config-file))]
@@ -14,7 +13,7 @@
         plain-key (name env-key)
         the-value (val env-object)
         system-environment
-          (assoc-in accum-environment [env-key] (System/getenv plain-key))
+        (assoc-in accum-environment [env-key] (System/getenv plain-key))
         program-environment (assoc-in accum-environment [env-key] the-value)]
     (if (System/getenv plain-key) system-environment program-environment)))
 

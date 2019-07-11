@@ -1,16 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
 (defn start-cron
   [cron-job my-db-obj pages-to-check sms-data]
   (let [an-sms-test? true

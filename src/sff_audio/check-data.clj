@@ -1,8 +1,4 @@
 
-
-
-
-
 (defn count-string
   "has test"
   [hay-stack needle-regex]

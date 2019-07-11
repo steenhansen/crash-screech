@@ -3,15 +3,6 @@
 ; https://github.com/mcohen01/amazonica   put-item
 ; https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
 
-; (load "check-data")
-
-; (load "check-data")
-
-
-
-
-
-
 (defn dynamo-build
   [amazonica-config my-table-name pages-to-check]
   (let [{:keys [access-key secret-key endpoint]} amazonica-config
@@ -31,17 +22,17 @@
     (defn make-table
       []
       (let [create-return
-              (aws-dyn/create-table
-                connection-opts
-                :table-name my-table-name
-                :key-schema [{:attribute-name "check-url", :key-type "HASH"}
-                             {:attribute-name "_id", :key-type "RANGE"}]
-                :attribute-definitions
-                  [{:attribute-name "check-url", :attribute-type "S"}
-                   {:attribute-name "_id", :attribute-type "S"}]
-                :provisioned-throughput {:read-capacity-units MAX-R-W-RECORDS,
-                                         :write-capacity-units
-                                           MAX-R-W-RECORDS})]))
+            (aws-dyn/create-table
+             connection-opts
+             :table-name my-table-name
+             :key-schema [{:attribute-name "check-url", :key-type "HASH"}
+                          {:attribute-name "_id", :key-type "RANGE"}]
+             :attribute-definitions
+             [{:attribute-name "check-url", :attribute-type "S"}
+              {:attribute-name "_id", :attribute-type "S"}]
+             :provisioned-throughput {:read-capacity-units MAX-R-W-RECORDS,
+                                      :write-capacity-units
+                                      MAX-R-W-RECORDS})]))
     (defn put-item
       [check-record]
       (when-not (table-exist? my-table-name) (make-table))
@@ -63,13 +54,13 @@
     (defn get-url
       [begins-with page-to-check]
       (let [page-matches (aws-dyn/query
-                           connection-opts
-                           :table-name my-table-name
-                           :key-conditions
-                             {:check-url {:attribute-value-list [page-to-check],
-                                          :comparison-operator "EQ"},
-                              :_id {:attribute-value-list [begins-with],
-                                    :comparison-operator "BEGINS_WITH"}})
+                          connection-opts
+                          :table-name my-table-name
+                          :key-conditions
+                          {:check-url {:attribute-value-list [page-to-check],
+                                       :comparison-operator "EQ"},
+                           :_id {:attribute-value-list [begins-with],
+                                 :comparison-operator "BEGINS_WITH"}})
             plain-items (:items page-matches)]
         plain-items))
     (defn get-all

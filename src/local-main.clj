@@ -4,15 +4,11 @@
 (comment "local monger db"
          (-local-main "monger-db" "./local-config.edn" "ignore-environment"))
 
-
 (comment "local amazonica db"
          (-local-main "amazonica-db" "./local-config.edn" "ignore-environment"))
 (comment "real monger db, config file outside project"
          (-local-main "monger-db" "../heroku-config.edn" "ignore-environment"))
 
-
-
-;(defn -main-dev
 (defn -local-main
   [db-type config-file environment-utilize]
   (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME
@@ -42,7 +38,7 @@
                     :the-accurate false,
                     :the-time 12346}]
         temporize-func
-          (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)
+        (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)
         request-handler (make-request-fn temporize-func my-db-obj cron-url)
         test-one {:the-url "www.sffaudio.com",
                   :the-date "2019-06-19-01:54:03.800Z",

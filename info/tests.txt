@@ -1,12 +1,6 @@
 
 
 
-in CIDER run tests 
-
- ::: load test/com/example/the-tests.clj
-
- ::: M-x cider-jack-in
-
- ::: CIDER Eval | Load this buffer
 
 
+(-run-tests)2222
