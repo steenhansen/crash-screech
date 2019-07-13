@@ -16,7 +16,6 @@
         system-environment (assoc-in accum-environment [env-key] system-env)
         program-environment (assoc-in accum-environment [env-key] the-value)]
 (println "++++++++++++++++++++" (type plain-key))
-(println "@@@@@@" (System/getenv env-key))
 (println "#####" (System/getenv plain-key))
 (println plain-key "^^" env-key "**" system-env "++" the-value)
     (if (System/getenv plain-key) system-environment program-environment)))
