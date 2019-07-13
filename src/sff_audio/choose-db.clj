@@ -52,11 +52,13 @@
         web-port (:PORT the-config)
         cron-url (:CRON_URL_DIR the-config)
         till-username (:TILL_USERNAME the-config)
+        till-url (:TILL_URL the-config)
         till-api-key (:TILL_API_KEY the-config)
         phone-comma-string (:PHONE_NUMBERS the-config)
         phone-numbers (get-phone-nums phone-comma-string)
         heroku-app-name (:HEROKU_APP_NAME the-config)
         sms-data (compact-hash till-username
+                               till-url
                                till-api-key
                                phone-numbers
                                heroku-app-name)

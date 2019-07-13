@@ -9,17 +9,11 @@
 
 (defn make-api-call
   [sms-data sms-error-message send-hello-sms?]
-  (let [{:keys [till-username till-api-key phone-numbers heroku-app-name]} sms-data
-        till-url (str "https://platform.tillmobile.com/api/send?username="
-                      till-username
-                      "&api_key=" till-api-key)
-      ;  phone-list (str phone-numbers)
+  (let [{:keys [till-username till-url till-api-key phone-numbers heroku-app-name]} sms-data
+        till-url (str till-url "username=" till-username "&api_key=" till-api-key)
         sms-message (str sms-error-message " - " heroku-app-name)
         sms-params {:form-params {:phone phone-numbers, :text sms-message},
                     :content-type :json}]
-    
-    
-    
     (compact-hash till-url sms-params send-hello-sms?)))
 
 (defn build-sms-send

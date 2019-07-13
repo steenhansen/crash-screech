@@ -1,11 +1,4 @@
 
-               TILL_URL "username="
-till-url (str "https://platform.tillmobile.com/api/send?username="
-                      till-username
-                      "&api_key=" till-api-key)
-
-
-
 
 
 
