@@ -12,8 +12,7 @@
   (let [env-key (key env-object)
         plain-key (name env-key)
         the-value (val env-object)
-        system-environment
-        (assoc-in accum-environment [env-key] (System/getenv plain-key))
+        system-environment (assoc-in accum-environment [env-key] (System/getenv plain-key))
         program-environment (assoc-in accum-environment [env-key] the-value)]
     (if (System/getenv plain-key) system-environment program-environment)))
 
@@ -26,6 +25,8 @@
         program-config (merge heroku-config db-config)
         ignore-environmentals (= environment-utilize IGNORE-ENV-VARS)
         has-environmentals (reduce merge-environment {} program-config)]
+    
+    (println "has-environmentals" ignore-environmentals has-environmentals)
     (if ignore-environmentals program-config has-environmentals)))
 
 (defmacro compact-hash [& vars] (list `zipmap (mapv keyword vars) (vec vars)))
