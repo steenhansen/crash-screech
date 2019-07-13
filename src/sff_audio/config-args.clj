@@ -14,6 +14,10 @@
         the-value (val env-object)
         system-environment (assoc-in accum-environment [env-key] (System/getenv plain-key))
         program-environment (assoc-in accum-environment [env-key] the-value)]
+      (println "++++++++++++++++++++" (type plain-key))
+(println "@@@@@@" (System/getenv env-key))
+(println "#####" (System/getenv plain-key))
+(println plain-key "^^" env-key "**" system-env "++" the-value)
     (if (System/getenv plain-key) system-environment program-environment)))
 
 (defn make-config
