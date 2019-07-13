@@ -5,3 +5,35 @@ for windows enviroment variables
 	C:\> echo %MONGODB_USER_PASS_URI%	
 
 (System/getenv "MY_VAR")
+
+
+
+
+
+; C:\> SET MONGODB_URI="mongodb://localhost:27017/local"
+; C:\> echo %MONGODB_URI%	
+; (System/getenv "%MONGODB_URI%")
+
+; C:\> SET PORT="8080"
+; C:\> echo %PORT%	
+; (System/getenv "%PORT%")
+
+; C:\> SET MONGODB_URI=          // to unset
+
+
+; (-main "monger-db" "localhost")            ; port 8080         port = process.env.PORT || 80
+
+; (System/getenv "MY_VAR")
+
+
+	
+; Environment Variables
+;  User variables for Me
+;   Variable     Value
+;    MONGODB_URI mongodb://localhost:27017/local
+;    PORT        8080
+
+; (System/getenv "MONGODB_URI")
+; (System/getenv "PORT")
+
+

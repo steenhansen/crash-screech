@@ -26,7 +26,18 @@
         ignore-environmentals (= environment-utilize IGNORE-ENV-VARS)
         has-environmentals (reduce merge-environment {} program-config)]
     
-    (println "has-environmentals" ignore-environmentals has-environmentals)
-    (if ignore-environmentals program-config has-environmentals)))
+    (println "-----------------------------------------")
+    (println "ignore-environmentals" ignore-environmentals)
+    (println "-----------------------------------------")
+    (println "has-environmentals" has-environmentals)
+    (println "-----------------------------------------")
+    (println "program-config" program-config)
+    (println "-----------------------------------------")
+    (println "heroku-config" heroku-config)
+    (println "-----------------------------------------")
+    (println "db-config" db-config)
+    (println "-----------------------------------------")
+
+        (if ignore-environmentals program-config has-environmentals)))
 
 (defmacro compact-hash [& vars] (list `zipmap (mapv keyword vars) (vec vars)))
