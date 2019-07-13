@@ -1,48 +1,6 @@
 
 
 
-Glenn free medical teeth
-
-
-have an SMS-send.clj         to scream sms
-
-have a (test-sms-send) to send to both phone, or included phone
-(test-sms '60444
-(test-sms ['604
-(test-sms)
-
-
-auto-save
-
-
-
-
-
-
-(defun sidebar-toggle ()
-  "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
-  (interactive)
-  (dired-sidebar-toggle-sidebar)
-  (ibuffer-sidebar-toggle-sidebar))
-
-
-
-
-
-
-
-https://www.gnu.org/software/emacs/manual/html_node/elisp/Auto_002dSaving.html
-
-
-
-auto load on auto save
-
-have button control -a   reload all things
-
-
-
-
-
 
 
     :CRON-URL-DIR "/url-for-cron-execution"  

@@ -1,0 +1,36 @@
+
+To get native grep for Emacs in Windows
+  Get Gnu Grep installer
+    http://gnuwin32.sourceforge.net/packages/grep.htm
+
+  Run
+    grep-2.5.4-src-setup.exe
+
+  Install in
+    C:\Program Files (x86)\GnuWin32
+
+  To System.Path add
+    C:\Program Files (x86)\GnuWin32\bin
+
+  Copy dlls in program-bin.zip/bin to c:/Windows/SysWoW64
+    http://gnuwin32.sourceforge.net/packages/libintl.htm
+      libintl3.dll
+    http://gnuwin32.sourceforge.net/packages/libiconv.htm
+      libiconv2.dll
+    http://gnuwin32.sourceforge.net/packages/pcre.htm
+      pcre3.dll
+    http://gnuwin32.sourceforge.net/packages/regex.htm
+      regex2.dll  
+
+  Info
+    https://www.emacswiki.org/emacs/GrepMode#GnuWin32
+
+  Default
+	(setq grep-command "grep -nr SEARCH-TEXT d:/_clojure/stat/src") 
+
+
+Mx Grep works in Emacs. -n linked, -r recursive
+	grep -n -r build-sms-send d:/_clojure/stat/src          
+	grep -n -r app.com *
+
+

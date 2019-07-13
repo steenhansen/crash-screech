@@ -22,7 +22,7 @@
 (def ^:const THE-CHECK-PAGES
   [{:check-page "www.sffaudio.com",
     :enlive-keys [:article :div.blog-item-wrap],
-    :at-least 6} ;6
+    :at-least 666} ;6
    ;{:check-page "www.jerkersearcher.com",
    ; :enlive-keys [:article.post :h2.entry-title],
    ; :at-least 10}
