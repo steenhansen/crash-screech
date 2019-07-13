@@ -16,6 +16,9 @@
   (:require [ring.util.response :as ring-response])
   (:require [java-time])
 
+
+
+
  (:require [cheshire.core :refer :all])
 
   (:require [clojure.test :refer :all])
@@ -40,7 +43,7 @@
 (load "./sff_audio/scrape-html")
 
 (load "heroku-main")  ;  (-main "monger-db" "./local-config.edn" "use-environment")
-(load "local-main")   ;  (-local-main "monger-db" "./local-config.edn" "ignore-environment")
+(load "local-main")   ;  (-local-main "monger-db" "./local-config.edn" "use-environment")
 
 (load "send-sms")     ;  (-sms-test "monger-db" "../heroku-config.edn" "use-environment") 
 (load "run-tests")    ;  (-run-tests)

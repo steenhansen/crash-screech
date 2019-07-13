@@ -12,9 +12,10 @@
   (let [env-key (key env-object)
         plain-key (name env-key)
         the-value (val env-object)
-        system-environment (assoc-in accum-environment [env-key] (System/getenv plain-key))
+        system-env (System/getenv plain-key)
+        system-environment (assoc-in accum-environment [env-key] system-env)
         program-environment (assoc-in accum-environment [env-key] the-value)]
-      (println "++++++++++++++++++++" (type plain-key))
+(println "++++++++++++++++++++" (type plain-key))
 (println "@@@@@@" (System/getenv env-key))
 (println "#####" (System/getenv plain-key))
 (println plain-key "^^" env-key "**" system-env "++" the-value)

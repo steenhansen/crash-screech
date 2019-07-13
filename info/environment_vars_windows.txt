@@ -36,4 +36,24 @@ for windows enviroment variables
 ; (System/getenv "MONGODB_URI")
 ; (System/getenv "PORT")
 
+/////////////////////////////
+ in Command Prompt
+
+SET CRON-URL-DIR="windows cron-url-dir env"
+SET HEROKU_APP_NAME="windows heroku-app-name env"
+SET PHONE-NUMBERS="123,456,789"
+SET TILL_API_KEY="till api"
+SET TILL_USERNAME="till username"
+SET MONGODB_URI="mongodb://localhost:27017/local"
+
+echo %CRON-URL-DIR%	
+echo %HEROKU_APP_NAME%
+echo %PHONE-NUMBERS%
+echo %TILL_API_KEY%	
+echo %TILL_USERNAME%	
+echo %MONGODB_URI%	
+
+
+
+ 
 
