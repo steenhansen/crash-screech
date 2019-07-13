@@ -50,10 +50,10 @@
   (let [the-config (make-config db-type config-file environment-utilize)
         my-db-funcs (get-db-conn table-name pages-to-check db-type the-config)
         web-port (:PORT the-config)
-        cron-url (:CRON-URL-DIR the-config)
+        cron-url (:CRON_URL_DIR the-config)
         till-username (:TILL_USERNAME the-config)
         till-api-key (:TILL_API_KEY the-config)
-        phone-comma-string (:PHONE-NUMBERS the-config)
+        phone-comma-string (:PHONE_NUMBERS the-config)
         phone-numbers (get-phone-nums phone-comma-string)
         heroku-app-name (:HEROKU_APP_NAME the-config)
         sms-data (compact-hash till-username

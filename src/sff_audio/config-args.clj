@@ -15,9 +15,9 @@
         system-env (System/getenv plain-key)
         system-environment (assoc-in accum-environment [env-key] system-env)
         program-environment (assoc-in accum-environment [env-key] the-value)]
-(println "++++++++++++++++++++" (type plain-key))
-(println "#####" (System/getenv plain-key))
-(println plain-key "^^" env-key "**" system-env "++" the-value)
+;(println "++++++++++++++++++++" (type env-key)  (type plain-key))
+;(println "#####" (System/getenv plain-key))
+;(println plain-key "^^" env-key "**" system-env "++" the-value)
     (if (System/getenv plain-key) system-environment program-environment)))
 
 (defn make-config
@@ -30,17 +30,17 @@
         ignore-environmentals (= environment-utilize IGNORE-ENV-VARS)
         has-environmentals (reduce merge-environment {} program-config)]
     
-    (println "-----------------------------------------")
-    (println "ignore-environmentals" ignore-environmentals)
-    (println "-----------------------------------------")
-    (println "has-environmentals" has-environmentals)
-    (println "-----------------------------------------")
-    (println "program-config" program-config)
-    (println "-----------------------------------------")
-    (println "heroku-config" heroku-config)
-    (println "-----------------------------------------")
-    (println "db-config" db-config)
-    (println "-----------------------------------------")
+     (println "-----------------------------------------")
+     (println "ignore-environmentals" ignore-environmentals)
+     (println "-----------------------------------------")
+    ; (println "has-environmentals" has-environmentals)
+    ; (println "-----------------------------------------")
+    ; (println "program-config" program-config)
+    ; (println "-----------------------------------------")
+    ; (println "heroku-config" heroku-config)
+    ; (println "-----------------------------------------")
+    ; (println "db-config" db-config)
+    ; (println "-----------------------------------------")
 
         (if ignore-environmentals program-config has-environmentals)))
 

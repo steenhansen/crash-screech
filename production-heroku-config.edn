@@ -1,5 +1,5 @@
 
-
+; NB no dashes in config vars
 ; use Heroku's config vars
 
 {}
