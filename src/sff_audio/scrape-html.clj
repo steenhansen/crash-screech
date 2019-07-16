@@ -1,4 +1,7 @@
 
+
+(import 'java.util.regex.Pattern)
+
 (defn count-scrapes
   [some-html]
   (let [number-scrapes (count-string some-html #"a_countable_scrape")]
@@ -17,13 +20,25 @@
                                enlive-html/html-resource)
                            css-match)))
 
+
+(defn matches-accurate
+ [actual-matches wanted-matches]
+  (if (>= actual-matches wanted-matches)
+      {:actual-matches actual-matches, :the-accurate true}
+      {:actual-matches actual-matches, :the-accurate false}))
+
+
 (defn enough-sections?
   [the-html css-match wanted-matches]
+ (if (< 1000 wanted-matches)
+  (let [ name-key (name (first css-match) )
+     my-regex ( re-pattern (str (java.util.regex.Pattern/quote name-key)))
+                       split-vector  (clj-str/split the-html my-regex)
+                       actual-matches (count split-vector)]
+    (matches-accurate actual-matches wanted-matches))
   (let [actual-sections (matching-css-sections the-html css-match)
         actual-matches (count actual-sections)]
-    (if (>= actual-matches wanted-matches)
-      {:actual-matches actual-matches, :the-accurate true}
-      {:actual-matches actual-matches, :the-accurate false})))
+        (matches-accurate actual-matches wanted-matches))))
 
 (defn remove-tags
   [the-html]
@@ -56,6 +71,12 @@
         first-check-of-month? (empty-month?)]
     first-check-of-month?))
 
+(defn figure-interval
+  [start-time]
+  (let [end-time (System/currentTimeMillis)
+        total-time (- end-time start-time)]
+    total-time))
+
 (defn scrape-pages-fn
   [my-db-obj pages-to-check time-fn sms-send-fn read-from-web]
   (let [today-error? (:today-error? my-db-obj)
@@ -66,28 +87,21 @@
             :let [{:keys [check-page enlive-keys at-least]} check-page-obj
                   start-timer (System/currentTimeMillis)
                   web-html (read-html check-page read-from-web)
-                  end-timer (System/currentTimeMillis)
-                  the-time (- end-timer start-timer)
-
-start-process (System/currentTimeMillis)
-
+                  the-time (figure-interval start-timer)
+                  start-process (System/currentTimeMillis)
                   {:keys [actual-matches the-accurate]}
-                  (enough-sections? web-html enlive-keys at-least)
+
+                  (enough-sections? web-html enlive-keys at-least)     ;;;; make a function
                   the-url (real-slash-url check-page)
-
-
-
-
                   the-date (time-fn)
                   the-html (remove-tags web-html)
-  end-process (System/currentTimeMillis)
-   process-time (- end-process start-process)
+                  process-time (figure-interval start-process)
                   check-record (compact-hash the-url
                                              the-date
                                              the-html
                                              the-accurate
                                              the-time)]]
-(println "the-time " the-time the-url process-time)
+      (println "the-time the-url process-time" the-time the-url process-time)
       (put-item check-record))
     (let [send-err-sms? (first-error-today? prev-errors-today? my-db-obj)
           no-sms-sent []]

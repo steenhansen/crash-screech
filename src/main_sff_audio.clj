@@ -2,6 +2,9 @@
 
   (:gen-class)
   (:require [amazonica.aws.dynamodbv2 :as aws-dyn])
+  
+  ; (:require [java.util.regex.Pattern :as reg-pat])
+   
   (:require [clojure.string :as clj-str])
   (:require [clojure.main :as clj-main])
   (:require [edn-config.core :as edn-read])
