@@ -19,23 +19,50 @@
 ;(def ^:const SMS-NO-ERROR [])
 (def ^:const SMS-NEW-MONTH "Start of a new SFFaudio month!")
 
+(def ^:const SFF-AUDIO
+  {:check-page "www.sffaudio.com",
+   :enlive-keys [:article :div.blog-item-wrap],
+   :at-least 66})
+
+(def ^:const SFF-RSD
+  {:check-page "sffaudio.herokuapp.com_rsd_rss"   :enlive-keys [:item],
+   :at-least 1})
+
+(def ^:const SFF-PODCAST
+  {:check-page "sffaudio.herokuapp.com_podcast_rss"
+   :enlive-keys [:item]
+   :at-least 525})
+
+(def ^:const SFF-PDF
+  {:check-page "sffaudio.herokuapp.com_pdf_rss"     :enlive-keys [:item]
+   :at-least 6100})
+
+(def ^:const SFF-MEDIA
+
+  {:check-page
+   "sffaudio-graph-ql.herokuapp.com/media-radio-lists"
+   :enlive-keys [:input]  :at-least 5})
+
+(def ^:const SFF-SEARCH
+
+  {:check-page "sffaudio-search.herokuapp.com"
+   :enlive-keys [:div.book__choice]             :at-least 6400})
+
+(def ^:const CANADIAN-QUOTATIONS
+  {:check-page "www.canadianquotations.ca",
+   :enlive-keys [:article.post],   :at-least 21})
+
+(def ^:const JERKER-SEARCHER
+  {:check-page "www.jerkersearcher.com",
+   :enlive-keys [:article.post :h2.entry-title],
+   :at-least 10})
+
 (def ^:const THE-CHECK-PAGES
-  [{:check-page "www.sffaudio.com",
-    :enlive-keys [:article :div.blog-item-wrap],
-    :at-least 666} ;6
-   ;{:check-page "www.jerkersearcher.com",
-   ; :enlive-keys [:article.post :h2.entry-title],
-   ; :at-least 10}
-   ;  {:check-page
-   ;  "sffaudio-graph-ql.herokuapp.com/media-radio-lists"
-   ;  :enlive-keys[:input]  :at-least 5}
-   {:check-page "sffaudio.herokuapp.com_rsd_rss",
-    :enlive-keys [:item],
-    :at-least 1} ;  {:check-page "sffaudio.herokuapp.com_podcast_rss"
-                 ;  :enlive-keys[:item]
-   ;                     :at-least 525}
-   ; {:check-page "sffaudio.herokuapp.com_pdf_rss"     :enlive-keys[:item]
-   ;                   :at-least 6100}
-   ;   {:check-page "sffaudio-search.herokuapp.com"
-   ;   :enlive-keys[:div.book__choice]             :at-least 6400}
-   ])
+  [SFF-AUDIO
+   SFF-RSD
+   SFF-PODCAST
+   SFF-PDF
+   SFF-MEDIA
+   SFF-SEARCH
+   CANADIAN-QUOTATIONS
+   JERKER-SEARCHER])

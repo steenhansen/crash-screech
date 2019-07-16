@@ -11,14 +11,11 @@
      [overtone/at-at "1.2.0"]
      [clojure.java-time "0.3.2"]
      [clj-http "3.10.0"]
-[cheshire "5.8.1"]
-     [me.raynes/fs "1.4.6"]
+     [cheshire "5.8.1"]
+     [me.raynes/fs "1.4.6"]      
      [enlive "1.1.6"]
      [ring "1.6.3"]
-     [log4j/log4j
-      "1.2.16"
-      :exclusions
-      [javax.mail/mail javax.jms/jms com.sun.jdmk/jmxtools com.sun.jmx/jmxri]]
+     [log4j/log4j "1.2.16" :exclusions [javax.mail/mail javax.jms/jms com.sun.jdmk/jmxtools com.sun.jmx/jmxri]]
      [org.slf4j/slf4j-log4j12 "1.6.4"]
      [org.clojure/tools.logging "0.2.3"]
      [clj-logging-config "1.9.7"]]

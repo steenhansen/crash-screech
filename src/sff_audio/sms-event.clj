@@ -8,21 +8,21 @@
 
 
 (defn make-api-call
-  [sms-data sms-error-message send-hello-sms?]
-  (let [{:keys [till-username till-url till-api-key phone-numbers heroku-app-name]} sms-data
+  [sms-data sms-message]
+  (let [{:keys [till-username till-url till-api-key phone-numbers heroku-app-name testing-sms?]} sms-data
         till-url (str till-url "?username=" till-username "&api_key=" till-api-key)
-        sms-message (str sms-error-message " - " heroku-app-name)
+        sms-message (str sms-message " - " heroku-app-name)
         sms-params {:form-params {:phone phone-numbers, :text sms-message},
                     :content-type :json}]
-    (compact-hash till-url sms-params send-hello-sms?)))
+    (compact-hash till-url sms-params testing-sms?)))
 
 (defn build-sms-send
-  [sms-data an-sms-test?]
+  [sms-data]    
   (defn sms-send-fn
-    [sms-error-message send-hello-sms?]
-    (let [{:keys [till-url sms-params]} (make-api-call sms-data sms-error-message send-hello-sms?)
-          test-sms (compact-hash till-url sms-params send-hello-sms?)]
-      (if an-sms-test?
+    [sms-message]
+    (let [{:keys [till-url sms-params testing-sms?]} (make-api-call sms-data sms-message)
+          test-sms (compact-hash till-url sms-params testing-sms?)]
+      (if testing-sms?
          (println " tttttttttttttttttttttttttttttttttttt test" test-sms)
             (http-client/post till-url sms-params)
         )
@@ -33,16 +33,13 @@
 ;https://tillmobile.com/
 (defn sms-to-phones
   [sms-data]
-  (let [an-sms-test? false
-        sms-send-fn (build-sms-send sms-data an-sms-test?)]
-(println "ddddddddddd" sms-data)
-   (sms-send-fn "test sms call" an-sms-test? )))
+  (let [sms-send-fn (build-sms-send sms-data)]
+   (sms-send-fn "test sms call" )))
   
 
 (defn single-cron-fn
   [scrape-pages-fn my-db-obj pages-to-check sms-data]
-  (let [an-sms-test? false
-        sms-send-fn (build-sms-send sms-data an-sms-test?)
+  (let [ sms-send-fn (build-sms-send sms-data)
         read-from-web true]
     (defn temporize-func
       []

@@ -7,7 +7,44 @@
 (def ^:const TEST-DIR "../test/sff_audio_test/")
 
 (load (str TEST-DIR "dbs-turned-on"))
-(print-block)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ (sms-is-in-test :monger-db)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 (load (str TEST-DIR "checked-data/tests"))
 (load (str TEST-DIR "choose-db/tests"))
@@ -72,6 +109,9 @@
 
 (defn test-ns-hook [] (test-suite))
 
-(run-tests 'main-sff-audio)
+(defn -run-tests []
+  (kill-services)
+	 (run-tests 'main-sff-audio)
+ )
 
 

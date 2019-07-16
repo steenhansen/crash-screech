@@ -1,4 +1,5 @@
 (ns main-sff-audio
+
   (:gen-class)
   (:require [amazonica.aws.dynamodbv2 :as aws-dyn])
   (:require [clojure.string :as clj-str])
@@ -15,12 +16,7 @@
   (:require [ring.middleware.reload :as ring-reload])
   (:require [ring.util.response :as ring-response])
   (:require [java-time])
-
-
-
-
- (:require [cheshire.core :refer :all])
-
+  (:require [cheshire.core :refer :all])
   (:require [clojure.test :refer :all])
   (:require [clojure.spec.alpha :as spec-alpha]
             [clojure.spec.gen.alpha :as spec-gen]
@@ -36,14 +32,19 @@
 (load "./sff_audio/dynamo-db")
 (load "./sff_audio/mongo-db")
 (load "./sff_audio/choose-db")
-(load "./sff_audio/temporize-event")
+(load "./sff_audio/sms-event")
 (load "./sff_audio/singular-service")
 (load "./sff_audio/cron-service")
 (load "./sff_audio/html-render")
 (load "./sff_audio/scrape-html")
 
-(load "heroku-main")  ;  (-main "monger-db" "./local-config.edn" "use-environment")
-(load "local-main")   ;  (-local-main "monger-db" "./local-config.edn" "use-environment")
+(load "../test/sff_audio_test/the_tests")   ; (-run-tests) 
+
+
+(load "local-heroku") ;  (-local-heroku "monger-db" "../heroku-config.edn" "use-environment") ;; locally run with Heroku db & sms
+(load "heroku-main")  ;  (-main "monger-db" "./local-config.edn" "use-environment")           ;; what Heroku runs
+(load "local-main")   ;  (-local-main "monger-db" "./local-config.edn" "use-environment")     ;; run locally on emacs
 
 (load "send-sms")     ;  (-sms-test "monger-db" "../heroku-config.edn" "use-environment") 
-(load "run-tests")    ;  (-run-tests)
+
+

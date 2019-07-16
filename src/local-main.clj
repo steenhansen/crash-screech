@@ -39,7 +39,7 @@
                     :the-time 12346}]
         temporize-func
         (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)
-        request-handler (make-request-fn temporize-func my-db-obj cron-url)
+        request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data)
         test-one {:the-url "www.sffaudio.com",
                   :the-date "2019-06-19-01:54:03.800Z",
                   :the-html "blah 5555",

@@ -118,16 +118,17 @@
 
 (defn make-request-fn
   "has db test"
-  [temporize-func my-db-obj cron-url]
+  [temporize-func my-db-obj cron-url sms-data]
   (defn request-handler
     [request]
-    (let [the-uri (:uri request)]
+    (let [the-uri (:uri request)
+          send-test-sms-url (:send-test-sms-url sms-data)]
       (if (= the-uri cron-url) (temporize-func))
       (condp = the-uri
         "/" (show-data my-db-obj)
         cron-url (show-data my-db-obj)
-        "/base-styles.css" (ring-response/resource-response "base-styles.css"
-                                                            {:root ""})
+        send-test-sms-url (sms-to-phones sms-data)
+        "/base-styles.css" (ring-response/resource-response "base-styles.css" {:root ""})
         (ring-response/not-found "404"))))
   request-handler)
 

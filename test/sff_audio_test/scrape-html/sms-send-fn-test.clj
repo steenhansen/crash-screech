@@ -7,8 +7,7 @@
                                            TEST-CONFIG-FILE
                                            IGNORE-ENV-VARS)
         purge-table (:purge-table my-db-obj)
-        an-sms-test? true
-        sms-send-fn (build-sms-send sms-data an-sms-test?)]
+        sms-send-fn (build-sms-send sms-data)]
 
     (defn get-actual-sms [read-from-web?]
       (let [actual-sms (scrape-pages-fn my-db-obj

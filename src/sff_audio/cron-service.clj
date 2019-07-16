@@ -1,8 +1,7 @@
 
 (defn start-cron
   [cron-job my-db-obj pages-to-check sms-data]
-  (let [an-sms-test? true
-        sms-send-fn (build-sms-send sms-data an-sms-test?)
+  (let [sms-send-fn (build-sms-send sms-data)
         read-from-web false]
     (defn cron-func
       []

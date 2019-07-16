@@ -10,7 +10,7 @@
 (def ^:const NO-RECORDS-0 0)
 
 (defn make-request-fn-test1 [db-type]
-  (let [[my-db-obj web-port cron-url _] (build-db DB-TEST-NAME
+  (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TEST-NAME
                                                   {}
                                                   db-type
                                                   TEST-CONFIG-FILE
@@ -18,7 +18,7 @@
         purge-table (:purge-table my-db-obj)
         int-port (Integer/parseInt web-port)
         temporize-func #("placeholder-func")
-        request-handler (make-request-fn temporize-func my-db-obj cron-url)
+        request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data)
         local-url (str "http://localhost:" int-port)
         kill-web  (web-init int-port request-handler)]
     (purge-table)
@@ -52,7 +52,7 @@
         purge-table (:purge-table my-db-obj)
         int-port (Integer/parseInt web-port)
         temporize-func (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES-99 sms-data)
-        request-handler (make-request-fn temporize-func my-db-obj cron-url)
+        request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data)
         local-url (str "http://localhost:" int-port cron-url)
         kill-web  (web-init int-port request-handler)]
     (purge-table)

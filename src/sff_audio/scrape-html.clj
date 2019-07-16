@@ -81,9 +81,9 @@
       (put-item check-record))
     (let [send-err-sms? (first-error-today? prev-errors-today? my-db-obj)
           no-sms-sent []]
-      (if send-hello-sms? (sms-send-fn SMS-NEW-MONTH send-hello-sms?))
+      (if send-hello-sms? (sms-send-fn SMS-NEW-MONTH))
       (if send-err-sms?
-        (sms-send-fn SMS-FOUND-ERROR send-hello-sms?)
+        (sms-send-fn SMS-FOUND-ERROR)
         no-sms-sent)))); NB return values used
 
 

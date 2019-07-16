@@ -9,11 +9,6 @@
 (defn month-name
   ([month-offset]
    (let [now-yyyy-mm (date-to-yyyy-mm (java-time/local-date))]
-     (println "ddddddddd"
-              (type now-yyyy-mm)
-              "ddddddddd"
-              now-yyyy-mm
-              "ddddddddd")
      (month-name month-offset now-yyyy-mm)))
   ([month-offset yyyy-mm]
    (let [month-names {:0 "December",

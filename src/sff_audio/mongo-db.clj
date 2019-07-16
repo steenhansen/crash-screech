@@ -31,7 +31,6 @@
         (mong-coll/insert db-handle my-collection fixed-rec)))
     (comment "" ((:get-all my-db-obj) "2019-06-19-01-54-03"))
     (comment "" ((:get-all my-db-obj) "2019-05"))
-    ;  ( println ((:get-all my-db-obj) "2019-06-22")    )
     (defn get-all
       ""
       [begins-with]

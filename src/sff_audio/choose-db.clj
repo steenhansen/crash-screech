@@ -57,11 +57,15 @@
         phone-comma-string (:PHONE_NUMBERS the-config)
         phone-numbers (get-phone-nums phone-comma-string)
         heroku-app-name (:HEROKU_APP_NAME the-config)
+        testing-sms? (:TESTING_SMS the-config)
+        send-test-sms-url (:SEND_TEST_SMS_URL the-config)
         sms-data (compact-hash till-username
                                till-url
                                till-api-key
                                phone-numbers
-                               heroku-app-name)
+                               heroku-app-name
+                               testing-sms?
+                               send-test-sms-url)
         get-all (:get-all my-db-funcs)
         my-db-obj {:delete-table (:delete-table my-db-funcs),
                    :purge-table (:purge-table my-db-funcs),

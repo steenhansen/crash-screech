@@ -37,5 +37,18 @@
   (println
    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"))
 
-
+(defn sms-is-in-test [db-type]
+  (let [[_ _ _ sms-data] (build-db DB-TEST-NAME
+                                                         {}
+                                                         db-type
+                                                         TEST-CONFIG-FILE
+                                                         IGNORE-ENV-VARS)
+        testing-sms? (:testing-sms? sms-data)
+        ]
+    (if (not testing-sms?)  (throw
+        (Exception.
+         " **** ERROR :TESTING_SMS is NOT false")))
+    )
+  
+  )
 
