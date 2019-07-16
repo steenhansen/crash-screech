@@ -76,7 +76,7 @@
                   the-url (real-slash-url check-page)
 
 
-(println "the-time " the-time the-url)
+
 
                   the-date (time-fn)
                   the-html (remove-tags web-html)
@@ -85,6 +85,7 @@
                                              the-html
                                              the-accurate
                                              the-time)]]
+(println "the-time " the-time the-url)
       (put-item check-record))
     (let [send-err-sms? (first-error-today? prev-errors-today? my-db-obj)
           no-sms-sent []]
