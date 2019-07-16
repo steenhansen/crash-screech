@@ -69,7 +69,7 @@
                   end-timer (System/currentTimeMillis)
                   the-time (- end-timer start-timer)
 
-
+start-process (System/currentTimeMillis)
 
                   {:keys [actual-matches the-accurate]}
                   (enough-sections? web-html enlive-keys at-least)
@@ -80,12 +80,14 @@
 
                   the-date (time-fn)
                   the-html (remove-tags web-html)
+  end-process (System/currentTimeMillis)
+   process-time (- end-process start-process)
                   check-record (compact-hash the-url
                                              the-date
                                              the-html
                                              the-accurate
                                              the-time)]]
-(println "the-time " the-time the-url)
+(println "the-time " the-time the-url process-time)
       (put-item check-record))
     (let [send-err-sms? (first-error-today? prev-errors-today? my-db-obj)
           no-sms-sent []]
