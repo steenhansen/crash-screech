@@ -3,6 +3,7 @@
          (-local-heroku "monger-db" "../heroku-config.edn" "use-environment"))
 (defn -local-heroku
   [db-type config-file environment-utilize]
+  (kill-services)
   (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME
                                                          THE-CHECK-PAGES
                                                          db-type

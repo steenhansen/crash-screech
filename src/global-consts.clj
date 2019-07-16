@@ -22,7 +22,7 @@
 (def ^:const SFF-AUDIO
   {:check-page "www.sffaudio.com",
    :enlive-keys [:article :div.blog-item-wrap],
-   :at-least 66})
+   :at-least 6})
 
 (def ^:const SFF-RSD
   {:check-page "sffaudio.herokuapp.com_rsd_rss"   :enlive-keys [:item],
@@ -38,15 +38,13 @@
    :at-least 6100})
 
 (def ^:const SFF-MEDIA
-
   {:check-page
-   "sffaudio-graph-ql.herokuapp.com/media-radio-lists"
+   "sffaudio-graph-ql.herokuapp.com/media-radio-lists"         ; Very slow 10 seconds to wake up
    :enlive-keys [:input]  :at-least 5})
 
 (def ^:const SFF-SEARCH
-
   {:check-page "sffaudio-search.herokuapp.com"
-   :enlive-keys [:div.book__choice]             :at-least 6400})
+   :enlive-keys [:div.book__choice]             :at-least 6400})   ; slow 2 seconds to wake up
 
 (def ^:const CANADIAN-QUOTATIONS
   {:check-page "www.canadianquotations.ca",
@@ -62,7 +60,7 @@
    SFF-RSD
    SFF-PODCAST
    SFF-PDF
-   SFF-MEDIA
    SFF-SEARCH
    CANADIAN-QUOTATIONS
-   JERKER-SEARCHER])
+   JERKER-SEARCHER
+   SFF-MEDIA])

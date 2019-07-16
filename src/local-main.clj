@@ -11,6 +11,7 @@
 
 (defn -local-main
   [db-type config-file environment-utilize]
+  (kill-services)
   (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME
                                                          THE-CHECK-PAGES
                                                          db-type

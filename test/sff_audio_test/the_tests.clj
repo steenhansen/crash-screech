@@ -3,46 +3,10 @@
 
 (def ^:const TEST-CONFIG-FILE "./local-config.edn")
 (def ^:const SMS-NO-ERROR [])
-(def ^:const DB-TEST-NAME "zzz2")
+(def ^:const DB-TEST-NAME "zzz3")
 (def ^:const TEST-DIR "../test/sff_audio_test/")
 
 (load (str TEST-DIR "dbs-turned-on"))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- (sms-is-in-test :monger-db)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -53,6 +17,13 @@
 (load (str TEST-DIR "years-months/tests"))
 
 (spec-test/instrument)
+
+(defn check-testing []
+ ;(local-dynamodb-on?)
+  (dampen-mongo-logging)
+  (local-mongo-on?) 
+  (sms-is-in-test :monger-db)
+)
 
 (defn checked-data-tests []
   (test-count-string)
@@ -111,6 +82,7 @@
 
 (defn -run-tests []
   (kill-services)
+  (check-testing)
 	 (run-tests 'main-sff-audio)
  )
 
