@@ -69,11 +69,15 @@
                   end-timer (System/currentTimeMillis)
                   the-time (- end-timer start-timer)
 
-(println "the-time " the-time the-url)
+
 
                   {:keys [actual-matches the-accurate]}
                   (enough-sections? web-html enlive-keys at-least)
                   the-url (real-slash-url check-page)
+
+
+(println "the-time " the-time the-url)
+
                   the-date (time-fn)
                   the-html (remove-tags web-html)
                   check-record (compact-hash the-url
