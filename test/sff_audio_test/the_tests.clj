@@ -16,10 +16,18 @@
 (load (str TEST-DIR "scrape-html/tests"))
 (load (str TEST-DIR "years-months/tests"))
 
+
+
+(io.aviso.repl/install-pretty-exceptions)
+
+
+
+
 (spec-test/instrument)
 
 (defn check-testing []
- ;(local-dynamodb-on?)
+   (local-dynamodb-on?)
+ 
   (dampen-mongo-logging)
   (local-mongo-on?) 
   (sms-is-in-test :monger-db)
@@ -50,8 +58,12 @@
 )
 
 (defn scrape-html-tests []
+  (test-1000)
+  (test-1001)
+  (test-1002)
   (test-1003)
   (test-2000)
+  (test-2001)
 )
 
 (defn years-months-tests []
@@ -81,6 +93,12 @@
 (defn test-ns-hook [] (test-suite))
 
 (defn -run-tests []
+   ; (try           
+   ;   (println "Nice stack trace print example, via io.aviso/pretty")
+   ;   ("nice_stack_trace_print")
+   ;    (catch Exception e (clojure.repl/pst e))   
+   ;  )
+  (reset! *we-be-testing* true)
   (kill-services)
   (check-testing)
 	 (run-tests 'main-sff-audio)

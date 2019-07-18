@@ -41,9 +41,8 @@
   [phone-comma-string]
   (let [phone-spaces (clj-str/split phone-comma-string #",")
         phone-numbers (map clj-str/trim phone-spaces)
-        phone-vector (into [] phone-numbers)
-        ]
-      phone-vector))
+        phone-vector (into [] phone-numbers)]
+    phone-vector))
 
 (defn build-db
   [table-name pages-to-check db-type config-file environment-utilize]
@@ -75,5 +74,10 @@
                    :put-items (:put-items my-db-funcs),
                    :empty-month? (build-empty-month? get-all),
                    :today-error? (build-today-error? get-all)}]
+    (if (not @*we-be-testing*)
+       (prt-prn/pprint the-config)
+    )
+
+
 
     [my-db-obj web-port cron-url sms-data]))

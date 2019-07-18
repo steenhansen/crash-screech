@@ -4,6 +4,7 @@
 (defn -local-heroku
   [db-type config-file environment-utilize]
   (kill-services)
+  (reset! *we-be-testing* false)
   (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME
                                                          THE-CHECK-PAGES
                                                          db-type

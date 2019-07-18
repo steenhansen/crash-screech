@@ -27,8 +27,7 @@
                          :at-least fail-to-large}]
         {:keys [my-db-obj sms-data sms-send-fn]} (sms-send-init pages-to-check db-type)
         read-from-web? false
-        send-hello-sms? true
-        expected-sms (make-api-call sms-data SMS-FOUND-ERROR send-hello-sms?)]
+        expected-sms (make-api-call sms-data SMS-FOUND-ERROR)]
     (let [actual-sms (get-actual-sms read-from-web?)]
       (is (= expected-sms actual-sms)))))
 
@@ -44,9 +43,9 @@
       (is (= expected-sms actual-sms)))))
 
 
-; (deftest test-1000
-;   (testing "test-1000 :amazonica-db should send an sms message in sms-send-fn"
-;            (sms-send-fn_error :amazonica-db)))
+(deftest test-1000
+  (testing "test-1000 :amazonica-db should send an sms message in sms-send-fn"
+           (sms-send-fn_error :amazonica-db)))
 
 
 (deftest test-1001
@@ -56,9 +55,9 @@
 
 
 
-; (deftest test-1002
-;   (testing "test-1002 :amazonica-db should send an sms message in sms-send-fn"
-;            (sms-send-fn_ok :amazonica-db)))
+(deftest test-1002
+  (testing "test-1002 :amazonica-db should send an sms message in sms-send-fn"
+           (sms-send-fn_ok :amazonica-db)))
 
 
 (deftest test-1003
@@ -117,5 +116,9 @@
       (is (= actual-counts epected-counts)))))
 
 (deftest test-2000
+  (testing "test-2000 :monger-db should send an sms message in sms-send-fn"
+    (init_1_2_3_4_months :monger-db)))
+
+(deftest test-2001
   (testing "test-2000 :monger-db should send an sms message in sms-send-fn"
     (init_1_2_3_4_months :monger-db)))

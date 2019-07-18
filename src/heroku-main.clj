@@ -3,6 +3,7 @@
          (-heroku-main "monger-db" "./local-config.edn" "use-environment"))
 (defn -main
   [db-type config-file environment-utilize]
+  (reset! *we-be-testing* false)
   (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME
                                                          THE-CHECK-PAGES
                                                          db-type

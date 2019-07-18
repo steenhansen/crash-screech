@@ -12,6 +12,8 @@
 (def ^:const CRON-MILL-SECS 600000); 1000 =sec      10000 =10sec         60000 =min   600000 = 10 min
 
 
+(def ^:const LARGE-RECORD-COUNT 1000)
+
 (def ^:const MAX-R-W-RECORDS 50)
 (def ^:const BASE-HTML-TEMPLATE "base-template.html")
 

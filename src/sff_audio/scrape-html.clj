@@ -20,25 +20,23 @@
                                enlive-html/html-resource)
                            css-match)))
 
-
 (defn matches-accurate
- [actual-matches wanted-matches]
+  [actual-matches wanted-matches]
   (if (>= actual-matches wanted-matches)
-      {:actual-matches actual-matches, :the-accurate true}
-      {:actual-matches actual-matches, :the-accurate false}))
-
+    {:actual-matches actual-matches, :the-accurate true}
+    {:actual-matches actual-matches, :the-accurate false}))
 
 (defn enough-sections?
   [the-html css-match wanted-matches]
- (if (< 1000 wanted-matches)
-  (let [ name-key (name (first css-match) )
-     my-regex ( re-pattern (str (java.util.regex.Pattern/quote name-key)))
-                       split-vector  (clj-str/split the-html my-regex)
-                       actual-matches (count split-vector)]
-    (matches-accurate actual-matches wanted-matches))
-  (let [actual-sections (matching-css-sections the-html css-match)
-        actual-matches (count actual-sections)]
-        (matches-accurate actual-matches wanted-matches))))
+  (if (< LARGE-RECORD-COUNT wanted-matches)
+    (let [name-key (name (first css-match))
+          my-regex (re-pattern (str (java.util.regex.Pattern/quote name-key)))
+          split-vector  (clj-str/split the-html my-regex)
+          actual-matches (count split-vector)]
+      (matches-accurate actual-matches wanted-matches))
+    (let [actual-sections (matching-css-sections the-html css-match)
+          actual-matches (count actual-sections)]
+      (matches-accurate actual-matches wanted-matches))))
 
 (defn remove-tags
   [the-html]

@@ -1,36 +1,12 @@
 
 
-(defn enough-sections?
-  [the-html css-match wanted-matches]
- (if (< 1000 wanted-matches)
+
+
+Have a test flag for ensure Dynamo is on with testing
 
 
 
-
-
-
-
-slowness 
-    pdf = 25483 mseconds to parse
-    search = 26795 mseconds to parse
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Have a function that tests mongo via injection of url port
 
 
 

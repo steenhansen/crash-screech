@@ -25,8 +25,16 @@
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
   (:require [clj-logging-config.log4j :as log-config]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log])
 
+(:require [clojure.pprint :as prt-prn])
+(:require [io.aviso.repl :as iap])
+(:require [clojure.repl :as crep])
+)
+
+(defonce ^:dynamic *we-be-testing* (atom {}))
+
+   
 (load "global-consts")
 
 (load "./sff_audio/config-args")
