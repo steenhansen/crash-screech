@@ -14,3 +14,8 @@
         (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)
         request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data)]
     (web-init int-port request-handler)))
+
+
+
+
+

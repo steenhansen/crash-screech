@@ -2,9 +2,6 @@
 
   (:gen-class)
   (:require [amazonica.aws.dynamodbv2 :as aws-dyn])
-  
-  ; (:require [java.util.regex.Pattern :as reg-pat])
-   
   (:require [clojure.string :as clj-str])
   (:require [clojure.main :as clj-main])
   (:require [edn-config.core :as edn-read])
@@ -26,10 +23,7 @@
             [clojure.spec.test.alpha :as spec-test])
   (:require [clj-logging-config.log4j :as log-config]
             [clojure.tools.logging :as log])
-
-(:require [clojure.pprint :as prt-prn])
-(:require [io.aviso.repl :as iap])
-(:require [clojure.repl :as crep])
+  (:require [clojure.pprint :as prt-prn])
 )
 
 (defonce ^:dynamic *we-be-testing* (atom {}))

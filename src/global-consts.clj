@@ -14,6 +14,11 @@
 
 (def ^:const LARGE-RECORD-COUNT 1000)
 
+(def ^:const START-REGEX-LITERAL "\\Q")
+(def ^:const END-REGEX-LITERAL "\\E")
+
+
+
 (def ^:const MAX-R-W-RECORDS 50)
 (def ^:const BASE-HTML-TEMPLATE "base-template.html")
 

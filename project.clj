@@ -3,8 +3,7 @@
   :url "http://example.com/FIXME"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0",
             :url "https://www.eclipse.org/legal/epl-2.0/"}
-  :dependencies
-    [[org.clojure/clojure "1.10.0"]
+  :dependencies   [[org.clojure/clojure "1.10.0"]
      [amazonica "0.3.142"]
      [chrisjd/edn-config "0.1.1"]
      [com.novemberain/monger "3.1.0"]
@@ -22,7 +21,6 @@
      [io.aviso/pretty "0.1.37"]
   ]
   :plugins [[lein-cljfmt "0.6.4"] ]
-
   :injections [(require 'io.aviso.repl 
                         'clojure.repl 
                         'clojure.main)
@@ -30,8 +28,6 @@
                       (constantly @#'io.aviso.repl/pretty-pst))
                (alter-var-root #'clojure.repl/pst                    ; nicer (pst) 
                       (constantly @#'io.aviso.repl/pretty-pst))]     ; (print stack trace) 
-
-
   :uberjar-name "main-sff-audio-standalone.jar"
   :min-lein-version "2.0.0"
   :main ^:skip-aot main-sff-audio

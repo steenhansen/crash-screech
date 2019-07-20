@@ -1,6 +1,5 @@
 
 
-(import 'java.util.regex.Pattern)
 
 (defn count-scrapes
   [some-html]
@@ -30,7 +29,7 @@
   [the-html css-match wanted-matches]
   (if (< LARGE-RECORD-COUNT wanted-matches)
     (let [name-key (name (first css-match))
-          my-regex (re-pattern (str (java.util.regex.Pattern/quote name-key)))
+          my-regex (re-pattern (str START-REGEX-LITERAL  name-key  END-REGEX-LITERAL))
           split-vector  (clj-str/split the-html my-regex)
           actual-matches (count split-vector)]
       (matches-accurate actual-matches wanted-matches))
@@ -99,7 +98,10 @@
                                              the-html
                                              the-accurate
                                              the-time)]]
-      (println "the-time the-url process-time" the-time the-url process-time)
+
+      (if (not @*we-be-testing*)
+        (println "the-time the-url process-time" the-time the-url process-time))
+
       (put-item check-record))
     (let [send-err-sms? (first-error-today? prev-errors-today? my-db-obj)
           no-sms-sent []]
