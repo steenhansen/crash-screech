@@ -1,19 +1,24 @@
 
 
-(def ^:const DB-TABLE-NAME "fff2")
+(ns sff-global-consts
+  (:gen-class)
+)
 
+(defonce ^:dynamic *we-be-testing* (atom {}))
+
+;;;;;;
+
+(def ^:const DB-TABLE-NAME "fff2")
 (def ^:const SCRAPED-TEST-DATA "./test/scraped-data/")
 
 (def ^:const EMPTY-HTML "-")
 (def ^:const DATE-MAX-LENGTH 19)
-
 (def ^:const ERROR-KEEP-LENGTH 200)
 (def ^:const IGNORE-ENV-VARS "ignore-environment"); don't look at Windows environment variables, just in case
 (def ^:const CRON-MILL-SECS 600000); 1000 =sec      10000 =10sec         60000 =min   600000 = 10 min
 
 
 (def ^:const LARGE-RECORD-COUNT 1000)
-
 (def ^:const START-REGEX-LITERAL "\\Q")
 (def ^:const END-REGEX-LITERAL "\\E")
 
@@ -76,3 +81,13 @@ SFF-AUDIO
    JERKER-SEARCHER
    SFF-MEDIA
    ])
+
+
+;;;;
+(def ^:const TEST-CONFIG-FILE "./local-config.edn")
+(def ^:const SMS-NO-ERROR [])
+(def ^:const DB-TEST-NAME "zzz3")
+
+                                        ;(def ^:const TEST-DIR "../test/sff_audio_test/")
+
+

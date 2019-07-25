@@ -1,4 +1,12 @@
-; main called by Heroku, has no cron-init() job, relies on temporize-func()
+
+
+(ns send-sms-test
+(:use [ sff-global-consts  :refer :all ])
+(:use [  sff-audio.choose-db :refer[build-db] ])
+(:use [  sff-audio.sms-event :refer [sms-to-phones] ])
+)
+
+
 (comment "to send sms message to phone"
          (-sms-test "monger-db" "../heroku-config.edn" "use-environment"))
 (defn -sms-test

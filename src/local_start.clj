@@ -1,6 +1,19 @@
 
+(ns local-start
+  (:gen-class)
+  (:require [sff-global-consts  :refer :all ] )
+  (:require [sff-audio.choose-db :refer [build-db]])
+  (:require [sff-audio.cron-service :refer [cron-init]])
+  (:require [sff-audio.html-render :refer [make-request-fn make-request-fn web-init]])
+  (:require [sff-audio.scrape-html :refer [scrape-pages-fn]])
+  (:require [sff-audio.singular-service :refer [kill-services]])
+  (:require [  sff-audio.sms-event :refer [build-sms-send single-cron-fn] ])
+)
+
 ; dev main, has scrape-pages-fn as an at-at scheduled job
 ; (kill-services) will delete web-server and at-at-scheduled job
+
+
 (comment "local monger db"
          (-local-main "monger-db" "./local-config.edn" "ignore-environment"))
 

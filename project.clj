@@ -20,7 +20,7 @@
      [clj-logging-config "1.9.7"]
      [io.aviso/pretty "0.1.37"]
   ]
-  :plugins [[lein-cljfmt "0.6.4"] ]
+  :plugins [[lein-cljfmt "0.6.4"] [jonase/eastwood "0.3.5"] ]
   :injections [(require 'io.aviso.repl 
                         'clojure.repl 
                         'clojure.main)
@@ -30,6 +30,6 @@
                       (constantly @#'io.aviso.repl/pretty-pst))]     ; (print stack trace) 
   :uberjar-name "main-sff-audio-standalone.jar"
   :min-lein-version "2.0.0"
-  :main ^:skip-aot main-sff-audio
+  :main ^:skip-aot heroku-start
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

@@ -1,3 +1,17 @@
+
+
+
+(ns sff-audio.years-months
+
+(:require [clojure.string :as clj-str])
+(:require [java-time.local :as j-time])
+(:require [java-time.core :as jt-core])
+(:require [java-time.amount :as jt-amount])
+(:require [java-time.temporal :as jt-temporal])
+
+
+)
+
 (defn date-to-yyyy-mm
   [ymd-date]
   (let [ymd-str (str ymd-date)
@@ -8,7 +22,7 @@
 
 (defn month-name
   ([month-offset]
-   (let [now-yyyy-mm (date-to-yyyy-mm (java-time/local-date))]
+   (let [now-yyyy-mm (date-to-yyyy-mm (j-time/local-date))]
      (month-name month-offset now-yyyy-mm)))
   ([month-offset yyyy-mm]
    (let [month-names {:0 "December",
@@ -46,19 +60,21 @@
     [yyyy-int mm-int]))
 
 (defn current-yyyy-mm
-  ([] (current-yyyy-mm (date-to-yyyy-mm (java-time/local-date))))
+  ([] (current-yyyy-mm (date-to-yyyy-mm (j-time/local-date))))
   ([yyyy-mm] yyyy-mm))
 
 (defn prev-yyyy-mm
-  ([] (prev-yyyy-mm (date-to-yyyy-mm (java-time/local-date))))
+  ([] (prev-yyyy-mm (date-to-yyyy-mm (j-time/local-date))))
   ([yyyy-mm]
    (let [[yyyy-int mm-int] (yyyy-mm-to-ints yyyy-mm)
-         local-date (java-time/local-date yyyy-int mm-int)
-         last-month (java-time/minus local-date (java-time/months 1))
+         local-date (j-time/local-date yyyy-int mm-int)
+         last-month (jt-core/minus
+                   local-date
+                         (jt-amount/months 1))
          ym-str (date-to-yyyy-mm last-month)]
      ym-str)))
 
-(defn instant-time-fn [] (str (java-time/instant)))
+(defn instant-time-fn [] (str (jt-temporal/instant)))
 
 (defn adjusted-date [date-str] (clj-str/replace date-str #"T|:" "-"))
 

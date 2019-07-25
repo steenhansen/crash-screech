@@ -1,4 +1,17 @@
 
+(ns sff-audio.check-data
+
+(:require [clojure.string :as clj-str])
+
+(:require [  sff-audio.years-months  :refer [ adjusted-date instant-time-fn] ])
+(:require [  sff-audio.config-args :refer [compact-hash]])
+
+(:require [ sff-global-consts :refer :all ])
+
+)
+
+
+
 (defn count-string
   "has test"
   [hay-stack needle-regex]

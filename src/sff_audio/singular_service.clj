@@ -1,3 +1,4 @@
+(ns sff-audio.singular-service)
 
 (defonce ^:dynamic *service-kill-list* (atom {}))
 

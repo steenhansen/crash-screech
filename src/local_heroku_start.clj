@@ -1,7 +1,22 @@
-; 
+
+(ns local-heroku-start
+
+  (:gen-class)
+  (:require [sff-global-consts  :refer :all ] )
+  (:require [sff-audio.choose-db :refer [build-db]])
+  (:require [sff-audio.cron-service :refer [cron-init]])
+  (:require [sff-audio.html-render :refer [make-request-fn make-request-fn web-init]])
+  (:require [sff-audio.scrape-html :refer [scrape-pages-fn]])
+  (:require [sff-audio.singular-service :refer [kill-services]])
+  (:require [  sff-audio.sms-event :refer [build-sms-send single-cron-fn] ])
+)
+
+
+
+
 (comment "to start"
-         (-local-heroku "monger-db" "../heroku-config.edn" "use-environment"))
-(defn -local-heroku
+         (-local-heroku-main "monger-db" "../heroku-config.edn" "use-environment"))
+(defn -local-heroku-main
   [db-type config-file environment-utilize]
   (kill-services)
   (reset! *we-be-testing* false)

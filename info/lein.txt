@@ -16,11 +16,7 @@ If any lein fail, then check to make sure there are no java.exes running in user
 
 
 ////////////////////////////////////////////////////////////////CIDER in EMACS:  (-main "amazonica-db" "./local-config.edn" "ignore-environment")   
-  COMMAND LINE: lein run amazonica-db   ./local-config.edn   ignore-environment
-
-
- COMMAND LINE: lein run monger-db ./local-config.edn ignore-environment     WORKS
-
+ 
 
 
 

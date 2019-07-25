@@ -1,4 +1,29 @@
 
+(ns sff-audio.html-render
+
+  (:require [net.cgrand.enlive-html :as enlive-html])
+  (:require [clojure.string :as clj-str])
+  (:require [clojure.spec.alpha :as spec-alpha]
+            [clojure.spec.gen.alpha :as spec-gen]
+            [clojure.spec.test.alpha :as spec-test])
+  (:require [ring.util.response :as ring-response])
+  (:require [ring.middleware.reload :as ring-reload])
+
+ (:require [ring.adapter.jetty :as ring-jetty])
+
+(:require [ sff-global-consts  :refer :all  ])
+
+
+(:require [  sff-audio.check-data  :refer [sub-string]])
+(:require [  sff-audio.years-months  :refer [current-yyyy-mm current-month
+                                             prev-month prev-yyyy-mm date-to-yyyy-mm]])
+(:require [  sff-audio.sms-event  :refer [sms-to-phones]])
+(:require [  sff-audio.singular-service :refer [add-service remove-service] ])
+(:require [java-time.local :as j-time])
+
+)
+
+
 (defn render-parts [html-pieces] (apply str html-pieces))
 
 (defn day-hour-min
@@ -83,8 +108,9 @@
                             month-sections)))
 
 (defn get-two-months
-  [my-db-obj yyyy-mm]
   "has db test"
+    [my-db-obj yyyy-mm]
+
   (let [get-all (:get-all my-db-obj)
         this-y-m (current-yyyy-mm yyyy-mm)
         last-y-m (prev-yyyy-mm yyyy-mm)
@@ -96,7 +122,7 @@
 
 (defn get-index
   "has db test"
-  ([my-db-obj] (get-index my-db-obj (date-to-yyyy-mm (java-time/local-date))))
+  ([my-db-obj] (get-index my-db-obj (date-to-yyyy-mm (j-time/local-date))))
   ([my-db-obj yyyy-mm]
    (let [[previous-months current-months] (get-two-months my-db-obj yyyy-mm)
          prev-name (prev-month yyyy-mm)
@@ -110,7 +136,7 @@
 
 (defn show-data
   "has db test"
-  ([my-db-obj] (show-data my-db-obj (date-to-yyyy-mm (java-time/local-date))))
+  ([my-db-obj] (show-data my-db-obj (date-to-yyyy-mm (j-time/local-date))))
   ([my-db-obj yyyy-mm]
    (ring-response/content-type (ring-response/response (get-index my-db-obj
                                                                   yyyy-mm))
@@ -119,10 +145,14 @@
 (defn make-request-fn
   "has db test"
   [temporize-func my-db-obj cron-url sms-data]
-  (defn request-handler
+  (fn request-handler
     [request]
     (let [the-uri (:uri request)
           send-test-sms-url (:send-test-sms-url sms-data)]
+;(println " request:" request)
+;(println " uri:" the-uri)
+;(println " show-data:" show-data)
+;(println " my-db-obj:" my-db-obj)
       (if (= the-uri cron-url) (temporize-func))
       (condp = the-uri
         "/" (show-data my-db-obj)
@@ -130,7 +160,7 @@
         send-test-sms-url (sms-to-phones sms-data)
         "/base-styles.css" (ring-response/resource-response "base-styles.css" {:root ""})
         (ring-response/not-found "404"))))
-  request-handler)
+)
 
 ;; https://stackoverflow.com/questions/54056579/how-to-avoid-global-state-in-clojure-when-using-wrap-reload
 ;     https://github.com/panta82/clojure-webdev/blob/master/src/webdev/core.clj
@@ -145,10 +175,11 @@
   (remove-service "web-init")
   (web-reload)
   (let [web-server (ring-jetty/run-jetty request-handler
-                                         {:port server-port, :join? false})]
-    (defn kill-web
-      []
-      (if-not (boolean (resolve 'DB-TEST-NAME)) (println "Killing web-service"))
-      (.stop web-server))
-    (add-service "web-init" kill-web)
-    kill-web))
+                                         {:port server-port, :join? false})
+          my-kill-web (fn kill-web
+																				      []
+																				      (if-not (boolean (resolve 'DB-TEST-NAME)) (println "Killing web-service"))
+																				      (.stop web-server))
+        ]
+    (add-service "web-init" my-kill-web)
+    my-kill-web))

@@ -1,15 +1,34 @@
 
 ; https://github.com/clojure/tools.logging   => log4j.properties
 ; http://www.paullegato.com/blog/logging-clojure-clj-logging-config/
+
+(ns sff-audio-test.dbs-turned-on
+  (:require [clj-logging-config.log4j :as log-config]
+            [clojure.tools.logging :as log])
+  (:require [clj-http.client :as http-client])
+
+(:require [clojure.string :as clj-str])
+
+(:use [  sff-global-consts ])
+
+
+
+(:use [  sff-audio.choose-db ])
+
+
+)
+
+
+
 (defn dampen-mongo-logging
   []
-(log-config/set-logger!
- :level :debug
- :out (org.apache.log4j.FileAppender.
-       (org.apache.log4j.EnhancedPatternLayout.
-        org.apache.log4j.EnhancedPatternLayout/TTCC_CONVERSION_PATTERN)
-       "logs/foo.log"
-       true)))
+  (log-config/set-logger!
+   :level :debug
+   :out (org.apache.log4j.FileAppender.
+         (org.apache.log4j.EnhancedPatternLayout.
+          org.apache.log4j.EnhancedPatternLayout/TTCC_CONVERSION_PATTERN)
+         "logs/foo.log"
+         true)))
 
 (defn local-dynamodb-on?
   []
@@ -48,3 +67,18 @@
                              (Exception.
                               " **** ERROR :TESTING_SMS is NOT false")))))
 
+(defn is-string-number
+  [num-as-str]
+  (try
+    (let [the-number (Integer/parseInt num-as-str)
+          is-number (number? the-number)
+          bigger-0 (< 0 the-number)]
+      (and is-number bigger-0))
+    (catch Exception e
+      false)))
+
+(defn is-url-dir 
+ []
+
+
+)

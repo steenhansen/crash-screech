@@ -1,0 +1,18 @@
+
+
+
+
+lein uberjar
+
+ java -jar sff-audio-web-stat-standalone.jar monger-db ../local-config.edn use-environment
+
+
+ java -jar web-stat-0.1.0-SNAPSHOT.jar monger-db ../local-config.edn use-environment
+
+
+
+
+>java $JVM_OPTS -cp target/sffaudio-web-stat-standalone.jar main -m sff-audio.web-stat
+
+
+

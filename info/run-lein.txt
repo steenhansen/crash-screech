@@ -1,0 +1,12 @@
+
+
+
+
+
+
+ COMMAND LINE: 
+ 	lein run amazonica-db   ./local-config.edn   ignore-environment
+
+
+ COMMAND LINE: 
+ 	lein run monger-db ./local-config.edn ignore-environment     NOT WORK

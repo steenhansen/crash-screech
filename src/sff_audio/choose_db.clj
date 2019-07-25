@@ -1,3 +1,16 @@
+(ns sff-audio.choose-db
+
+  (:require [clojure.string :as clj-str])
+ (:require [clojure.pprint :as prt-prn])
+
+(:require [  sff-global-consts  :refer :all  ])
+
+(:require [  sff-audio.config-args :refer [make-config compact-hash] ])
+(:require [  sff-audio.dynamo-db  :refer [dynamo-build]])
+(:require [sff-audio.mongo-db :refer [mongolabs-build]])
+(:require [  sff-audio.years-months :refer [current-yyyy-mm]])
+)
+
 (defn get-db-conn
   [table-name pages-to-check db-type the-config]
   (let [db-keyword (keyword db-type)]
@@ -10,31 +23,34 @@
 
 (defn build-empty-month?
   [get-all]
-  (defn empty-month?
+  (fn empty-month?
     []
     (let [yyyy-mm (current-yyyy-mm)
           url-checks (get-all yyyy-mm)
           months-checks (count url-checks)]
       (if (= 0 months-checks) true false)))
-  empty-month?)
+  )
 
 (defn build-today-error?
   [get-all]
   (let [FOUND-FAILED-CHECK true
-        ALL-ACCURATE-CHECKS false]
-    (defn failed-check
-      [found-error? url-check]
-      (if (:check-accurate url-check)
-        ALL-ACCURATE-CHECKS            ; return true early once a
-        (reduced FOUND-FAILED-CHECK))  ; failed check is found
-      )
-    (defn today-error?
+        ALL-ACCURATE-CHECKS false
+        
+        my-failed-check     (fn failed-check
+																									      [found-error? url-check]
+																									      (if (:check-accurate url-check)
+																									        ALL-ACCURATE-CHECKS            ; return true early once a
+																									        (reduced FOUND-FAILED-CHECK))  ; failed check is found
+																									      )
+        ]
+    
+    (fn today-error?
       []
       (let [yyyy-mm (current-yyyy-mm)
             url-checks (get-all yyyy-mm)
-            error-found (reduce failed-check false url-checks)]
+            error-found (reduce my-failed-check false url-checks)]
         error-found))
-    today-error?))
+    ))
 
 (defn get-phone-nums
   "has test"
@@ -65,16 +81,17 @@
                                heroku-app-name
                                testing-sms?
                                send-test-sms-url)
-        get-all (:get-all my-db-funcs)
-        my-db-obj {:delete-table (:delete-table my-db-funcs),
-                   :purge-table (:purge-table my-db-funcs),
+        get-all (:my-get-all my-db-funcs)
+        my-db-obj {:delete-table (:my-delete-table my-db-funcs),
+                   :purge-table (:my-purge-table my-db-funcs),
                    :get-all get-all,
-                   :get-url (:get-url my-db-funcs),
-                   :put-item (:put-item my-db-funcs),
-                   :put-items (:put-items my-db-funcs),
+                   :get-url (:my-get-url my-db-funcs),
+                   :put-item (:my-put-item my-db-funcs),
+                   :put-items (:my-put-items my-db-funcs),
                    :empty-month? (build-empty-month? get-all),
                    :today-error? (build-today-error? get-all)}]
-    (if (not @*we-be-testing*)
+    
+  (if (not @*we-be-testing*)
        (prt-prn/pprint the-config)
     )
 

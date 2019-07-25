@@ -1,12 +1,47 @@
 
 
 
-(def ^:const TEST-CONFIG-FILE "./local-config.edn")
-(def ^:const SMS-NO-ERROR [])
-(def ^:const DB-TEST-NAME "zzz3")
-(def ^:const TEST-DIR "../test/sff_audio_test/")
+(ns sff-audio-test.the-tests
+  (:require [clj-logging-config.log4j :as log-config]
+            [clojure.tools.logging :as log])
+  (:require [clj-http.client :as http-client])
 
-(load (str TEST-DIR "dbs-turned-on"))
+
+ (:require [clojure.spec.alpha :as spec-alpha]
+            [clojure.spec.gen.alpha :as spec-gen]
+            [clojure.spec.test.alpha :as spec-test])
+
+ (:require [java-time.local :as j-time])
+ 
+(:require [clojure.string :as clj-str])
+(:use [  clojure.test ])
+
+
+
+(:use [  sff-global-consts ])
+
+
+(:use [ sff-audio-test.dbs-turned-on ])
+
+
+(:use [  sff-audio.check-data ])
+
+(:use [  sff-audio.choose-db ])
+(:use [  sff-audio.html-render ])
+(:use [  sff-audio.scrape-html ])
+(:use [  sff-audio.sms-event ])
+(:use [  sff-audio.years-months ])
+(:use [  sff-audio.config-args ])
+(:use [  sff-audio.singular-service ])
+
+)
+
+
+(println "uuuuuuuuuuuuuu238709237234978")
+
+(def ^:const TEST-DIR "")
+
+(load (str TEST-DIR "dbs_turned_on"))
 
 
 
@@ -45,6 +80,8 @@
 
 (defn choose-db-tests []
  (test-get-phone-nums)
+ (test-build-db-3333)
+ (test-build-db-3334)
 )
 
 (defn html-render-tests []
@@ -92,7 +129,7 @@
 
 (defn test-ns-hook [] (test-suite))
 
-(defn -run-tests []
+(defn -do-tests []
    ; (try           
    ;   (println "Nice stack trace print example, via io.aviso/pretty")
    ;   ("nice_stack_trace_print")
@@ -101,7 +138,7 @@
   (reset! *we-be-testing* true)
   (kill-services)
   (check-testing)
-	 (run-tests 'main-sff-audio)
+  (run-tests  'sff-audio-test.the-tests)
  )
 
 
