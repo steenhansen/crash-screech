@@ -9,22 +9,18 @@
   (:require [ring.util.response :as ring-response])
   (:require [ring.middleware.reload :as ring-reload])
 
- (:require [ring.adapter.jetty :as ring-jetty])
+  (:require [ring.adapter.jetty :as ring-jetty])
 
-(:require [ sff-global-consts  :refer :all  ])
+  (:require [sff-global-consts  :refer :all])
 
-
-(:require [  sff-audio.check-data  :refer [sub-string]])
-(:require [  sff-audio.years-months  :refer [current-yyyy-mm current-month
+  (:require [sff-audio.check-data  :refer [sub-string]])
+  (:require [sff-audio.years-months  :refer [current-yyyy-mm current-month
                                              prev-month prev-yyyy-mm date-to-yyyy-mm]])
-(:require [  sff-audio.sms-event  :refer [sms-to-phones]])
-(:require [  sff-audio.singular-service :refer [add-service remove-service] ])
-(:require [java-time.local :as j-time])
+  (:require [sff-audio.sms-event  :refer [sms-to-phones]])
+  (:require [sff-audio.singular-service :refer [add-service remove-service]])
+  (:require [java-time.local :as j-time]))
 
-)
-
-
-(defn render-parts [html-pieces] (apply str html-pieces))
+(defn render-parts [html-pieces] (clj-str/join html-pieces))
 
 (defn day-hour-min
   "has test"
@@ -104,12 +100,12 @@
   [:#title_of_page]
   (enlive-html/content page-title)
   [:#two_months]
-  (enlive-html/content (map #(month-selector %)
+  (enlive-html/content (map month-selector
                             month-sections)))
 
 (defn get-two-months
   "has db test"
-    [my-db-obj yyyy-mm]
+  [my-db-obj yyyy-mm]
 
   (let [get-all (:get-all my-db-obj)
         this-y-m (current-yyyy-mm yyyy-mm)
@@ -159,8 +155,7 @@
         cron-url (show-data my-db-obj)
         send-test-sms-url (sms-to-phones sms-data)
         "/base-styles.css" (ring-response/resource-response "base-styles.css" {:root ""})
-        (ring-response/not-found "404"))))
-)
+        (ring-response/not-found "404")))))
 
 ;; https://stackoverflow.com/questions/54056579/how-to-avoid-global-state-in-clojure-when-using-wrap-reload
 ;     https://github.com/panta82/clojure-webdev/blob/master/src/webdev/core.clj
@@ -176,10 +171,9 @@
   (web-reload)
   (let [web-server (ring-jetty/run-jetty request-handler
                                          {:port server-port, :join? false})
-          my-kill-web (fn kill-web
-																				      []
-																				      (if-not (boolean (resolve 'DB-TEST-NAME)) (println "Killing web-service"))
-																				      (.stop web-server))
-        ]
+        my-kill-web (fn kill-web
+                      []
+                      (if-not (boolean (resolve 'DB-TEST-NAME)) (println "Killing web-service"))
+                      (.stop web-server))]
     (add-service "web-init" my-kill-web)
     my-kill-web))

@@ -16,7 +16,7 @@
   "has test"
   [hay-stack needle-regex]
   (let [split-vector (clj-str/split hay-stack needle-regex)
-        occurance-count (- (count split-vector) 1)]
+        occurance-count (dec (count split-vector) )]
     occurance-count))
 
 (defn trunc-string

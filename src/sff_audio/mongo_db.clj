@@ -15,7 +15,7 @@
   (let [date-vector (clj-str/split begins-with #"-")
         last-string (last date-vector)
         last-int (Integer/parseInt last-string)
-        last-plus1 (+ last-int 1)
+        last-plus1 (inc last-int)
         last-padded (left-pad2 last-plus1)
         but-last (pop date-vector)
         plus1-vector (conj but-last last-padded)

@@ -9,10 +9,10 @@
 
 On http://localhost:8080/
    
-5a all-main> (-local-main "monger-db" "./local-config.edn" "use-environment") ;Local Mongodb 
+5a all-main> (-local-main "monger-db" "./local-config.edn")          ;Local Mongodb 
 
-5b all-main> (-local-main "amazonica-db" "./local-config.edn" "")             ;Local Dynamodb 
+5b all-main> (-local-main "amazonica-db" "./local-config.edn")       ;Local Dynamodb 
 
-5c all-main> (-local-heroku-main "monger-db" "../heroku-config.edn" "")       ;Heroku Mlabs 
+5c all-main> (-local-heroku-main "monger-db" "../heroku-config.edn") ;Heroku Mlabs 
   
 6 all-main> (kill-services) ;Kill web-server and scheduled jobs

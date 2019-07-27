@@ -1,10 +1,11 @@
 (ns sff-audio.choose-db
 
-  (:require [clojure.string :as clj-str])
+ (:require [clojure.string :as clj-str])
  (:require [clojure.pprint :as prt-prn])
 
 (:require [  sff-global-consts  :refer :all  ])
-
+(:require [sff-global-vars  :refer :all ] )
+  
 (:require [  sff-audio.config-args :refer [make-config compact-hash] ])
 (:require [  sff-audio.dynamo-db  :refer [dynamo-build]])
 (:require [sff-audio.mongo-db :refer [mongolabs-build]])
@@ -28,20 +29,18 @@
     (let [yyyy-mm (current-yyyy-mm)
           url-checks (get-all yyyy-mm)
           months-checks (count url-checks)]
-      (if (= 0 months-checks) true false)))
+      (if (zero? months-checks) true false)))
   )
 
 (defn build-today-error?
   [get-all]
   (let [FOUND-FAILED-CHECK true
         ALL-ACCURATE-CHECKS false
-        
-        my-failed-check     (fn failed-check
-																									      [found-error? url-check]
-																									      (if (:check-accurate url-check)
-																									        ALL-ACCURATE-CHECKS            ; return true early once a
-																									        (reduced FOUND-FAILED-CHECK))  ; failed check is found
-																									      )
+        my-failed-check (fn failed-check
+   		            [found-error? url-check]
+		            (if (:check-accurate url-check)
+		              ALL-ACCURATE-CHECKS            ; return true early once a
+   	                      (reduced FOUND-FAILED-CHECK)))   ; failed check is found
         ]
     
     (fn today-error?
@@ -57,7 +56,7 @@
   [phone-comma-string]
   (let [phone-spaces (clj-str/split phone-comma-string #",")
         phone-numbers (map clj-str/trim phone-spaces)
-        phone-vector (into [] phone-numbers)]
+        phone-vector (vec phone-numbers)]
     phone-vector))
 
 (defn build-db

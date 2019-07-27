@@ -1,12 +1,13 @@
 
-;  
 
 (ns sff-global-consts
   (:gen-class)
 )
 
-(defonce ^:dynamic *we-be-testing* (atom {}))
+(def ^:const MONGER_DB "monger-db")
+(def ^:const AMAZONICA_DB "amazonica-db")
 
+(def ^:const START_CRON "start-cron")
 
 (def ^:const DB-TABLE-NAME "fff2")
 (def ^:const SCRAPED-TEST-DATA "./test/scraped-data/")
@@ -14,6 +15,8 @@
 (def ^:const EMPTY-HTML "-")
 (def ^:const DATE-MAX-LENGTH 19)
 (def ^:const ERROR-KEEP-LENGTH 200)
+
+(def ^:const USE_ENVIRONMENT "use-environment")
 (def ^:const IGNORE-ENV-VARS "ignore-environment"); don't look at Windows environment variables, just in case
 (def ^:const CRON-MILL-SECS 600000); 1000 =sec      10000 =10sec         60000 =min   600000 = 10 min
 
@@ -77,6 +80,7 @@ SFF-AUDIO
    SFF-MEDIA
    ])
 
+(def ^:const HEROKU_CONFIG "../heroku-config.edn")
 
 (def ^:const TEST-CONFIG-FILE "./local-config.edn")
 (def ^:const SMS-NO-ERROR [])

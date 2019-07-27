@@ -5,15 +5,11 @@
 (:require [clojure.string :as clj-str])
   (:require [clj-http.client :as http-client])
 
-
 (:require [ sff-global-consts  :refer :all])
-
+ (:require [sff-global-vars  :refer :all ] )
 
 (:require [  sff-audio.config-args :refer [ compact-hash] ])
-
 (:require [  sff-audio.check-data :refer [count-string]])
-
-
 )
 
 

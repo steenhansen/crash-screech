@@ -2,6 +2,8 @@
 (ns local-start
   (:gen-class)
   (:require [sff-global-consts  :refer :all ] )
+    (:require [sff-global-vars  :refer :all ] )
+    
   (:require [sff-audio.choose-db :refer [build-db]])
   (:require [sff-audio.cron-service :refer [cron-init]])
   (:require [sff-audio.html-render :refer [make-request-fn make-request-fn web-init]])
@@ -15,7 +17,7 @@
 
 
 (comment "local monger db"
-         (-local-main "monger-db" "./local-config.edn" "ignore-environment"))
+         (-local-main  "./local-config.edn" "ignore-environment"))
 
 (comment "local amazonica db"
          (-local-main "amazonica-db" "./local-config.edn" "ignore-environment"))
@@ -23,7 +25,9 @@
          (-local-main "monger-db" "../heroku-config.edn" "ignore-environment"))
 
 (defn -local-main
-  [db-type config-file environment-utilize]
+     ([db-type config-file] (-local-main db-type config-file IGNORE-ENV-VARS))
+     
+  ([db-type config-file environment-utilize]
   (kill-services)
   (reset! *we-be-testing* false)
   (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME
@@ -63,4 +67,4 @@
     ;((:put-items my-db-obj) test-many)
     ;((:put-item my-db-obj) test-one)
     (web-init int-port request-handler)
-    (cron-init scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)))
+    (cron-init scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data))))

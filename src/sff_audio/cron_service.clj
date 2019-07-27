@@ -1,18 +1,14 @@
 (ns sff-audio.cron-service
- (:require [overtone.at-at :as at-at])
-(:require [  sff-audio.singular-service :refer [remove-service add-service]])
+  (:require [overtone.at-at :as at-at])
+  (:require [sff-audio.singular-service :refer [remove-service add-service]])
 
-(:require [  sff-global-consts  :refer :all  ])
-(:require [  sff-audio.sms-event :refer [build-sms-send] ])
+  (:require [sff-global-consts  :refer :all])
+  (:require [sff-audio.sms-event :refer [build-sms-send]])
 
-(:require [  sff-audio.years-months :refer [instant-time-fn current-yyyy-mm] ])
-
-
-)
-
+  (:require [sff-audio.years-months :refer [instant-time-fn current-yyyy-mm]]))
 
 (defn build-cron-func [cron-job my-db-obj pages-to-check sms-data]
-   (let [sms-send-fn (build-sms-send sms-data)
+  (let [sms-send-fn (build-sms-send sms-data)
         read-from-web false]
     (fn cron-func
       []
@@ -23,8 +19,8 @@
                 read-from-web))))
 (defn start-cronOLD
   [cron-job my-db-obj pages-to-check sms-data]
-  (let [ cron-func (build-cron-func cron-job my-db-obj pages-to-check sms-data) ]
-    
+  (let [cron-func (build-cron-func cron-job my-db-obj pages-to-check sms-data)]
+
     (let [thread-pool (at-at/mk-pool)
           scheduled-task (at-at/every CRON-MILL-SECS cron-func thread-pool)]
       (fn remove-crons
@@ -35,24 +31,17 @@
                (println " -- caught exception " (.getMessage e)))))
       scheduled-task)))
 
-
-
 (defn start-cron
   [cron-job my-db-obj pages-to-check sms-data]
-  (let [
-        sms-send-fn (build-sms-send sms-data)
+  (let [sms-send-fn (build-sms-send sms-data)
         read-from-web false
-       my-cron-func  (fn cron-func []
-																		       (cron-job my-db-obj
-																		                 pages-to-check
-																		                 instant-time-fn
-																		                 sms-send-fn
-																		                 read-from-web))
-        ]
-    
-    
-    
-    
+        my-cron-func  (fn cron-func []
+                        (cron-job my-db-obj
+                                  pages-to-check
+                                  instant-time-fn
+                                  sms-send-fn
+                                  read-from-web))]
+
     (let [thread-pool (at-at/mk-pool)
           scheduled-task (at-at/every CRON-MILL-SECS my-cron-func thread-pool)]
       (fn remove-crons
@@ -66,7 +55,6 @@
 (defn cron-init
   [cron-job my-db-obj pages-to-check sms-data]
   (let [scheduled-task (start-cron cron-job my-db-obj pages-to-check sms-data)
-         my-kill-cron (fn kill-cron [] (at-at/stop scheduled-task))
-        ]
-    (remove-service "start-cron")
-    (add-service "start-cron" my-kill-cron)))
+        my-kill-cron (fn kill-cron [] (at-at/stop scheduled-task))]
+    (remove-service START_CRON)
+    (add-service START_CRON my-kill-cron)))

@@ -34,7 +34,7 @@
     [sms-message]
     (let [{:keys [till-url sms-params testing-sms?]} (make-api-call sms-data sms-message)
           test-sms (compact-hash till-url sms-params testing-sms?)]
-      (if (not testing-sms?)
+      (if-not testing-sms? 
           (http-client/post till-url sms-params)
          (println "7892789324234  my test-sms == " test-sms) 
         )

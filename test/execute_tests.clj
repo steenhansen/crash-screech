@@ -16,9 +16,10 @@
   (:require [java-time.local :as j-time])
   (:require [clojure.string :as clj-str])
 
-;  (:use [clojure.test])
 
   (:use [sff-global-consts])
+  (:use [sff-global-vars])
+    
   (:use [test-prepare])
   (:use [sff-audio.check-data])
   (:use [sff-audio.choose-db])
