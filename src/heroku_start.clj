@@ -1,4 +1,7 @@
 
+; This is where Heroku starts  
+
+
 (ns heroku-start
 
   (:gen-class)
@@ -14,7 +17,7 @@
 
 ; main called by Heroku, has no cron-init() job, relies on temporize-func()
 (comment "to start"
-         (-main "monger-db" "./local-config.edn" "use-environment"))
+         (-main "monger-db" "../heroku-config.edn" "use-environment"))
 (defn -main
   [db-type config-file environment-utilize]
   (reset! *we-be-testing* false)

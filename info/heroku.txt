@@ -4,6 +4,7 @@
 
 
 
+heroku logs --tail -a fathomless-woodland-85635  
 
 
 
@@ -13,10 +14,8 @@
 
 
 
+prepare for Heroku
 
-how to serve on Heroku
-
-- lein deps
 - lein uberjar       ; if this fails so will Heroku deploy
 
 
@@ -30,4 +29,4 @@ how to serve on Heroku
 
 
 
-    heroku logs --tail -a fathomless-woodland-85635   
+     

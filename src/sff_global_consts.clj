@@ -1,4 +1,5 @@
 
+;  
 
 (ns sff-global-consts
   (:gen-class)
@@ -6,7 +7,6 @@
 
 (defonce ^:dynamic *we-be-testing* (atom {}))
 
-;;;;;;
 
 (def ^:const DB-TABLE-NAME "fff2")
 (def ^:const SCRAPED-TEST-DATA "./test/scraped-data/")
@@ -22,13 +22,10 @@
 (def ^:const START-REGEX-LITERAL "\\Q")
 (def ^:const END-REGEX-LITERAL "\\E")
 
-
-
 (def ^:const MAX-R-W-RECORDS 50)
 (def ^:const BASE-HTML-TEMPLATE "base-template.html")
 
 (def ^:const SMS-FOUND-ERROR "Found an error")
-;(def ^:const SMS-NO-ERROR [])
 (def ^:const SMS-NEW-MONTH "Start of a new SFFaudio month!")
 
 (def ^:const SFF-AUDIO
@@ -57,9 +54,7 @@
 (def ^:const SFF-SEARCH
   {:check-page "sffaudio-search.herokuapp.com"
    :enlive-keys [:div]             :at-least 6400
- ; :enlive-keys [:div.book__choice]             :at-least 6400
-   
-   })   
+  })   
 
 (def ^:const CANADIAN-QUOTATIONS
   {:check-page "www.canadianquotations.ca",
@@ -83,11 +78,10 @@ SFF-AUDIO
    ])
 
 
-;;;;
 (def ^:const TEST-CONFIG-FILE "./local-config.edn")
 (def ^:const SMS-NO-ERROR [])
 (def ^:const DB-TEST-NAME "zzz3")
 
-                                        ;(def ^:const TEST-DIR "../test/sff_audio_test/")
+                                       
 
 

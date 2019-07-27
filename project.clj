@@ -28,8 +28,8 @@
                       (constantly @#'io.aviso.repl/pretty-pst))
                (alter-var-root #'clojure.repl/pst                    ; nicer (pst) 
                       (constantly @#'io.aviso.repl/pretty-pst))]     ; (print stack trace) 
-  :uberjar-name "main-sff-audio-standalone.jar"
+  :uberjar-name "sff-audio.jar"
   :min-lein-version "2.0.0"
-  :main ^:skip-aot heroku-start
+  :main ^:skip-aot heroku-start            ; the main() that heroku calls
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

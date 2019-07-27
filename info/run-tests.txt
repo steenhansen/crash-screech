@@ -1,0 +1,11 @@
+
+0 kill all java.exe in task manager in case of
+  crashes causing "Address alread in use: bind" error
+
+1 load all_main.clj in Emacs
+2 "==" cider-jack-in
+3 "--" cider-repl-set-ns
+4 "aa" load all_main.clj buffer
+
+5 all-main>(-do-tests)
+

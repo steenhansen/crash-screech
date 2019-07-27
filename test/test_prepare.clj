@@ -1,15 +1,18 @@
 
+
+;   a
+
 ; https://github.com/clojure/tools.logging   => log4j.properties
 ; http://www.paullegato.com/blog/logging-clojure-clj-logging-config/
 
-(ns sff-audio-test.dbs-turned-on
+(ns test-prepare
   (:require [clj-logging-config.log4j :as log-config]
             [clojure.tools.logging :as log])
   (:require [clj-http.client :as http-client])
 
 (:require [clojure.string :as clj-str])
 
-(:use [  sff-global-consts ])
+(:use [ sff-global-consts ])
 
 
 

@@ -5,13 +5,11 @@
 
 
 Linting
-	lein eastwood "{:namespaces [:source-paths]}"
 
     lein eastwood "{:namespaces [:source-paths] :exclude-linters [:wrong-arity]}"
 
-
-
-;; the amazon aws-dyn package seems to not get the aritys correct 
+    lein eastwood "{:namespaces [:source-paths]}"
+	;; the amazon aws-dyn package seems to not get the aritys correct 
 
 
 

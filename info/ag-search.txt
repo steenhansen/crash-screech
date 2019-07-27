@@ -1,7 +1,6 @@
+https://chocolatey.org/
 
-
- choco install ag
-
+choco install ag
 
 Software installed to 'C:\ProgramData\chocolatey\lib\ag\tools'
 
