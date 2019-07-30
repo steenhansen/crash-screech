@@ -1,16 +1,15 @@
-(ns sff-audio.choose-db
+(ns crash-screech.choose-db
 
- (:require [clojure.string :as clj-str])
- (:require [clojure.pprint :as prt-prn])
+  (:require [clojure.string :as clj-str])
+  (:require [clojure.pprint :as prt-prn])
 
-(:require [  sff-global-consts  :refer :all  ])
-(:require [sff-global-vars  :refer :all ] )
-  
-(:require [  sff-audio.config-args :refer [make-config compact-hash] ])
-(:require [  sff-audio.dynamo-db  :refer [dynamo-build]])
-(:require [sff-audio.mongo-db :refer [mongolabs-build]])
-(:require [  sff-audio.years-months :refer [current-yyyy-mm]])
-)
+  (:require [sff-global-consts  :refer :all])
+  (:require [sff-global-vars  :refer :all])
+
+  (:require [crash-screech.config-args :refer [make-config compact-hash]])
+  (:require [crash-screech.dynamo-db  :refer [dynamo-build]])
+  (:require [crash-screech.mongo-db :refer [mongolabs-build]])
+  (:require [crash-screech.years-months :refer [current-yyyy-mm]]))
 
 (defn get-db-conn
   [table-name pages-to-check db-type the-config]
@@ -29,27 +28,25 @@
     (let [yyyy-mm (current-yyyy-mm)
           url-checks (get-all yyyy-mm)
           months-checks (count url-checks)]
-      (if (zero? months-checks) true false)))
-  )
+      (if (zero? months-checks) true false))))
 
 (defn build-today-error?
   [get-all]
   (let [FOUND-FAILED-CHECK true
         ALL-ACCURATE-CHECKS false
         my-failed-check (fn failed-check
-   		            [found-error? url-check]
-		            (if (:check-accurate url-check)
-		              ALL-ACCURATE-CHECKS            ; return true early once a
-   	                      (reduced FOUND-FAILED-CHECK)))   ; failed check is found
+                          [found-error? url-check]
+                          (if (:check-accurate url-check)
+                            ALL-ACCURATE-CHECKS            ; return true early once a
+                            (reduced FOUND-FAILED-CHECK)))   ; failed check is found
         ]
-    
+
     (fn today-error?
       []
       (let [yyyy-mm (current-yyyy-mm)
             url-checks (get-all yyyy-mm)
             error-found (reduce my-failed-check false url-checks)]
-        error-found))
-    ))
+        error-found))))
 
 (defn get-phone-nums
   "has test"
@@ -89,11 +86,8 @@
                    :put-items (:my-put-items my-db-funcs),
                    :empty-month? (build-empty-month? get-all),
                    :today-error? (build-today-error? get-all)}]
-    
-  (if (not @*we-be-testing*)
-       (prt-prn/pprint the-config)
-    )
 
-
+    (if (not @*we-be-testing*)
+      (prt-prn/pprint the-config))
 
     [my-db-obj web-port cron-url sms-data]))

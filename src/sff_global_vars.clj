@@ -1,6 +1,5 @@
 (ns sff-global-vars
-  (:gen-class)
-)
+  (:gen-class))
 
 (defonce ^:dynamic *we-be-testing* (atom {}))
 

@@ -20,7 +20,9 @@
      [clj-logging-config "1.9.7"]
      [io.aviso/pretty "0.1.37"]
   ]
-  :plugins [[lein-cljfmt "0.6.4"] [jonase/eastwood "0.3.5"] ]
+  :plugins [[lein-cljfmt "0.6.4"]
+            [lein-cloverage "1.0.2"]
+ [jonase/eastwood "0.3.5"] ]
   :injections [(require 'io.aviso.repl 
                         'clojure.repl 
                         'clojure.main)
@@ -28,7 +30,7 @@
                       (constantly @#'io.aviso.repl/pretty-pst))
                (alter-var-root #'clojure.repl/pst                    ; nicer (pst) 
                       (constantly @#'io.aviso.repl/pretty-pst))]     ; (print stack trace) 
-  :uberjar-name "sff-audio.jar"
+  :uberjar-name "crash-screech.jar"
   :min-lein-version "2.0.0"
   :main ^:skip-aot heroku-start            ; the main() that heroku calls
   :target-path "target/%s"

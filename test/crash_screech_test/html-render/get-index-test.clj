@@ -2,7 +2,7 @@
 
 
 
-(def ^:const GET-INDEX-FILE "./test/sff_audio_test/html-render/get-index.html")
+(def ^:const GET-INDEX-FILE "./test/crash_screech_test/html-render/get-index.html")
 
 (defn get-index-test1 [db-type]
   (let [[my-db-obj _ _ _] (build-db DB-TEST-NAME

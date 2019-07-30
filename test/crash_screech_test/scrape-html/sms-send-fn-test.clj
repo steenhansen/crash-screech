@@ -42,23 +42,17 @@
     (let [actual-sms (get-actual-sms read-from-web?)]
       (is (= expected-sms actual-sms)))))
 
-
 (deftest test-1000
   (testing "test-1000 :amazonica-db should send an sms message in sms-send-fn"
-           (sms-send-fn_error :amazonica-db)))
-
+    (sms-send-fn_error :amazonica-db)))
 
 (deftest test-1001
   (testing "test-1001 :monger-db should send an sms message in sms-send-fn"
     (sms-send-fn_error :monger-db)))
 
-
-
-
 (deftest test-1002
   (testing "test-1002 :amazonica-db should send an sms message in sms-send-fn"
-           (sms-send-fn_ok :amazonica-db)))
-
+    (sms-send-fn_ok :amazonica-db)))
 
 (deftest test-1003
   (testing "test-1003 :monger-db should send an sms message in sms-send-fn"

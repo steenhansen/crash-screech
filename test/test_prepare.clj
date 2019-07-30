@@ -10,18 +10,11 @@
             [clojure.tools.logging :as log])
   (:require [clj-http.client :as http-client])
 
-(:require [clojure.string :as clj-str])
+  (:require [clojure.string :as clj-str])
 
-(:use [ sff-global-consts ])
+  (:use [sff-global-consts])
 
-
-
-(:use [  sff-audio.choose-db ])
-
-
-)
-
-
+  (:use [crash-screech.choose-db]))
 
 (defn dampen-mongo-logging
   []
@@ -80,8 +73,5 @@
     (catch Exception e
       false)))
 
-(defn is-url-dir 
- []
-
-
-)
+(defn is-url-dir
+  [])

@@ -1,7 +1,7 @@
 
 
 
-(def ^:const SHOW-DATA-FILE "./test/sff_audio_test/html-render/show-data.edn")
+(def ^:const SHOW-DATA-FILE "./test/crash_screech_test/html-render/show-data.edn")
 
 (defn show-data-test1 [db-type]
   (let [[my-db-obj _ _ _] (build-db DB-TEST-NAME

@@ -1,9 +1,9 @@
 
-; /test/execute_tests.clj  
+; /test/core_test.clj  
 ; (-do-tests)
 
 
-(ns execute-tests
+(ns core-test
   (:gen-class)
   (:require [clojure.test :refer :all])
 
@@ -16,25 +16,28 @@
   (:require [java-time.local :as j-time])
   (:require [clojure.string :as clj-str])
 
-
   (:use [sff-global-consts])
   (:use [sff-global-vars])
-    
+
   (:use [test-prepare])
-  (:use [sff-audio.check-data])
-  (:use [sff-audio.choose-db])
-  (:use [sff-audio.html-render])
-  (:use [sff-audio.scrape-html])
-  (:use [sff-audio.sms-event])
-  (:use [sff-audio.years-months])
-  (:use [sff-audio.config-args])
-  (:use [sff-audio.singular-service])
-  (:use [sff-audio.check-data ]))
+  (:use [crash-screech.check-data])
+  (:use [crash-screech.choose-db])
+  (:use [crash-screech.html-render])
+  (:use [crash-screech.scrape-html])
+  (:use [crash-screech.sms-event])
+  (:use [crash-screech.years-months])
+  (:use [crash-screech.config-args])
+  (:use [crash-screech.singular-service])
+  (:use [crash-screech.check-data]))
 
-(def ^:const TEST-DIR "sff_audio_test/")
+(def ^:const TEST-DIR "crash_screech_test/")
 
-(load (str TEST-DIR "checked-data/the-tests"))
+(load (str TEST-DIR "check-data/the-tests"))
+
 (load (str TEST-DIR "choose-db/the-tests"))
+
+(load (str TEST-DIR "cron-service/a-set-of-tests"))
+
 (load (str TEST-DIR "html-render/the-tests"))
 (load (str TEST-DIR "scrape-html/the-tests"))
 (load (str TEST-DIR "years-months/the-tests"))
@@ -49,7 +52,7 @@
   (local-mongo-on?)
   (sms-is-in-test :monger-db))
 
-(defn checked-data-tests []
+(defn check-data-tests []
   (test-count-string)
   (test-derive-data)
   (test-ensure-has-date)
@@ -62,6 +65,12 @@
   (test-get-phone-nums)
   (test-build-db-3333)
   (test-build-db-3334))
+
+(defn cron-service-tests []
+  (test-build-cron-func)
+  ;(test-build-db-3333)
+  ;(test-build-db-3334)
+  )
 
 (defn html-render-tests []
   (test-count-scrapes)
@@ -93,11 +102,13 @@
   (test-yyyy-mm-to-ints))
 
 (defn test-suite []
-  (checked-data-tests)
-  (choose-db-tests)
-  (html-render-tests)
-  (scrape-html-tests)
-  (years-months-tests))
+ ; (check-data-tests)
+  ;(choose-db-tests)
+  (cron-service-tests)
+  ;(html-render-tests)
+  ;(scrape-html-tests)
+  ;(years-months-tests)
+  )
 
 (defn test-ns-hook [] (test-suite))
 
@@ -107,9 +118,10 @@
    ;   ("nice_stack_trace_print")
    ;    (catch Exception e (clojure.repl/pst e))   
    ;  )
+
   (reset! *we-be-testing* true)
   (kill-services)
   (check-testing)
-  (run-tests 'execute-tests))
+  (run-tests 'core-test))
 
 

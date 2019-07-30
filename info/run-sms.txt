@@ -2,10 +2,10 @@
 0 kill all java.exe in task manager in case of
   crashes causing "Address alread in use: bind" error
 
-1 load all_main.clj in Emacs
+1 load core.clj in Emacs
 2 "==" cider-jack-in
 3 "--" cider-repl-set-ns
-4 "aa" load all_main.clj buffer
+4 "aa" load core.clj buffer
 
 5 all-main> (-sms-test "../heroku-config.edn" "use-environment")
 

@@ -1,9 +1,7 @@
-(ns sff-audio.config-args
+(ns crash-screech.config-args
   (:require [edn-config.core :as edn-read])
   (:require [me.raynes.fs :as file-sys])
-  (:require [ sff-global-consts :refer :all ])
-)
-
+  (:require [sff-global-consts :refer :all]))
 
 (defn read-config-file
   [config-file]
@@ -32,6 +30,6 @@
         program-config (merge heroku-config db-config)
         ignore-environmentals (= environment-utilize IGNORE-ENV-VARS)
         has-environmentals (reduce merge-environment {} program-config)]
-        (if ignore-environmentals program-config has-environmentals)))
+    (if ignore-environmentals program-config has-environmentals)))
 
 (defmacro compact-hash [& vars] (list `zipmap (mapv keyword vars) (vec vars)))

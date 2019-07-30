@@ -1,12 +1,9 @@
 
-(ns sff-audio.sms-event
+(ns crash-screech.sms-event
 
   (:require [clj-http.client :as http-client])
-(:require [  sff-audio.config-args :refer [compact-hash]])
-(:require [  sff-audio.years-months :refer [ instant-time-fn] ])
-
-
-)
+  (:require [crash-screech.config-args :refer [compact-hash]])
+  (:require [crash-screech.years-months :refer [instant-time-fn]]))
 
 
 ;   https://elements.heroku.com/addons/temporize
@@ -27,32 +24,29 @@
     (compact-hash till-url sms-params testing-sms?)))
 
 (defn build-sms-send
-  [sms-data]    
-  
-  
+  [sms-data]
+
   (fn sms-send-fn
     [sms-message]
     (let [{:keys [till-url sms-params testing-sms?]} (make-api-call sms-data sms-message)
           test-sms (compact-hash till-url sms-params testing-sms?)]
-      (if-not testing-sms? 
-          (http-client/post till-url sms-params)
-         (println "7892789324234  my test-sms == " test-sms) 
-        )
-      test-sms))
-  
-  )
+      (if-not testing-sms?
+        (http-client/post till-url sms-params)
+        (println "7892789324234  my test-sms == " test-sms))
+      test-sms)))
 
 
 ;https://tillmobile.com/
+
+
 (defn sms-to-phones
   [sms-data]
   (let [sms-send-fn (build-sms-send sms-data)]
-   (sms-send-fn "test sms call" )))
-  
+    (sms-send-fn "test sms call")))
 
 (defn single-cron-fn
   [scrape-pages-fn my-db-obj pages-to-check sms-data]
-  (let [ sms-send-fn (build-sms-send sms-data)
+  (let [sms-send-fn (build-sms-send sms-data)
         read-from-web true]
     (fn temporize-func
       []
@@ -60,5 +54,4 @@
                        pages-to-check
                        instant-time-fn
                        sms-send-fn
-                       read-from-web))
-    ))
+                       read-from-web))))

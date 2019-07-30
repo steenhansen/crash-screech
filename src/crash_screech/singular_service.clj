@@ -1,4 +1,5 @@
-(ns sff-audio.singular-service)
+(ns crash-screech.singular-service
+  (:gen-class))
 
 (defonce ^:dynamic *service-kill-list* (atom {}))
 

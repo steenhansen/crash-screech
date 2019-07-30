@@ -3,8 +3,8 @@
 
 (ns send-sms-test
   (:use [sff-global-consts  :refer :all])
-  (:use [sff-audio.choose-db :refer [build-db]])
-  (:use [sff-audio.sms-event :refer [sms-to-phones]]))
+  (:use [crash-screech.choose-db :refer [build-db]])
+  (:use [crash-screech.sms-event :refer [sms-to-phones]]))
 
 (comment "to send sms message to phone"
          (-sms-test "../heroku-config.edn")

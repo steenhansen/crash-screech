@@ -1,22 +1,18 @@
 
-(ns sff-audio.check-data
+(ns crash-screech.check-data
 
-(:require [clojure.string :as clj-str])
+  (:require [clojure.string :as clj-str])
 
-(:require [  sff-audio.years-months  :refer [ adjusted-date instant-time-fn] ])
-(:require [  sff-audio.config-args :refer [compact-hash]])
+  (:require [crash-screech.years-months  :refer [adjusted-date instant-time-fn]])
+  (:require [crash-screech.config-args :refer [compact-hash]])
 
-(:require [ sff-global-consts :refer :all ])
-
-)
-
-
+  (:require [sff-global-consts :refer :all]))
 
 (defn count-string
   "has test"
   [hay-stack needle-regex]
   (let [split-vector (clj-str/split hay-stack needle-regex)
-        occurance-count (dec (count split-vector) )]
+        occurance-count (dec (count split-vector))]
     occurance-count))
 
 (defn trunc-string

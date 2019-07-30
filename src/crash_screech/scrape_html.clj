@@ -1,17 +1,15 @@
 
-(ns sff-audio.scrape-html
+(ns crash-screech.scrape-html
 
   (:require [net.cgrand.enlive-html :as enlive-html])
-(:require [clojure.string :as clj-str])
+  (:require [clojure.string :as clj-str])
   (:require [clj-http.client :as http-client])
 
-(:require [ sff-global-consts  :refer :all])
- (:require [sff-global-vars  :refer :all ] )
+  (:require [sff-global-consts  :refer :all])
+  (:require [sff-global-vars  :refer :all])
 
-(:require [  sff-audio.config-args :refer [ compact-hash] ])
-(:require [  sff-audio.check-data :refer [count-string]])
-)
-
+  (:require [crash-screech.config-args :refer [compact-hash]])
+  (:require [crash-screech.check-data :refer [count-string]]))
 
 (defn count-scrapes
   [some-html]
@@ -87,24 +85,23 @@
     total-time))
 
 (defn get-db-objs [my-db-obj]
-    (let [ today-error? (:today-error? my-db-obj)
+  (let [today-error? (:today-error? my-db-obj)
         send-hello-sms? (send-first-day-sms? my-db-obj)
         prev-errors-today? (today-error?)
-        put-item (:put-item my-db-obj)  ]
-      (compact-hash today-error? send-hello-sms? prev-errors-today? put-item)
-      ))
+        put-item (:put-item my-db-obj)]
+    (compact-hash today-error? send-hello-sms? prev-errors-today? put-item)))
 
 (defn send-sms-message [prev-errors-today? my-db-obj send-hello-sms? sms-send-fn]
   (let [send-err-sms? (first-error-today? prev-errors-today? my-db-obj)
-          no-sms-sent []]
-      (if send-hello-sms? (sms-send-fn SMS-NEW-MONTH))
-      (if send-err-sms?
-        (sms-send-fn SMS-FOUND-ERROR)
-        no-sms-sent)))
+        no-sms-sent []]
+    (if send-hello-sms? (sms-send-fn SMS-NEW-MONTH))
+    (if send-err-sms?
+      (sms-send-fn SMS-FOUND-ERROR)
+      no-sms-sent)))
 
 (defn scrape-pages-fn
   [my-db-obj pages-to-check time-fn sms-send-fn read-from-web]
-  (let [{:keys [today-error? send-hello-sms? prev-errors-today? put-item]} (get-db-objs my-db-obj) ]
+  (let [{:keys [today-error? send-hello-sms? prev-errors-today? put-item]} (get-db-objs my-db-obj)]
     (doseq [check-page-obj pages-to-check
             :let [{:keys [check-page enlive-keys at-least]} check-page-obj
                   start-timer (System/currentTimeMillis)
@@ -112,7 +109,7 @@
                   the-time (figure-interval start-timer)
                   start-process (System/currentTimeMillis)
                   {:keys [actual-matches the-accurate]}
-                  (enough-sections? web-html enlive-keys at-least)     
+                  (enough-sections? web-html enlive-keys at-least)
                   the-url (real-slash-url check-page)
                   the-date (time-fn)
                   the-html (remove-tags web-html)
@@ -125,7 +122,7 @@
       (if (not @*we-be-testing*)
         (println "the-time the-url process-time" the-time the-url process-time))
       (put-item check-record))
-      (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn)))  ; NB return values used
+    (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn)))  ; NB return values used
 
 
 

@@ -1,5 +1,5 @@
 
-(ns sff-audio.html-render
+(ns crash-screech.html-render
 
   (:require [net.cgrand.enlive-html :as enlive-html])
   (:require [clojure.string :as clj-str])
@@ -13,11 +13,11 @@
 
   (:require [sff-global-consts  :refer :all])
 
-  (:require [sff-audio.check-data  :refer [sub-string]])
-  (:require [sff-audio.years-months  :refer [current-yyyy-mm current-month
-                                             prev-month prev-yyyy-mm date-to-yyyy-mm]])
-  (:require [sff-audio.sms-event  :refer [sms-to-phones]])
-  (:require [sff-audio.singular-service :refer [add-service remove-service]])
+  (:require [crash-screech.check-data  :refer [sub-string]])
+  (:require [crash-screech.years-months  :refer [current-yyyy-mm current-month
+                                                 prev-month prev-yyyy-mm date-to-yyyy-mm]])
+  (:require [crash-screech.sms-event  :refer [sms-to-phones]])
+  (:require [crash-screech.singular-service :refer [add-service remove-service]])
   (:require [java-time.local :as j-time]))
 
 (defn render-parts [html-pieces] (clj-str/join html-pieces))

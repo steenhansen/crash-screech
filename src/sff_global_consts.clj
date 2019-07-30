@@ -1,15 +1,14 @@
 
 
 (ns sff-global-consts
-  (:gen-class)
-)
+  (:gen-class))
 
 (def ^:const MONGER_DB "monger-db")
 (def ^:const AMAZONICA_DB "amazonica-db")
 
 (def ^:const START_CRON "start-cron")
 
-(def ^:const DB-TABLE-NAME "fff2")
+(def ^:const DB-TABLE-NAME "iii8")
 (def ^:const SCRAPED-TEST-DATA "./test/scraped-data/")
 
 (def ^:const EMPTY-HTML "-")
@@ -18,7 +17,7 @@
 
 (def ^:const USE_ENVIRONMENT "use-environment")
 (def ^:const IGNORE-ENV-VARS "ignore-environment"); don't look at Windows environment variables, just in case
-(def ^:const CRON-MILL-SECS 600000); 1000 =sec      10000 =10sec         60000 =min   600000 = 10 min
+(def ^:const CRON-MILL-SECS 1000); 1000 =sec      10000 =10sec         60000 =min   600000 = 10 min
 
 
 (def ^:const LARGE-RECORD-COUNT 1000)
@@ -51,13 +50,12 @@
 
 (def ^:const SFF-MEDIA
   {:check-page
-   "sffaudio-graph-ql.herokuapp.com/media-radio-lists"        
+   "sffaudio-graph-ql.herokuapp.com/media-radio-lists"
    :enlive-keys [:input]  :at-least 5})
 
 (def ^:const SFF-SEARCH
   {:check-page "sffaudio-search.herokuapp.com"
-   :enlive-keys [:div]             :at-least 6400
-  })   
+   :enlive-keys [:div]             :at-least 6400})
 
 (def ^:const CANADIAN-QUOTATIONS
   {:check-page "www.canadianquotations.ca",
@@ -69,16 +67,14 @@
    :at-least 10})
 
 (def ^:const THE-CHECK-PAGES
-  [
-SFF-AUDIO
+  [SFF-AUDIO
    SFF-RSD
    SFF-PODCAST
    SFF-PDF
    SFF-SEARCH
    CANADIAN-QUOTATIONS
    JERKER-SEARCHER
-   SFF-MEDIA
-   ])
+   SFF-MEDIA])
 
 (def ^:const HEROKU_CONFIG "../heroku-config.edn")
 
@@ -86,6 +82,6 @@ SFF-AUDIO
 (def ^:const SMS-NO-ERROR [])
 (def ^:const DB-TEST-NAME "zzz3")
 
-                                       
+
 
 

@@ -1,7 +1,7 @@
 
 
 
-(def ^:const GET-TWO-MONTHS-FILE "./test/sff_audio_test/html-render/get-two-months.edn")
+(def ^:const GET-TWO-MONTHS-FILE "./test/crash_screech_test/html-render/get-two-months.edn")
 
 (defn get-two-months-test1 [db-type]
   (let [[my-db-obj _ _ _] (build-db DB-TEST-NAME
