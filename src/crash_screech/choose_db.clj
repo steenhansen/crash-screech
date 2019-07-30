@@ -7,7 +7,7 @@
   (:require [sff-global-vars  :refer :all])
 
   (:require [crash-screech.config-args :refer [make-config compact-hash]])
-  (:require [crash-screech.dynamo-db  :refer [dynamo-build]])
+;  (:require [crash-screech.dynamo-db  :refer [dynamo-build]])
   (:require [crash-screech.mongo-db :refer [mongolabs-build]])
   (:require [crash-screech.years-months :refer [current-yyyy-mm]]))
 
@@ -15,7 +15,7 @@
   [table-name pages-to-check db-type the-config]
   (let [db-keyword (keyword db-type)]
     (try (case db-keyword
-           :amazonica-db (dynamo-build the-config table-name pages-to-check)
+ ;          :amazonica-db (dynamo-build the-config table-name pages-to-check)
            :monger-db (mongolabs-build the-config table-name pages-to-check))
          (catch Exception e
            (println " get-db-conn - " db-keyword
