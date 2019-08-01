@@ -1,5 +1,10 @@
 (ns crash-screech.choose-db
 
+  (:require
+   [clojure.spec.alpha :as s]
+   [clojure.spec.gen.alpha :as spec-gen]
+   [clojure.spec.test.alpha :as spec-test])
+
   (:require [clojure.string :as clj-str])
   (:require [clojure.pprint :as prt-prn])
 
@@ -48,15 +53,24 @@
             error-found (reduce my-failed-check false url-checks)]
         error-found))))
 
-(defn get-phone-nums
-  "has test"
-  [phone-comma-string]
+(s/fdef get-phone-nums
+  :args (s/cat :phone-comma-string string?)
+  :ret  (s/coll-of string? :kind vector? :min-count 1 :distinct true))
+(defn get-phone-nums [phone-comma-string]
+  "get string with phone numbers delimeted by commas, return them in a vector"
   (let [phone-spaces (clj-str/split phone-comma-string #",")
         phone-numbers (map clj-str/trim phone-spaces)
         phone-vector (vec phone-numbers)]
     phone-vector))
 
+;(s/fdef build-db
+;  :args (s/cat :table-name string? :pages-to-check vector? :db-type string? 
+;               :config-file )
+                                        ;  :ret  (s/coll-of string? :kind vector? :min-count 1 :distinct true)
+;  )
+
 (defn build-db
+  "return an object with database functions"
   [table-name pages-to-check db-type config-file environment-utilize]
   (let [the-config (make-config db-type config-file environment-utilize)
         my-db-funcs (get-db-conn table-name pages-to-check db-type the-config)

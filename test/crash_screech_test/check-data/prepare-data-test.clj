@@ -1,4 +1,4 @@
- 
+(ns check-data-test) 
  
  (def ^:const BEFORE-ENSURE-DATA
 

@@ -2,9 +2,18 @@
 ; /src/send_sms_test.clj
 
 (ns send-sms-test
-  (:use [sff-global-consts  :refer :all])
-  (:use [crash-screech.choose-db :refer [build-db]])
-  (:use [crash-screech.sms-event :refer [sms-to-phones]]))
+  
+  (:require [sff-global-consts  :refer :all])
+  (:require [crash-screech.choose-db :refer [build-db]])
+  (:require [crash-screech.sms-event :refer [sms-to-phones]])
+  
+  
+;  (:use [sff-global-consts  :refer :all])
+ ; (:use [crash-screech.choose-db :refer [build-db]])
+  ;(:use [crash-screech.sms-event :refer [sms-to-phones]])
+  
+  
+  )
 
 (comment "to send sms message to phone"
          (-sms-test "../heroku-config.edn")

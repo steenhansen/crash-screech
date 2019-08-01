@@ -21,11 +21,9 @@
      [io.aviso/pretty "0.1.37"]
   ]
   
-  
-  :plugins [[lein-cljfmt "0.6.4"]
-          
+    :plugins [[lein-cljfmt "0.6.4"]
             [lein-cloverage "1.0.2"]
- [jonase/eastwood "0.3.5"] ]
+ 										[jonase/eastwood "0.3.5"] ]
   :injections [(require 'io.aviso.repl 
                         'clojure.repl 
                         'clojure.main)

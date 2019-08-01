@@ -1,5 +1,5 @@
 
-; /src/core.clj   ......................a
+; /src/core.clj   ..........a............a
 
 (ns core
   (:gen-class)
@@ -14,6 +14,9 @@
 
   (:require [send-sms-test :refer :all])      ; (-sms-test "../heroku-config.edn")
   (:require [core-test :refer :all])      ; (-do-tests)
+;(:require [qwe-456 :refer :all] )
+
+
 
   (:require [local-heroku-start :refer :all]) ; (-local-heroku-main "monger-db" "../heroku-config.edn")       ;Heroku Mlabs 
 

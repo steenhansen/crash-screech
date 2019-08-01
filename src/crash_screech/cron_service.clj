@@ -13,7 +13,7 @@
     (fn cron-func
       []
       (cron-job my-db-obj
-                pages-to-check
+               pages-to-check
                 instant-time-fn
                 sms-send-fn
                 read-from-web))))

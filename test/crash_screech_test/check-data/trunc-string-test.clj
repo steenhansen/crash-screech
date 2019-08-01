@@ -1,4 +1,4 @@
- 
+(ns check-data-test) 
  (deftest test-trunc-string
    (testing "test-trunc-string : cccccccccccccccccccccc "
      (let [trunced-str (trunc-string "123456789" 3)]
