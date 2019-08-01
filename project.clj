@@ -4,7 +4,7 @@
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0",
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies   [[org.clojure/clojure "1.10.0"]
- ;    [amazonica "0.3.142"]
+     [amazonica "0.3.142"]
      [chrisjd/edn-config "0.1.1"]
      [com.novemberain/monger "3.1.0"]
      [overtone/at-at "1.2.0"]
@@ -14,27 +14,25 @@
      [me.raynes/fs "1.4.6"]      
      [enlive "1.1.6"]
      [ring "1.6.3"]
-   ;  [log4j/log4j "1.2.16" :exclusions [javax.mail/mail javax.jms/jms com.sun.jdmk/jmxtools com.sun.jmx/jmxri]]
-   ;  [org.slf4j/slf4j-log4j12 "1.6.4"]
-   ;  [org.clojure/tools.logging "0.2.3"]
+     [log4j/log4j "1.2.16" :exclusions [javax.mail/mail javax.jms/jms com.sun.jdmk/jmxtools com.sun.jmx/jmxri]]
+     [org.slf4j/slf4j-log4j12 "1.6.4"]
+     [org.clojure/tools.logging "0.2.3"]
      [clj-logging-config "1.9.7"]
-    [io.aviso/pretty "0.1.37"]
+     [io.aviso/pretty "0.1.37"]
   ]
-  :plugins [
-;[lein-cljfmt "0.6.4"]
- ;           [lein-cloverage "1.0.2"]
- ;[jonase/eastwood "0.3.5"]
-            ]
-  :injections [
-
-               (require 'io.aviso.repl 
+  
+  
+  :plugins [[lein-cljfmt "0.6.4"]
+          
+            [lein-cloverage "1.0.2"]
+ [jonase/eastwood "0.3.5"] ]
+  :injections [(require 'io.aviso.repl 
                         'clojure.repl 
                         'clojure.main)
                (alter-var-root #'clojure.main/repl-caught
-                              (constantly @#'io.aviso.repl/pretty-pst))
+                      (constantly @#'io.aviso.repl/pretty-pst))
                (alter-var-root #'clojure.repl/pst                    ; nicer (pst) 
-                               (constantly @#'io.aviso.repl/pretty-pst))
-      ]     ; (print stack trace) 
+                      (constantly @#'io.aviso.repl/pretty-pst))]     ; (print stack trace) 
   :uberjar-name "crash-screech.jar"
   :min-lein-version "2.0.0"
   :main ^:skip-aot heroku-start            ; the main() that heroku calls
