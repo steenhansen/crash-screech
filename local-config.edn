@@ -3,19 +3,26 @@
 ; NB no dashes in config vars
 
 
-{:amazonica-db {:access-key "local-access",
-                :endpoint "http://localhost:8000",                 ; not used by Heroku
-                :secret-key "local-secret"},
+{
+  :amazonica-db {
+    :access-key "local-access",
+    :endpoint "http://localhost:8000",                 ; not used by Heroku
+    :secret-key "local-secret"
+  },
  
- :heroku-vars {:CRON_URL_DIR "/url-for-cron-execution",                               ;re-written by Heroku config var
-               :SEND_TEST_SMS_URL "/zxc"
-               :HEROKU_APP_NAME "https://fathomless-woodland-85635.herokuapp.com/",
-               :PHONE_NUMBERS "11234567890,123234342,123123123",                      ;re-written by Heroku config var
-               :PORT "8080",                                                          ;re-written by Heroku config var
-               :TILL_API_KEY "1234567890abcdefghijklmnopqrstuvwxyz1234",              ;re-written by Heroku config var
-               :TILL_URL "https://platform.tillmobile.com/api/send"                   ;re-written by Heroku config var
-               :TILL_USERNAME "abcdefghijklmnopqrstuvwxyz1234"                        ;re-written by Heroku config var
-              	:TESTING_SMS true},                                                    ;re-written by Heroku config var
+  :heroku-vars {
+    :CRON_URL_DIR "/url-for-cron-execution",                               ;re-written by Heroku config var
+    :SEND_TEST_SMS_URL "/zxc"
+    :HEROKU_APP_NAME "https://fathomless-woodland-85635.herokuapp.com/",
+    :PHONE_NUMBERS "1234567890,1234567890,1234567890",                      ;re-written by Heroku config var
+    :PORT "8080",                                                          ;re-written by Heroku config var
+    :TILL_API_KEY "1234567890abcdefghijklmnopqrstuvwxyz1234",              ;re-written by Heroku config var
+    :TILL_URL "https://platform.tillmobile.com/api/send"                   ;re-written by Heroku config var
+    :TILL_USERNAME "abcdefghijklmnopqrstuvwxyz1234"                        ;re-written by Heroku config var
+    :TESTING_SMS true
+  },                                                    ;re-written by Heroku config var
  
- :monger-db {:MONGODB_URI "mongodb://localhost:27017/local"}}                         ;re-written by Heroku config var
+  :monger-db {
+    :MONGODB_URI "mongodb://localhost:27017/local"}   ;re-written by Heroku config var
+}                         
 

@@ -12,10 +12,11 @@
 
   (:require [clojure.string :as clj-str])
 
- ; (:use [sff-global-consts])
-     (:require [sff-global-consts  :refer :all])
+  (:require [sff-global-consts  :refer :all])
 
- ; (:use [crash-screech.choose-db])
+
+
+
     (:require [crash-screech.choose-db :refer :all])
   
   )

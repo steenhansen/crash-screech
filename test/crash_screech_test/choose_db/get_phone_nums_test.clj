@@ -13,7 +13,18 @@
  
 (deftest test-get-phone-nums
   (testing "test-get-phone-nums : cccccccccccccccccccccc "
-    (let [expected-phone-nums ["123-4567" "234-5678"]
-          actual-phone-nums (get-phone-nums " 123-4567, 234-5678 ")]
-      (is (= expected-phone-nums actual-phone-nums)))))
+  
+
+;    (try
+      (println "dddddddddddddddddddddddddkdkdkdkdk")
+      (let [expected-phone-nums ["1234567890" "0123456789"]
+            actual-phone-nums (get-phone-nums "1234567890,0123456789")]
+        (is (= expected-phone-nums actual-phone-nums)))
+      
+      
+  ;    (catch Exception e (str "asdf " (.getMessage e)))
+ ;     )
+    
+    
+    ))
 

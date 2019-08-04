@@ -35,4 +35,6 @@
   :min-lein-version "2.0.0"
   :main ^:skip-aot heroku-start            ; the main() that heroku calls
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:uberjar {:aot :all}
+             :dev {:dependencies [[org.clojure/test.check "0.9.0"]]}
+             })

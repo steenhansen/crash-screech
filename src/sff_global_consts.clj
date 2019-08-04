@@ -36,7 +36,8 @@
    :at-least 6})
 
 (def ^:const SFF-RSD
-  {:check-page "sffaudio.herokuapp.com_rsd_rss"   :enlive-keys [:item],
+  {:check-page "sffaudio.herokuapp.com_rsd_rss"  
+ :enlive-keys [:item],
    :at-least 1})
 
 (def ^:const SFF-PODCAST
@@ -45,21 +46,25 @@
    :at-least 525})
 
 (def ^:const SFF-PDF
-  {:check-page "sffaudio.herokuapp.com_pdf_rss"     :enlive-keys [:item]
+  {:check-page "sffaudio.herokuapp.com_pdf_rss"
+     :enlive-keys [:item]
    :at-least 6100})
 
 (def ^:const SFF-MEDIA
   {:check-page
    "sffaudio-graph-ql.herokuapp.com/media-radio-lists"
-   :enlive-keys [:input]  :at-least 5})
+   :enlive-keys [:input] 
+   :at-least 5})
 
 (def ^:const SFF-SEARCH
   {:check-page "sffaudio-search.herokuapp.com"
-   :enlive-keys [:div]             :at-least 6400})
+   :enlive-keys [:div]           
+  :at-least 6400})
 
 (def ^:const CANADIAN-QUOTATIONS
   {:check-page "www.canadianquotations.ca",
-   :enlive-keys [:article.post],   :at-least 21})
+   :enlive-keys [:article.post],  
+ :at-least 21})
 
 (def ^:const JERKER-SEARCHER
   {:check-page "www.jerkersearcher.com",

@@ -1,9 +1,10 @@
 
-; /src/core.clj   ..........a............a
+; /src/core.clj   ..a........a..aa.....a.....aAAaaass
 
 (ns core
   (:gen-class)
 
+  (:require [spec-types  :refer :all])
   (:require [crash-screech.singular-service :refer  [kill-services]])
 
 

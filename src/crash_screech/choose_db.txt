@@ -8,6 +8,8 @@
   (:require [clojure.string :as clj-str])
   (:require [clojure.pprint :as prt-prn])
 
+  (:require [spec-types  :refer :all])
+
   (:require [sff-global-consts  :refer :all])
   (:require [sff-global-vars  :refer :all])
 
@@ -15,10 +17,6 @@
   (:require [crash-screech.dynamo-db  :refer [dynamo-build]])
   (:require [crash-screech.mongo-db :refer [mongolabs-build]])
   (:require [crash-screech.years-months :refer [current-yyyy-mm]]))
-
-
-(spec-test/instrument)
-
 
 (defn get-db-conn
   [table-name pages-to-check db-type the-config]
@@ -47,7 +45,7 @@
                           [found-error? url-check]
                           (if (:check-accurate url-check)
                             ALL-ACCURATE-CHECKS            ; return true early once a
-                            (reduced FOUND-FAILED-CHECK)))   ; failed check is founda
+                            (reduced FOUND-FAILED-CHECK)))   ; failed check is found
         ]
 
     (fn today-error?
@@ -59,21 +57,43 @@
 
 
 
+; (def phones-regex #"^([0-9]{11})(,[0-9]{11})*$")
+; (s/def ::phone-list-type (s/and string? #(re-matches phones-regex %)))
+   ; :args (s/cat :phone-comma-string string?)
+;:args (s/cat :phone-comma-string (s/and string? #(re-matches phones-regex %)))
+    ;:ret  (s/coll-of string? :kind vector? :min-count 1 :distinct true)
 
-
+  ;    (s/def ::phone-list-type (s/and string? #(re-matches phones-regex %)))
+  ; (s/fdef get-phone-nums :args (s/valid? ::phone-list-type :phone-comma-string)    
+  ;   )
+ 
+ 
 (defn get-phone-nums [phone-comma-string]
   "get string with phone numbers delimeted by commas, return them in a vector"
+
+
   (let [phone-spaces (clj-str/split phone-comma-string #",")
         phone-numbers (map clj-str/trim phone-spaces)
         phone-vector (vec phone-numbers)]
+    (println "1111111111111")
     phone-vector))
 
-
-
-
+;(s/fdef build-db
+;  :args (s/cat :table-name string? :pages-to-check vector? :db-type string? 
+;               :config-file )
+                                        ;  :ret  (s/coll-of string? :kind vector? :min-count 1 :distinct true)
+;  )
 
 (defn build-db
-  "return an object with database functions"
+  "return an object with dynamo or mongo database functions"
+  ;(s/fdef build-db
+  ;  :args (s/cat :table-name string?
+   ;              :pages-to-check vector?     ; vector of check-pages    {check-page url enlive-keys :at-least int
+                 ;:db-type string?                ;  "amazonica-db"         "monger-db"
+;)
+;    :ret  (s/coll-of string? :kind vector? :min-count 1 :distinct true)
+;)
+
   [table-name pages-to-check db-type config-file environment-utilize]
   (let [the-config (make-config db-type config-file environment-utilize)
         my-db-funcs (get-db-conn table-name pages-to-check db-type the-config)
