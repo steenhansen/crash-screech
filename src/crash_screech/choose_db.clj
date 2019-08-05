@@ -1,9 +1,5 @@
 (ns crash-screech.choose-db
 
-  (:require
-   [clojure.spec.alpha :as s]
-   [clojure.spec.gen.alpha :as spec-gen]
-   [clojure.spec.test.alpha :as spec-test])
 
   (:require [clojure.string :as clj-str])
   (:require [clojure.pprint :as prt-prn])
@@ -17,7 +13,6 @@
   (:require [crash-screech.years-months :refer [current-yyyy-mm]]))
 
 
-(spec-test/instrument)
 
 
 (defn get-db-conn

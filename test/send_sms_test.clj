@@ -1,5 +1,8 @@
 
-; /src/send_sms_test.clj
+; /test/send_sms_test.clj
+
+ ; (-sms-test "../heroku-config.edn")
+
 
 (ns send-sms-test
   
@@ -20,7 +23,7 @@
          (-sms-test "../heroku-config.edn" "use-environment"))
 
 (defn -sms-test
-  ([config-file] (-sms-test IGNORE-ENV-VARS))
+  ([config-file] (-sms-test config-file IGNORE-ENV-VARS))
 
   ([config-file environment-utilize]
    (let [db-type MONGER_DB

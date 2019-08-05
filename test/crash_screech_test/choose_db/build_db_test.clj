@@ -21,7 +21,7 @@
 
 (defn build-db-test [db-type]
   (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TEST-NAME
-                                                         {}
+                                                         []
                                                          db-type
                                                          TEST-CONFIG-FILE
                                                          IGNORE-ENV-VARS)]

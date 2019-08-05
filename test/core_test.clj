@@ -2,38 +2,23 @@
 ; (-do-tests)
 
 (ns core-test
- ;(:require [crash-screech-test.choose-db.choose-db  :refer :all] )
-
   (:require [clojure.test :refer :all])
-
   (:require [clojure.spec.alpha :as spec-alpha]
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
 
-
-
   (:require [sff-global-consts  :refer :all])
   (:require [sff-global-vars  :refer :all])
+
   (:require [crash-screech.singular-service :refer  [kill-services]])
-
-  (:require [test-prepare  :refer :all])
-
   (:require [crash-screech-test.choose-db.build-db-test :as build-db-test])
   (:require [crash-screech-test.choose-db.get-phone-nums-test :as get-phone-nums-test])
-
-
-
-
-
   (:require [crash-screech.choose-db :refer [get-phone-nums]])
-  (:require [spec-types  :refer :all])
+  
+  (:require [test-prepare :refer :all])
+  (:require [spec-types :refer :all]))
 
-)
-;(in-ns 'crash-screech.choose-db)
 (spec-test/instrument)
-;(in-ns 'core-test)
-
-;(spec-test/check `crash-screech.choose-db.get-phone-nums)
 
 ;;;; some uses in test-prepare
 
@@ -56,9 +41,8 @@
       (spec-test/instrument 'get-phone-nums)
       (get-phone-nums-test/test-get-phone-nums)
 
- (println "herdddddddddddddddddddddddddddddddde")
 
- ; (spec-test/instrument 'build-db)
+  (spec-test/instrument 'build-db)
   (build-db-test/test-build-db-dynoDb)
   (build-db-test/test-build-db-mongoDb)) 
 

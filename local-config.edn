@@ -14,7 +14,7 @@
     :CRON_URL_DIR "/url-for-cron-execution",                               ;re-written by Heroku config var
     :SEND_TEST_SMS_URL "/zxc"
     :HEROKU_APP_NAME "https://fathomless-woodland-85635.herokuapp.com/",
-    :PHONE_NUMBERS "1234567890,1234567890,1234567890",                      ;re-written by Heroku config var
+    :PHONE_NUMBERS "12345678901,12345678901,12345678901",                      ;re-written by Heroku config var
     :PORT "8080",                                                          ;re-written by Heroku config var
     :TILL_API_KEY "1234567890abcdefghijklmnopqrstuvwxyz1234",              ;re-written by Heroku config var
     :TILL_URL "https://platform.tillmobile.com/api/send"                   ;re-written by Heroku config var

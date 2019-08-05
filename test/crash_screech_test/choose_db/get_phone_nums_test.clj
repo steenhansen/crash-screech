@@ -16,9 +16,9 @@
   
 
 ;    (try
-      (println "dddddddddddddddddddddddddkdkdkdkdk")
-      (let [expected-phone-nums ["1234567890" "0123456789"]
-            actual-phone-nums (get-phone-nums "1234567890,0123456789")]
+     ; (println "dddddddddddddddddddddddddkdkdkdkdk")
+      (let [expected-phone-nums ["12345678901" "01234567890"]
+            actual-phone-nums (get-phone-nums "12345678901,01234567890")]
         (is (= expected-phone-nums actual-phone-nums)))
       
       

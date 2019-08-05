@@ -3,9 +3,6 @@
 
   (:require [net.cgrand.enlive-html :as enlive-html])
   (:require [clojure.string :as clj-str])
-  (:require [clojure.spec.alpha :as spec-alpha]
-            [clojure.spec.gen.alpha :as spec-gen]
-            [clojure.spec.test.alpha :as spec-test])
   (:require [ring.util.response :as ring-response])
   (:require [ring.middleware.reload :as ring-reload])
 
@@ -52,10 +49,10 @@
 
 (defn fill-url [check-url] (enlive-html/do-> (enlive-html/content check-url)))
 
-(spec-alpha/fdef fill-bytes
-  :args (spec-alpha/cat :check-bytes
-                        number?)
-  :ret (spec-alpha/fspec :args any? :ret any?))
+;(spec-alpha/fdef fill-bytes
+ ; :args (spec-alpha/cat :check-bytes
+  ;                      number?)
+ ; :ret (spec-alpha/fspec :args any? :ret any?))
 (defn fill-bytes
   "no test"
   [check-bytes]

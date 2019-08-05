@@ -59,7 +59,7 @@
 
 (defn sms-is-in-test [db-type]
   (let [[_ _ _ sms-data] (build-db DB-TEST-NAME
-                                   {}
+                                   []
                                    db-type
                                    TEST-CONFIG-FILE
                                    IGNORE-ENV-VARS)
