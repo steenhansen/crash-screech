@@ -11,6 +11,8 @@
 (defn count-string
   "has test"
   [hay-stack needle-regex]
+;(println "hay-stack" hay-stack  (type hay-stack))
+;(println "needl-reg" needle-regex (type needle-regex))
   (let [split-vector (clj-str/split hay-stack needle-regex)
         occurance-count (dec (count split-vector))]
     occurance-count))
@@ -21,11 +23,6 @@
   (if the-string
     (subs the-string 0 (min (count the-string) num-chars))
     EMPTY-HTML))
-
-(defn sub-string
-  "has test"
-  [the-string start-pos end-exclusive]
-  (subs the-string start-pos end-exclusive))
 
 (defn derive-data
   "has test"
@@ -65,6 +62,12 @@
 (defn prepare-data
   "has test"
   [check-records]
+
+;(println "check-records" check-records  (type check-records))
+;(println "needl-reg" needle-regex (type needle-regex))
+
+
+
   (let [records-dated (for [check-record check-records]
                         (ensure-has-date check-record))
         derived-data (for [dated-record records-dated]

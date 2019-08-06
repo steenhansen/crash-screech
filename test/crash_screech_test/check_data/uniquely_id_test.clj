@@ -1,5 +1,8 @@
 
- (ns check-data-test)
+(ns crash-screech-test.check-data.uniquely-id-test 
+  (:require [crash-screech.check-data :refer :all])
+      (:require [clojure.test :refer :all])
+)
  
  (def ^:const BEFORE-UNIQUE-ID {:check-url "www.sffaudio.com",
                                 :check-date "2019-06-19-01:54:03.800Z",

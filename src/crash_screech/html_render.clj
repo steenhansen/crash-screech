@@ -10,7 +10,6 @@
 
   (:require [sff-global-consts  :refer :all])
 
-  (:require [crash-screech.check-data  :refer [sub-string]])
   (:require [crash-screech.years-months  :refer [current-yyyy-mm current-month
                                                  prev-month prev-yyyy-mm date-to-yyyy-mm]])
   (:require [crash-screech.sms-event  :refer [sms-to-phones]])
@@ -22,7 +21,7 @@
 (defn day-hour-min
   "has test"
   [check-date]
-  (let [dd-hh-mm (sub-string check-date 8 16)
+  (let [dd-hh-mm (subs check-date 8 16)
         [days hours minutes] (clj-str/split dd-hh-mm #"-")
         short-date (str days "-" hours ":" minutes)]
     short-date))
@@ -49,10 +48,6 @@
 
 (defn fill-url [check-url] (enlive-html/do-> (enlive-html/content check-url)))
 
-;(spec-alpha/fdef fill-bytes
- ; :args (spec-alpha/cat :check-bytes
-  ;                      number?)
- ; :ret (spec-alpha/fspec :args any? :ret any?))
 (defn fill-bytes
   "no test"
   [check-bytes]

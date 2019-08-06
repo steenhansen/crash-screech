@@ -32,11 +32,11 @@
                         (let [fixed-dates (prepare-data check-records)]
                           (mong-coll/insert-batch db-handle my-collection fixed-dates)))
 
-        my-delete-table (fn delete-table [] 
-                               (mong-coll/drop db-handle my-collection))
+        my-delete-table (fn delete-table []
+                          (mong-coll/drop db-handle my-collection))
 
-        my-purge-table  (fn purge-table [] 
-                            (mong-coll/purge-many db-handle [my-collection]))
+        my-purge-table  (fn purge-table []
+                          (mong-coll/purge-many db-handle [my-collection]))
 
         my-put-item      (fn put-item [check-record]
                            (let [fixed-dates (prepare-data [check-record])
@@ -46,10 +46,13 @@
     ;(comment "" ((:get-all my-db-obj) "2019-05"))
         my-get-all (fn get-all [begins-with]
                      (let [begin-date (trunc-string begins-with DATE-MAX-LENGTH)
-                           date-plus1 (date-plus-1 begin-date)]
-                       (mong-coll/find-maps db-handle
-                                            my-collection
-                                            {:_id {$gte begins-with, $lt date-plus1}})))
+                           date-plus1 (date-plus-1 begin-date)
+                           all-records
+                           (mong-coll/find-maps db-handle
+                                                my-collection
+                                                {:_id {$gte begins-with, $lt date-plus1}})]
+                       all-records))
+
      ;       (comment "year of www.sffaudio"
       ;       ((:get-url-monger my-db-obj) "2019" "www.sffaudio.com"))
         my-get-url   (fn get-url

@@ -1,5 +1,7 @@
-(ns check-data-test)
- 
+ (ns crash-screech-test.check-data.derive-data-test
+  (:require [crash-screech.check-data :refer :all])
+      (:require [clojure.test :refer :all])
+)
   
  (def ^:const BEFORE-THE-DATA {:the-url "www.sffaudio.com",
                                :the-date "2019-06-19-01:54:03.800Z",

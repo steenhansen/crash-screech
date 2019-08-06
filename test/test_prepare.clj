@@ -21,6 +21,9 @@
   
   )
 
+(def ^:const DB-TEST-NAME "zzz3")
+
+
 (defn dampen-mongo-logging
   []
   (log-config/set-logger!

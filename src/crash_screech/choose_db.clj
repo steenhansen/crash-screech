@@ -1,6 +1,5 @@
 (ns crash-screech.choose-db
 
-
   (:require [clojure.string :as clj-str])
   (:require [clojure.pprint :as prt-prn])
 
@@ -10,10 +9,7 @@
   (:require [crash-screech.config-args :refer [make-config compact-hash]])
   (:require [crash-screech.dynamo-db  :refer [dynamo-build]])
   (:require [crash-screech.mongo-db :refer [mongolabs-build]])
-  (:require [crash-screech.years-months :refer [current-yyyy-mm]]))
-
-
-
+  (:require [crash-screech.years-months :refer [current-yyyy-mm current-yyyy-mm-dd]]))
 
 (defn get-db-conn
   [table-name pages-to-check db-type the-config]
@@ -26,35 +22,42 @@
                     " -caught exception: " (.getMessage e))))))
 
 (defn build-empty-month?
-  [get-all]
+  [get-all-fn]
   (fn empty-month?
-    []
-    (let [yyyy-mm (current-yyyy-mm)
-          url-checks (get-all yyyy-mm)
-          months-checks (count url-checks)]
-      (if (zero? months-checks) true false))))
+
+    ([]
+     (let [yyyy-mm (current-yyyy-mm)
+           url-checks (get-all-fn yyyy-mm)
+           months-checks (count url-checks)]
+       (if (zero? months-checks) true false)))
+
+    ([yyyy-mm]
+     (let [url-checks (get-all-fn yyyy-mm)
+           months-checks (count url-checks)]
+       (if (zero? months-checks) true false)))))
 
 (defn build-today-error?
-  [get-all]
+  [get-all-fn]
   (let [FOUND-FAILED-CHECK true
         ALL-ACCURATE-CHECKS false
         my-failed-check (fn failed-check
                           [found-error? url-check]
                           (if (:check-accurate url-check)
                             ALL-ACCURATE-CHECKS            ; return true early once a
-                            (reduced FOUND-FAILED-CHECK)))   ; failed check is founda
+                            (reduced FOUND-FAILED-CHECK)))   ; failed check is found
         ]
-
     (fn today-error?
-      []
-      (let [yyyy-mm (current-yyyy-mm)
-            url-checks (get-all yyyy-mm)
-            error-found (reduce my-failed-check false url-checks)]
-        error-found))))
 
+      ([]
+       (let [yyyy-mm-dd (current-yyyy-mm-dd)
+             url-checks (get-all-fn yyyy-mm-dd)
+             error-found (reduce my-failed-check false url-checks)]
+         error-found))
 
-
-
+      ([yyyy-mm-dd]
+       (let  [url-checks (get-all-fn yyyy-mm-dd)
+              error-found (reduce my-failed-check false url-checks)]
+         error-found)))))
 
 (defn get-phone-nums [phone-comma-string]
   "get string with phone numbers delimeted by commas, return them in a vector"
@@ -62,10 +65,6 @@
         phone-numbers (map clj-str/trim phone-spaces)
         phone-vector (vec phone-numbers)]
     phone-vector))
-
-
-
-
 
 (defn build-db
   "return an object with database functions"

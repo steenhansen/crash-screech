@@ -13,9 +13,19 @@
   [ymd-date]
   (let [ymd-str (str ymd-date)
         date-vector (clj-str/split ymd-str #"-")
-        ym-vector (pop date-vector)
+        ym-vector (take 2 date-vector)
         ym-str (clj-str/join "-" ym-vector)]
     ym-str))
+
+(defn date-to-yyyy-mm-dd
+  [ymd-date]
+  (let [ymd-str (str ymd-date)
+        date-vector (clj-str/split ymd-str #"-")
+        ym-vector (take 3 date-vector)
+       ym-str (clj-str/join "-" ym-vector)]
+  ym-str))
+
+
 
 (defn month-name
   ([month-offset]
@@ -59,6 +69,12 @@
 (defn current-yyyy-mm
   ([] (current-yyyy-mm (date-to-yyyy-mm (j-time/local-date))))
   ([yyyy-mm] yyyy-mm))
+
+(defn current-yyyy-mm-dd
+  ([] (current-yyyy-mm-dd (date-to-yyyy-mm-dd (j-time/local-date))))
+  ([yyyy-mm-dd] yyyy-mm-dd))
+
+
 
 (defn prev-yyyy-mm
   ([] (prev-yyyy-mm (date-to-yyyy-mm (j-time/local-date))))

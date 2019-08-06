@@ -10,16 +10,12 @@
       
          (:require [test-prepare  :refer :all])
          
-   ; (:require [clojure.spec.alpha :as spec-alpha]
-   ;          [clojure.spec.gen.alpha :as spec-gen]
-   ;          [clojure.spec.test.alpha :as spec-test])
-   
   )
 
 
-;(def ^:const GET-TWO-MONTHS-FILE "./test/crash_screech_test/html-render/get-two-months.edn")
+;(def ^:const GET-TWO-MONTHS-FILE "./test/crash_screech_test/html-render/get-two-months.edn") 
 
-(defn build-db-test [db-type]
+(defn test-build-db [db-type]
   (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TEST-NAME
                                                          []
                                                          db-type
@@ -34,16 +30,16 @@
     (is (function? (:put-items my-db-obj)))
     (is (is-string-number web-port))
      (is-url-dir cron-url)   ; "/url-for-cron-execution"
-                                          (println sms-data)
+                                          ;(println "sms-data here" sms-data)
            ))
-
-(deftest test-build-db-dynoDb
-  (testing "test-build-db :"
-    (build-db-test :monger-db)))
 
 (deftest test-build-db-mongoDb
   (testing "test-build-db :"
-    (build-db-test     :amazonica-db)))
+    (test-build-db :monger-db)))
+
+(deftest test-build-db-dynoDb
+  (testing "test-build-db :"
+    (test-build-db     :amazonica-db)))
 
 
 
