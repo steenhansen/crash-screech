@@ -6,7 +6,7 @@
 
   (:require [crash-screech.config-args :refer [compact-hash]])
   (:require [crash-screech.check-data :refer [prepare-data trunc-string]])
-  (:require [sff-global-consts  :refer :all]))
+  (:require [global-consts  :refer :all]))
 
 (defn left-pad2 [my-str] (format "%02d" my-str))
 

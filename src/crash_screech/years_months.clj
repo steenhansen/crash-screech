@@ -9,23 +9,35 @@
   (:require [java-time.amount :as jt-amount])
   (:require [java-time.temporal :as jt-temporal]))
 
+(defn trunc-yyyy-mm
+  [ym-extra]
+  (let [date-vector (clj-str/split ym-extra #"-")
+        ym-vector (take 2 date-vector)
+        ym-str (clj-str/join "-" ym-vector)]
+   ; (if-not (= 2 (count date-vector))
+    ;  (throw (Exception. "trunc-yyyy-mm didn't have 2 items")))
+    ym-str))
+
+(defn trunc-yyyy-mm-dd
+  [ymd-extra]
+  (let [date-vector (clj-str/split ymd-extra #"-")
+        ymd-vector (take 3 date-vector)
+        ymd-str (clj-str/join "-" ymd-vector)]
+  ;  (if-not (= 3 (count date-vector))
+      ;(throw (Exception. "trunc-yyyy-mm-dd didn't have 3 items")))
+    ymd-str))
+
 (defn date-to-yyyy-mm
   [ymd-date]
   (let [ymd-str (str ymd-date)
-        date-vector (clj-str/split ymd-str #"-")
-        ym-vector (take 2 date-vector)
-        ym-str (clj-str/join "-" ym-vector)]
+        ym-str (trunc-yyyy-mm ymd-str)]
     ym-str))
 
 (defn date-to-yyyy-mm-dd
   [ymd-date]
   (let [ymd-str (str ymd-date)
-        date-vector (clj-str/split ymd-str #"-")
-        ym-vector (take 3 date-vector)
-       ym-str (clj-str/join "-" ym-vector)]
-  ym-str))
-
-
+        ym-str (trunc-yyyy-mm-dd ymd-str)]
+    ym-str))
 
 (defn month-name
   ([month-offset]
@@ -55,9 +67,13 @@
          month-name (int-key month-names)]
      month-name)))
 
-(defn prev-month ([] (month-name -1)) ([yyyy-mm] (month-name -1 yyyy-mm)))
+(defn prev-month 
+  ([] (month-name -1))
+  ([yyyy-mm] (month-name -1 yyyy-mm)))
 
-(defn current-month ([] (month-name 0)) ([yyyy-mm] (month-name 0 yyyy-mm)))
+(defn current-month 
+  ([] (month-name 0)) 
+  ([yyyy-mm] (month-name 0 yyyy-mm)))
 
 (defn yyyy-mm-to-ints
   [yyyy-mm]
@@ -68,13 +84,11 @@
 
 (defn current-yyyy-mm
   ([] (current-yyyy-mm (date-to-yyyy-mm (j-time/local-date))))
-  ([yyyy-mm] yyyy-mm))
+  ([yyyy-mm] (trunc-yyyy-mm yyyy-mm)))
 
 (defn current-yyyy-mm-dd
   ([] (current-yyyy-mm-dd (date-to-yyyy-mm-dd (j-time/local-date))))
-  ([yyyy-mm-dd] yyyy-mm-dd))
-
-
+  ([yyyy-mm-dd] (trunc-yyyy-mm-dd yyyy-mm-dd)))
 
 (defn prev-yyyy-mm
   ([] (prev-yyyy-mm (date-to-yyyy-mm (j-time/local-date))))

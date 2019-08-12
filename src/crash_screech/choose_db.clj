@@ -3,8 +3,8 @@
   (:require [clojure.string :as clj-str])
   (:require [clojure.pprint :as prt-prn])
 
-  (:require [sff-global-consts  :refer :all])
-  (:require [sff-global-vars  :refer :all])
+  (:require [global-consts  :refer :all])
+  (:require [global-vars  :refer :all])
 
   (:require [crash-screech.config-args :refer [make-config compact-hash]])
   (:require [crash-screech.dynamo-db  :refer [dynamo-build]])
@@ -34,6 +34,7 @@
     ([yyyy-mm]
      (let [url-checks (get-all-fn yyyy-mm)
            months-checks (count url-checks)]
+
        (if (zero? months-checks) true false)))))
 
 (defn build-today-error?

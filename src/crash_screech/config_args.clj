@@ -1,7 +1,7 @@
 (ns crash-screech.config-args
   (:require [edn-config.core :as edn-read])
   (:require [me.raynes.fs :as file-sys])
-  (:require [sff-global-consts :refer :all]))
+  (:require [global-consts :refer :all]))
 
 (defn read-config-file
   [config-file]

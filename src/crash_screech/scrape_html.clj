@@ -5,8 +5,8 @@
   (:require [clojure.string :as clj-str])
   (:require [clj-http.client :as http-client])
 
-  (:require [sff-global-consts  :refer :all])
-  (:require [sff-global-vars  :refer :all])
+  (:require [global-consts  :refer :all])
+  (:require [global-vars  :refer :all])
 
   (:require [crash-screech.config-args :refer [compact-hash]])
   (:require [crash-screech.check-data :refer [count-string]]))

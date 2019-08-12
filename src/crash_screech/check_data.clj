@@ -6,7 +6,7 @@
   (:require [crash-screech.years-months  :refer [adjusted-date instant-time-fn]])
   (:require [crash-screech.config-args :refer [compact-hash]])
 
-  (:require [sff-global-consts :refer :all]))
+  (:require [global-consts :refer :all]))
 
 (defn count-string
   "has test"

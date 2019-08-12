@@ -8,7 +8,7 @@
 
   (:require [ring.adapter.jetty :as ring-jetty])
 
-  (:require [sff-global-consts  :refer :all])
+  (:require [global-consts  :refer :all])
 
   (:require [crash-screech.years-months  :refer [current-yyyy-mm current-month
                                                  prev-month prev-yyyy-mm date-to-yyyy-mm]])

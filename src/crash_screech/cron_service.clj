@@ -2,7 +2,7 @@
   (:require [overtone.at-at :as at-at])
   (:require [crash-screech.singular-service :refer [remove-service add-service]])
 
-  (:require [sff-global-consts  :refer :all])
+  (:require [global-consts  :refer :all])
   (:require [crash-screech.sms-event :refer [build-sms-send]])
 
   (:require [crash-screech.years-months :refer [instant-time-fn current-yyyy-mm]]))

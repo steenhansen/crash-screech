@@ -1,3 +1,4 @@
+
 (defproject sffaudio/web-server "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
@@ -12,6 +13,11 @@
                    [clj-http "3.10.0"]
                    [cheshire "5.8.1"]
                    [me.raynes/fs "1.4.6"]
+
+[cljc.java-time "0.1.5"]
+[clojure.java-time "0.3.2"]
+
+
                    [enlive "1.1.6"]
                    [ring "1.6.3"]
                    [log4j/log4j "1.2.16" :exclusions [javax.mail/mail javax.jms/jms com.sun.jdmk/jmxtools com.sun.jmx/jmxri]]
@@ -32,7 +38,7 @@
                                (constantly @#'io.aviso.repl/pretty-pst))]     ; (print stack trace) 
   :uberjar-name "crash-screech.jar"
   :min-lein-version "2.0.0"
-  :main ^:skip-aot heroku-start            ; the main() that heroku calls
+  :main ^:skip-aot start-heroku            ; the main() that heroku calls
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
              :dev {:dependencies [[org.clojure/test.check "0.9.0"]]}})
