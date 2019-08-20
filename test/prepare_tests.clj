@@ -16,15 +16,17 @@
 
   (:require [crash-screech.choose-db :refer :all]))
 
-(def ^:const DB-TEST-NAME "zzz3")
-(def ^:const CONSOLE-TESTS true)
+(def ^:const T-DB-TEST-NAME "zzz3")    
+(def ^:const T-CONSOLE-TESTS true)     
 
-(def ^:const DO-DYNAMODB-TESTS false)
+(def ^:const T-DO-DYNAMODB-TESTS false) 
+(def ^:const T-TIME-STAMP #"^([\d]{4})-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T\d\d:\d\d:\d\d\.\d\d\dZ$")
+ 
 
 (defn console-test
   ([test-name] (console-test test-name "-"))
   ([test-name test-area]
-   (if CONSOLE-TESTS
+   (if T-CONSOLE-TESTS
      (println "..." test-area test-name ))))
 
 (defn dampen-mongo-logging
@@ -39,7 +41,7 @@
 
 (defn local-dynamodb-on?
   []
-  (if DO-DYNAMODB-TESTS
+  (if T-DO-DYNAMODB-TESTS
     (try
       (http-client/get "http://localhost:8000/shell/")
       (catch Exception e
@@ -65,7 +67,7 @@
    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"))
 
 (defn sms-is-in-test [db-type]
-  (let [[_ _ _ sms-data] (build-db DB-TEST-NAME
+  (let [[_ _ _ sms-data] (build-db T-DB-TEST-NAME
                                    []
                                    db-type
                                    TEST-CONFIG-FILE

@@ -136,7 +136,8 @@
   (fn request-handler
     [request]
     (let [the-uri (:uri request)
-          send-test-sms-url (:send-test-sms-url sms-data)]
+          send-test-sms-url (:send-test-sms-url sms-data)
+testing-sms? false]
 ;(println " request:" request)
 ;(println " uri:" the-uri)
 ;(println " show-data:" show-data)
@@ -145,7 +146,7 @@
       (condp = the-uri
         "/" (show-data my-db-obj)
         cron-url (show-data my-db-obj)
-        send-test-sms-url (sms-to-phones sms-data)
+        send-test-sms-url (sms-to-phones sms-data testing-sms?)
         "/base-styles.css" (ring-response/resource-response "base-styles.css" {:root ""})
         (ring-response/not-found "404")))))
 

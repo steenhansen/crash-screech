@@ -19,6 +19,8 @@
         system-env (System/getenv plain-key)
         system-environment (assoc-in accum-environment [env-key] system-env)
         program-environment (assoc-in accum-environment [env-key] the-value)]
+
+
     (if (System/getenv plain-key) system-environment program-environment)))
 
 (defn make-config

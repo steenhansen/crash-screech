@@ -28,6 +28,7 @@
   ([db-type config-file] (-local-main db-type config-file IGNORE-ENV-VARS))
 
   ([db-type config-file environment-utilize]
+
    (kill-services)
    (reset! *we-be-testing* false)
    (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME
@@ -56,7 +57,8 @@
                      :the-html "bluhss 4444",
                      :the-accurate false,
                      :the-time 12346}]
-         temporize-func (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)
+testing-sms? true
+         temporize-func (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms?)
          request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data)
          test-one {:the-url "www.sffaudio.com",
                    :the-date "2019-06-19-01:54:03.800Z",

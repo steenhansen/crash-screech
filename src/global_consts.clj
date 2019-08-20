@@ -85,7 +85,6 @@
 
 (def ^:const TEST-CONFIG-FILE "./local-config.edn")
 (def ^:const SMS-NO-ERROR [])
-;(def ^:const DB-TEST-NAME "zzz3")
 
 
 

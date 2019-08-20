@@ -6,6 +6,8 @@
   (:require [crash-screech.years-months :refer [instant-time-fn]]))
 
 
+;https://tillmobile.com/
+
 ;   https://elements.heroku.com/addons/temporize
 ; UTC time is +7 Vancouver time
 ; every day    23:10
@@ -15,38 +17,34 @@
 
 
 (defn make-api-call
+  ""
   [sms-data sms-message]
-  (let [{:keys [till-username till-url till-api-key phone-numbers heroku-app-name testing-sms?]} sms-data
+  (let [{:keys [till-username till-url till-api-key phone-numbers heroku-app-name]} sms-data
         till-url (str till-url "?username=" till-username "&api_key=" till-api-key)
         sms-message (str sms-message " - " heroku-app-name)
         sms-params {:form-params {:phone phone-numbers, :text sms-message},
                     :content-type :json}]
-    (compact-hash till-url sms-params testing-sms?)))
+    (compact-hash till-url sms-params)))
 
 (defn build-sms-send
-  [sms-data]
-
+  ""
+  [sms-data testing-sms?]
   (fn sms-send-fn
     [sms-message]
-    (let [{:keys [till-url sms-params testing-sms?]} (make-api-call sms-data sms-message)
+    (let [{:keys [till-url sms-params]} (make-api-call sms-data sms-message)
           test-sms (compact-hash till-url sms-params testing-sms?)]
       (if-not testing-sms?
-        (http-client/post till-url sms-params)
-        (println "7892789324234  my test-sms == " test-sms))
+        (http-client/post till-url sms-params))
       test-sms)))
 
-
-;https://tillmobile.com/
-
-
 (defn sms-to-phones
-  [sms-data]
-  (let [sms-send-fn (build-sms-send sms-data)]
+  [sms-data testing-sms?]
+  (let [sms-send-fn (build-sms-send sms-data testing-sms?)]
     (sms-send-fn "test sms call")))
 
 (defn single-cron-fn
-  [scrape-pages-fn my-db-obj pages-to-check sms-data]
-  (let [sms-send-fn (build-sms-send sms-data)
+  [scrape-pages-fn my-db-obj pages-to-check sms-data testing-sms?]
+  (let [sms-send-fn (build-sms-send sms-data testing-sms?)
         read-from-web true]
     (fn temporize-func
       []
@@ -55,3 +53,4 @@
                        instant-time-fn
                        sms-send-fn
                        read-from-web))))
+

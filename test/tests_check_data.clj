@@ -17,13 +17,20 @@
   (:require [prepare-tests :refer :all])
   (:require [spec-calls :refer :all]))
 
+(spec-test/instrument 'count-string)
+(spec-test/instrument 'trunc-string)
+(spec-test/instrument 'derive-data)
+(spec-test/instrument 'uniquely-id)
+(spec-test/instrument 'ensure-has-date)
+(spec-test/instrument 'prepare-data)
+
 (deftest uni-count-string
   (testing "count-string : cccccccccccccccccccccc "
     (let [occurance-count (count-string "001001001000" #"1")]
       (console-test "uni-count-string" "check-data")
       (is (= occurance-count 3)))))
 
-(spec-test/instrument 'count-string)
+
 
 
 

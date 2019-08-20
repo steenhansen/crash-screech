@@ -25,13 +25,15 @@
 
 
 
-(defn html-render-units []
+
+
+
+
    (spec-test/instrument 'day-hour-min)
- ; (day-hour-min-test/test-day-hour-min)
-)
 
  (deftest uni-day-hour-min
    (testing "test-day-hour-min : cccccccccccccccccccccc "
+     (console-test  "uni-day-hour-min"  "html-render")
      (let [expected-day-hour-min "05-06:07"
            actual-day-hour-min (day-hour-min "2019-04-05-06-07-46.173Z")]
        (is (= expected-day-hour-min actual-day-hour-min)))))

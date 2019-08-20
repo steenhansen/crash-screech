@@ -8,7 +8,8 @@
   (:require [crash-screech.years-months :refer [instant-time-fn current-yyyy-mm]]))
 
 (defn build-cron-func [cron-job my-db-obj pages-to-check sms-data]
-  (let [sms-send-fn (build-sms-send sms-data)
+  (let [testing-sms? false
+        sms-send-fn (build-sms-send sms-data testing-sms?)
         read-from-web false]
     (fn cron-func
       []
@@ -20,7 +21,8 @@
 
 (defn start-cron
   [cron-job my-db-obj pages-to-check sms-data]
-  (let [sms-send-fn (build-sms-send sms-data)
+  (let [testing-sms? false
+        sms-send-fn (build-sms-send sms-data testing-sms?)
         read-from-web false
         my-cron-func (build-cron-func cron-job my-db-obj pages-to-check sms-data)]
     (let [thread-pool (at-at/mk-pool)

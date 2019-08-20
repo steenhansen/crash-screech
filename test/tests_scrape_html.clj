@@ -25,8 +25,6 @@
 
 
 
-  (:require [tests-unit.scrape-html.count-scrapes-test :as count-scrapes-test])
-
 
 
 
@@ -37,34 +35,34 @@
 
 
 
-(def ^:const T-COUNT-SCRAPES-HTML " a_countable_scrape a_countable_scrape ")
+(spec-test/instrument 'count-scrapes)
+
+
+ (def ^:const T-COUNT-SCRAPES-HTML " a_countable_scrape a_countable_scrape ")
 
 (deftest uni-count-scrapes
   (testing "test-count-scrapes : ssssssss "
+      (console-test  "uni-count-scrapes"  "scrape-html")
     (let [expected-scrapes 2
           actual-scrapes (count-scrapes T-COUNT-SCRAPES-HTML)]
       (is (= expected-scrapes actual-scrapes)))))
 
 
 
-(defn scrape-html-units []
-  (spec-test/instrument 'count-scrapes)
-  (count-scrapes-test/test-count-scrapes)
 
-
-) 
 
 
 
 
 (defn sms-send-init [pages-to-check db-type]
-  (let [[my-db-obj _ _ sms-data] (build-db DB-TEST-NAME
+  (let [[my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME
                                            pages-to-check
                                            db-type
                                            TEST-CONFIG-FILE
                                            IGNORE-ENV-VARS)
         purge-table (:purge-table my-db-obj)
-        sms-send-fn (build-sms-send sms-data)]
+        testing-sms? true
+        sms-send-fn (build-sms-send sms-data testing-sms?)]
 
     (defn get-actual-sms [read-from-web?]
       (let [actual-sms (scrape-pages-fn my-db-obj
@@ -101,26 +99,26 @@
 
 (deftest test-1000
   (testing "test-1000 :amazonica-db should send an sms message in sms-send-fn"
-    (sms-send-fn_error :amazonica-db)))
+    (sms-send-fn_error "amazonica-db")))
 
 (deftest test-1001
   (testing "test-1001 :monger-db should send an sms message in sms-send-fn"
-    (sms-send-fn_error :monger-db)))
+    (sms-send-fn_error "monger-db")))
 
 (deftest test-1002
   (testing "test-1002 :amazonica-db should send an sms message in sms-send-fn"
-    (sms-send-fn_ok :amazonica-db)))
+    (sms-send-fn_ok "amazonica-db")))
 
 (deftest test-1003
   (testing "test-1003 :monger-db should send an sms message in sms-send-fn"
-    (sms-send-fn_ok :monger-db)))
+    (sms-send-fn_ok "monger-db")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 (defn init_1_2_3_4_months [db-type]
-  (let [[my-db-obj _ _ _] (build-db DB-TEST-NAME
+  (let [[my-db-obj _ _ _] (build-db T-DB-TEST-NAME
                                     {}
                                     db-type
                                     TEST-CONFIG-FILE
@@ -168,8 +166,21 @@
 
 (deftest test-2000
   (testing "test-2000 :monger-db should send an sms message in sms-send-fn"
-    (init_1_2_3_4_months :monger-db)))
+    (init_1_2_3_4_months "monger-db")))
 
 (deftest test-2001
   (testing "test-2000 :monger-db should send an sms message in sms-send-fn"
-    (init_1_2_3_4_months :monger-db)))
+    (init_1_2_3_4_months "monger-db")))
+
+
+
+
+
+
+
+
+
+
+
+
+

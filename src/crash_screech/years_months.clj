@@ -10,6 +10,7 @@
   (:require [java-time.temporal :as jt-temporal]))
 
 (defn trunc-yyyy-mm
+  "spec"
   [ym-extra]
   (let [date-vector (clj-str/split ym-extra #"-")
         ym-vector (take 2 date-vector)
@@ -19,6 +20,7 @@
     ym-str))
 
 (defn trunc-yyyy-mm-dd
+  "spec"
   [ymd-extra]
   (let [date-vector (clj-str/split ymd-extra #"-")
         ymd-vector (take 3 date-vector)
@@ -28,18 +30,21 @@
     ymd-str))
 
 (defn date-to-yyyy-mm
+  "spec"
   [ymd-date]
   (let [ymd-str (str ymd-date)
         ym-str (trunc-yyyy-mm ymd-str)]
     ym-str))
 
 (defn date-to-yyyy-mm-dd
+  "spec"
   [ymd-date]
   (let [ymd-str (str ymd-date)
         ym-str (trunc-yyyy-mm-dd ymd-str)]
     ym-str))
 
 (defn month-name
+  "spec"
   ([month-offset]
    (let [now-yyyy-mm (date-to-yyyy-mm (j-time/local-date))]
      (month-name month-offset now-yyyy-mm)))
@@ -67,15 +72,18 @@
          month-name (int-key month-names)]
      month-name)))
 
-(defn prev-month 
+(defn prev-month
+  "spec"
   ([] (month-name -1))
   ([yyyy-mm] (month-name -1 yyyy-mm)))
 
-(defn current-month 
-  ([] (month-name 0)) 
+(defn current-month
+  "spec"
+  ([] (month-name 0))
   ([yyyy-mm] (month-name 0 yyyy-mm)))
 
 (defn yyyy-mm-to-ints
+  "spec"
   [yyyy-mm]
   (let [date-vector (clj-str/split yyyy-mm #"-")
         yyyy-int (Integer/parseInt (first date-vector))
@@ -83,14 +91,17 @@
     [yyyy-int mm-int]))
 
 (defn current-yyyy-mm
+  "spec"
   ([] (current-yyyy-mm (date-to-yyyy-mm (j-time/local-date))))
   ([yyyy-mm] (trunc-yyyy-mm yyyy-mm)))
 
 (defn current-yyyy-mm-dd
+  "spec"
   ([] (current-yyyy-mm-dd (date-to-yyyy-mm-dd (j-time/local-date))))
   ([yyyy-mm-dd] (trunc-yyyy-mm-dd yyyy-mm-dd)))
 
 (defn prev-yyyy-mm
+  "spec"
   ([] (prev-yyyy-mm (date-to-yyyy-mm (j-time/local-date))))
   ([yyyy-mm]
    (let [[yyyy-int mm-int] (yyyy-mm-to-ints yyyy-mm)
@@ -101,9 +112,13 @@
          ym-str (date-to-yyyy-mm last-month)]
      ym-str)))
 
-(defn instant-time-fn [] (str (jt-temporal/instant)))
+(defn instant-time-fn []
+  "spec"
+  (str (jt-temporal/instant)))
 
-(defn adjusted-date [date-str] (clj-str/replace date-str #"T|:" "-"))
+(defn adjusted-date [date-str]
+  "spec"
+  (clj-str/replace date-str #"T|:" "-"))
 
 
 

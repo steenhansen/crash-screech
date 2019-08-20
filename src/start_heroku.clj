@@ -22,7 +22,6 @@
          (-main "monger-db" "../heroku-config.edn")
          (-main "monger-db" "../heroku-config.edn" "use-environment"))
 (defn -main
-
   ([db-type config-file] (-main db-type config-file USE_ENVIRONMENT))
 
   ([db-type config-file environment-utilize]
@@ -33,8 +32,8 @@
                                                           config-file
                                                           environment-utilize)
          int-port (Integer/parseInt web-port)
-         temporize-func
-         (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)
+         testing-sms? false
+         temporize-func (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms?)
          request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data)]
      (web-init int-port request-handler))))
 
