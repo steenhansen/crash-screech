@@ -62,12 +62,6 @@
 (defn prepare-data
   "has test"
   [check-records]
-
-;(println "check-records" check-records  (type check-records))
-;(println "needl-reg" needle-regex (type needle-regex))
-
-
-
   (let [records-dated (for [check-record check-records]
                         (ensure-has-date check-record))
         derived-data (for [dated-record records-dated]

@@ -67,11 +67,8 @@
                                                 (let [{check-page :check-page} check-page-obj
                                                       plain-items (my-get-url begins-with check-page)]
                                                   (concat items-vector plain-items)))]
-
-
                          (let [all-matches (reduce my-get-the-pages [] pages-to-check)
                                sorted-matches (sort-by :check-url all-matches)]
-
                            sorted-matches)))
 
         my-put-item  (fn put-item [check-record]

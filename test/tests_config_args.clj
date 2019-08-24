@@ -15,11 +15,31 @@
 
   (:require [java-time :refer [local-date?]])
 
-  (:require [prepare-tests :refer :all])
-  (:require [spec-calls :refer :all]))
+  (:require [prepare-tests :refer :all]))
 
-(spec-test/instrument 'read-config-file)
-;(spec-test/instrument 'merge-environment)
+(defn config-args-specs []
+  (if RUN-SPEC-TESTS
+    (do
+
+      (spec-test/instrument)
+      (spec-test/instrument 'read-config-file)
+      (spec-test/instrument 'merge-environment)
+      (spec-test/instrument 'make-config)
+
+
+)))
+
+(def ^:const TEST-MAKE-CONFIG
+  {:SEND_TEST_SMS_URL "/zxc"
+   :PHONE_NUMBERS "12345678901,12345678901,12345678901"
+   :HEROKU_APP_NAME "https://fathomless-woodland-85635.herokuapp.com/"
+   :MONGODB_URI "mongodb://localhost:27017/local"
+   :TILL_USERNAME "abcdefghijklmnopqrstuvwxyz1234"
+   :TILL_API_KEY "1234567890abcdefghijklmnopqrstuvwxyz1234"
+   :TILL_URL "https://platform.tillmobile.com/api/send"
+   :CRON_URL_DIR "/url-for-cron-execution"
+   :TESTING_SMS true
+   :PORT "8080"})
 
 (def ^:const TEST-READ-CONFIG
   {:amazonica-db {:access-key "local-access"
@@ -36,17 +56,29 @@
                  :PORT "8080"},
    :monger-db {:MONGODB_URI "mongodb://localhost:27017/local"}})
 
+
 (deftest uni-read-config-file
-  (testing "count-string : cccccccccccccccccccccc "
-    (let [config-map (read-config-file "./local-config.edn")]
+  (testing "read-config-file : cccccccccccccccccccccc "
+    (let [config-file "./local-config.edn"
+          config-map (read-config-file config-file)]
       (console-test "uni-read-config-file" "config-args")
+;(show-2-values config-map TEST-READ-CONFIG)
       (is (= config-map TEST-READ-CONFIG)))))
 
-
 (deftest uni-merge-environment
-  (testing "count-string : cccccccccccccccccccccc "
-    (let [ a-map-entry (first {:not_exist_key "a_value"})
-	new-env (merge-environment {} a-map-entry)]
+  (testing "merge-environment : cccccccccccccccccccccc "
+    (let [a-map-entry (first {:not_exist_key "a_value"})
+          start-accum {}
+          new-env (merge-environment start-accum a-map-entry)]
       (console-test "uni-merge-environment" "config-args")
-      (is (= new-env {:not_exist_key "a_value"}))
-                                                )))
+      (is (= new-env {:not_exist_key "a_value"})))))
+
+(deftest uni-make-config
+  (testing "make-config : cccccccccccccccccccccc "
+    (let [db-type "monger-db"
+          config-file "./local-config.edn"
+          environment-utilize  "ignore-environment"
+          config-map (make-config db-type config-file environment-utilize)]
+      (console-test "uni-make-config" "config-args")
+;(show-2-values config-map TEST-MAKE-CONFIG)
+      (is (= config-map TEST-MAKE-CONFIG)))))

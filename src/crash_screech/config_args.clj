@@ -3,6 +3,8 @@
   (:require [me.raynes.fs :as file-sys])
   (:require [global-consts :refer :all]))
 
+(defmacro compact-hash [& vars] (list `zipmap (mapv keyword vars) (vec vars)))
+
 (defn read-config-file
   [config-file]
   (let [config-path (str (file-sys/absolute config-file))]
@@ -19,8 +21,6 @@
         system-env (System/getenv plain-key)
         system-environment (assoc-in accum-environment [env-key] system-env)
         program-environment (assoc-in accum-environment [env-key] the-value)]
-
-
     (if (System/getenv plain-key) system-environment program-environment)))
 
 (defn make-config
@@ -34,4 +34,4 @@
         has-environmentals (reduce merge-environment {} program-config)]
     (if ignore-environmentals program-config has-environmentals)))
 
-(defmacro compact-hash [& vars] (list `zipmap (mapv keyword vars) (vec vars)))
+

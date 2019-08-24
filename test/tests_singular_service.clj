@@ -13,13 +13,20 @@
 
 
   (:require [prepare-tests :refer :all])
-  (:require [spec-calls :refer :all]))
+)
 
+(defn singular-service-specs []
+  (if RUN-SPEC-TESTS
+    (do
 
-
+      (spec-test/instrument)
 (spec-test/instrument 'add-service)
 (spec-test/instrument 'remove-service)
 (spec-test/instrument 'kill-services)
+
+
+)))
+
 
 (deftest uni-add-service
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "

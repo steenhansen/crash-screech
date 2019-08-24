@@ -1,8 +1,8 @@
 
 (alias 's 'clojure.spec.alpha)
+(alias 's-h 'crash-screech.scrape-html)
 
 
-
-(s/fdef crash-screech.scrape-html/count-scrapes
+(s/fdef s-h/count-scrapes
   :args (s/cat :some-html string?)) 
 

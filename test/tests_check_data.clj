@@ -1,28 +1,26 @@
 
-
 (ns tests-check-data
   (:require [clojure.test :refer :all])
   (:require [clojure.spec.alpha :as spec-alpha]
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
-
   (:require [global-consts  :refer :all])
   (:require [global-vars  :refer :all])
-
   (:require [crash-screech.check-data :refer :all])
-
   (:require [java-time :refer [local-date?]])
-
-
   (:require [prepare-tests :refer :all])
-  (:require [spec-calls :refer :all]))
+)
 
+(defn check-data-specs []
+  (if RUN-SPEC-TESTS
+    (do
+      (spec-test/instrument)
 (spec-test/instrument 'count-string)
 (spec-test/instrument 'trunc-string)
 (spec-test/instrument 'derive-data)
 (spec-test/instrument 'uniquely-id)
 (spec-test/instrument 'ensure-has-date)
-(spec-test/instrument 'prepare-data)
+(spec-test/instrument 'prepare-data))))
 
 (deftest uni-count-string
   (testing "count-string : cccccccccccccccccccccc "
@@ -30,11 +28,13 @@
       (console-test "uni-count-string" "check-data")
       (is (= occurance-count 3)))))
 
+(deftest uni-trunc-string
+  (testing "test-trunc-string : cccccccccccccccccccccc "
+    (let [trunced-str (trunc-string "123456789" 3)]
+      (console-test "uni-trunc-string" "check-data")
+      (is (= trunced-str "123")))))
 
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 (def ^:const T-BEFORE-THE-DATA {:the-url "www.sffaudio.com",
                                 :the-date "2019-06-19-01:54:03.800Z",
@@ -54,6 +54,28 @@
     (let [derived-data (derive-data T-BEFORE-THE-DATA)]
       (console-test "uni-derive-data" "check-data")
       (is (= derived-data T-AFTER-CHECK-DATA)))))
+
+
+(def ^:const T-BEFORE-UNIQUE-ID {:check-url "www.sffaudio.com",
+                                 :check-date "2019-06-19-01:54:03.800Z",
+                                 :check-html "123456789",
+                                 :check-bytes 9
+                                 :check-accurate true,
+                                 :check-time 1234})
+
+(def ^:const T-EXPECTED-UNIQUE-ID {:check-url "www.sffaudio.com",
+                                :check-date "2019-06-19-01:54:03.800Z",
+                                :_id "2019-06-19-01:54:03.800Z+1",
+                                :check-html "123456789",
+                                :check-bytes 9
+                                :check-accurate true,
+                                :check-time 1234})
+
+(deftest uni-uniquely-id
+  (testing "test-uniquely-id : cccccccccccccccccccccc "
+    (let [unique-data (uniquely-id 1 T-BEFORE-UNIQUE-ID)]
+      (console-test  "uni-uniquely-id"  "check-data")
+      (is (= unique-data T-EXPECTED-UNIQUE-ID)))))
 
 
 ;;;;;;;;;;;;;;
@@ -87,7 +109,7 @@
     :the-accurate true,
     :the-time 12346}])
 
-(def ^:const T-AFTER-ENSURE-DATA
+(def ^:const T-EXPECTED-PREPARE-DATA
 
   [{:check-url "www.sffaudio.com",
     :check-date "2019-06-19-01-54-03.800Z",
@@ -108,42 +130,11 @@
   (testing "prepare-tests-data : fffff "
     (let [prepared-data (prepare-data T-BEFORE-ENSURE-DATA)]
       (console-test "uni-prepare-data" "check-data")
-      (is (= prepared-data T-AFTER-ENSURE-DATA)))))
+      (is (= prepared-data T-EXPECTED-PREPARE-DATA)))))
 
 ;;;;;;;;;;;;;
 
 
-(deftest uni-trunc-string
-  (testing "test-trunc-string : cccccccccccccccccccccc "
-    (let [trunced-str (trunc-string "123456789" 3)]
-      (console-test "uni-trunc-string" "check-data")
-      (is (= trunced-str "123")))))
 
 ;;;;;;;;;;;;
-
-(def ^:const T-BEFORE-UNIQUE-ID {:check-url "www.sffaudio.com",
-                                 :check-date "2019-06-19-01:54:03.800Z",
-                                 :check-html "123456789",
-                                 :check-bytes 9
-                                 :check-accurate true,
-                                 :check-time 1234})
-
-(def ^:const T-AFTER-UNIQUE-ID {:check-url "www.sffaudio.com",
-                                :check-date "2019-06-19-01:54:03.800Z",
-                                :_id "2019-06-19-01:54:03.800Z+1",
-                                :check-html "123456789",
-                                :check-bytes 9
-                                :check-accurate true,
-                                :check-time 1234})
-
-(deftest uni-uniquely-id
-  (testing "test-uniquely-id : cccccccccccccccccccccc "
-    (let [unique-data (uniquely-id 1 T-BEFORE-UNIQUE-ID)]
-      (console-test  "uni-uniquely-id"  "check-data")
-      (is (= unique-data T-AFTER-UNIQUE-ID)))))
-
-
-
-
-
 

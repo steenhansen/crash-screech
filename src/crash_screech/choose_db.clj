@@ -11,6 +11,15 @@
   (:require [crash-screech.mongo-db :refer [mongolabs-build]])
   (:require [crash-screech.years-months :refer [current-yyyy-mm current-yyyy-mm-dd]]))
 
+
+(defn get-phone-nums
+  "get string with phone numbers delimeted by commas, return them in a vector"
+ [phone-comma-string]
+  (let [phone-spaces (clj-str/split phone-comma-string #",")
+        phone-numbers (map clj-str/trim phone-spaces)
+        phone-vector (vec phone-numbers)]
+    phone-vector))
+
 (defn get-db-conn
   [table-name pages-to-check db-type the-config]
   (let [db-keyword (keyword db-type)]
@@ -60,13 +69,7 @@
               error-found (reduce my-failed-check false url-checks)]
          error-found)))))
 
-(defn get-phone-nums
-  "get string with phone numbers delimeted by commas, return them in a vector"
- [phone-comma-string]
-  (let [phone-spaces (clj-str/split phone-comma-string #",")
-        phone-numbers (map clj-str/trim phone-spaces)
-        phone-vector (vec phone-numbers)]
-    phone-vector))
+
 
 (defn build-db
   "return an object with database functions
@@ -85,14 +88,14 @@ have an default environment-utilize
         phone-comma-string (:PHONE_NUMBERS the-config)
         phone-numbers (get-phone-nums phone-comma-string)
         heroku-app-name (:HEROKU_APP_NAME the-config)
-        testing-sms? (:TESTING_SMS the-config)         ;;  test-98 delete
+        testing-sms? (:TESTING_SMS the-config)         
         send-test-sms-url (:SEND_TEST_SMS_URL the-config)
         sms-data (compact-hash till-username
                                till-url
                                till-api-key
                                phone-numbers
                                heroku-app-name
-                               testing-sms?           ;;  test-98 delete
+                               testing-sms?           
                                send-test-sms-url)
         get-all (:my-get-all my-db-funcs)
         my-db-obj {:delete-table (:my-delete-table my-db-funcs),

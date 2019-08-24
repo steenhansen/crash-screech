@@ -10,12 +10,23 @@
   (:require [crash-screech.choose-db :refer :all])
   (:require [java-time :refer [local-date?]])
   (:require [prepare-tests :refer :all])
-  (:require [spec-calls :refer :all]))
+)
+
+
+
+(defn sms-event-specs []
+  (if RUN-SPEC-TESTS
+    (do
+
+      (spec-test/instrument)
+
 
 (spec-test/instrument 'make-api-call)
 (spec-test/instrument 'build-sms-send)
 (spec-test/instrument 'sms-to-phones)
 (spec-test/instrument 'single-cron-fn)
+
+)))
 
 (def ^:const TEST-SMS-MAP-SHORT
   {:till-url "https://platform.tillmobile.com/api/send?username=abcdefghijklmnopqrstuvwxyz1234&api_key=1234567890abcdefghijklmnopqrstuvwxyz1234"

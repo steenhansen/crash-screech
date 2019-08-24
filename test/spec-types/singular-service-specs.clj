@@ -1,22 +1,21 @@
 
 (alias 's 'clojure.spec.alpha)
+(alias 's-s 'crash-screech.singular-service)
 
 
 
-
-(s/fdef crash-screech.singular-service/add-service
+(s/fdef s-s/add-service
   :args (s/cat :spawning-name string?
-                :kill-service clojure.test/function? )) 
+                :kill-service function? )) 
 
 
 
-(s/fdef crash-screech.singular-service/remove-service
+(s/fdef s-s/remove-service
   :args (s/cat :spawning-name string?)) 
 
 
-(s/fdef crash-screech.singular-service/kill-services
+(s/fdef s-s/kill-services
   :args (s/cat)) 
 
 
-(in-ns 'spec-calls)
 

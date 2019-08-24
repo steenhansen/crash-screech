@@ -10,18 +10,29 @@
             [clojure.tools.logging :as log])
   (:require [clj-http.client :as http-client])
 
-  (:require [clojure.string :as clj-str])
+  (:require [clojure.string :as clj-str])   
 
   (:require [global-consts  :refer :all])
 
   (:require [crash-screech.choose-db :refer :all]))
 
-(def ^:const T-DB-TEST-NAME "zzz3")    
-(def ^:const T-CONSOLE-TESTS true)     
+(def ^:const RUN-SPEC-TESTS false)
 
-(def ^:const T-DO-DYNAMODB-TESTS false) 
+(def ^:const T-DB-TEST-NAME "zzz3")  
+(def ^:const T-CONSOLE-TESTS true)      
+(def ^:const T-DO-DYNAMODB-TESTS false)  
 (def ^:const T-TIME-STAMP #"^([\d]{4})-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T\d\d:\d\d:\d\d\.\d\d\dZ$")
  
+(defn show-2-values [first-value second-value]
+ (println "111111111111111111111111111111111111111")
+ (println "1: " first-value)
+ (println "222222222222222222222222222222222222222")
+ (println "2: " second-value)
+ (println "333333333333333333333333333333333333333")
+)
+
+
+
 
 (defn console-test
   ([test-name] (console-test test-name "-"))

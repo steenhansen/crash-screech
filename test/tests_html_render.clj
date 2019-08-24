@@ -21,15 +21,23 @@
 
 
   (:require [prepare-tests :refer :all])
-  (:require [spec-calls :refer :all]))
+)
 
 
 
+(defn html-render-specs []
+  (if RUN-SPEC-TESTS
+    (do
 
-
-
+      (spec-test/instrument)
 
    (spec-test/instrument 'day-hour-min)
+
+
+)))
+
+
+
 
  (deftest uni-day-hour-min
    (testing "test-day-hour-min : cccccccccccccccccccccc "

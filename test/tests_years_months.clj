@@ -16,9 +16,13 @@
   (:require [java-time :refer [local-date?]])
 
   (:require [prepare-tests :refer :all])
-  (:require [spec-calls :refer :all]))
+)
 
+(defn years-months-specs []
+  (if RUN-SPEC-TESTS
+    (do
 
+      (spec-test/instrument)
 (spec-test/instrument 'adjusted-date)
 (spec-test/instrument 'current-month)
 (spec-test/instrument 'current-yyyy-mm-dd)
@@ -31,6 +35,11 @@
 (spec-test/instrument 'trunc-yyyy-mm-dd)
 (spec-test/instrument 'trunc-yyyy-mm)
 (spec-test/instrument 'yyyy-mm-to-ints)
+
+)))
+
+
+
 
 
 (deftest uni-adjusted-date

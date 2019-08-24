@@ -31,11 +31,20 @@
 
 
   (:require [prepare-tests :refer :all])
-  (:require [spec-calls :refer :all]))
+)
 
 
+(defn scrape-html-specs []
+  (if RUN-SPEC-TESTS
+    (do
 
-(spec-test/instrument 'count-scrapes)
+      (spec-test/instrument)
+
+      (spec-test/instrument 'count-scrapes)
+
+)))
+
+
 
 
  (def ^:const T-COUNT-SCRAPES-HTML " a_countable_scrape a_countable_scrape ")

@@ -10,9 +10,9 @@
 
 (defn left-pad2 [my-str] (format "%02d" my-str))
 
-(defn date-plus-1
-  [begins-with]
-  (let [date-vector (clj-str/split begins-with #"-")
+(defn next-date-time
+  [yyyy-mm-d]
+  (let [date-vector (clj-str/split yyyy-mm-d #"-")
         last-string (last date-vector)
         last-int (Integer/parseInt last-string)
         last-plus1 (inc last-int)
@@ -46,7 +46,7 @@
     ;(comment "" ((:get-all my-db-obj) "2019-05"))
         my-get-all (fn get-all [begins-with]
                      (let [begin-date (trunc-string begins-with DATE-MAX-LENGTH)
-                           date-plus1 (date-plus-1 begin-date)
+                           date-plus1 (next-date-time begin-date)
                            all-records
                            (mong-coll/find-maps db-handle
                                                 my-collection
@@ -57,7 +57,7 @@
       ;       ((:get-url-monger my-db-obj) "2019" "www.sffaudio.com"))
         my-get-url   (fn get-url
                        [begins-with page-to-check]
-                       (let [date-plus1 (date-plus-1 begins-with)]
+                       (let [date-plus1 (next-date-time begins-with)]
                          (mong-coll/find-maps db-handle
                                               my-collection
                                               {$and [{:_id {$gte begins-with, $lt date-plus1}}
