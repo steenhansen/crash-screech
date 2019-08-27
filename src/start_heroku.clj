@@ -9,7 +9,8 @@
 
   (:require [crash-screech.choose-db :refer [build-db]])
   (:require [crash-screech.cron-service :refer [cron-init]])
-  (:require [crash-screech.html-render :refer [make-request-fn make-request-fn web-init]])
+  (:require [crash-screech.web-server :refer [make-request-fn web-init]])
+
   (:require [crash-screech.scrape-html :refer [scrape-pages-fn]])
   (:require [crash-screech.singular-service :refer [kill-services]])
   (:require [crash-screech.sms-event :refer [build-sms-send single-cron-fn]]))

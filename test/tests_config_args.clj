@@ -62,7 +62,6 @@
     (let [config-file "./local-config.edn"
           config-map (read-config-file config-file)]
       (console-test "uni-read-config-file" "config-args")
-;(show-2-values config-map TEST-READ-CONFIG)
       (is (= config-map TEST-READ-CONFIG)))))
 
 (deftest uni-merge-environment
@@ -80,5 +79,4 @@
           environment-utilize  "ignore-environment"
           config-map (make-config db-type config-file environment-utilize)]
       (console-test "uni-make-config" "config-args")
-;(show-2-values config-map TEST-MAKE-CONFIG)
       (is (= config-map TEST-MAKE-CONFIG)))))

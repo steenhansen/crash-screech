@@ -10,7 +10,7 @@
             [clojure.tools.logging :as log])
   (:require [clj-http.client :as http-client])
 
-  (:require [clojure.string :as clj-str])   
+  (:require [clojure.string :as clj-str])
 
   (:require [global-consts  :refer :all])
 
@@ -18,27 +18,26 @@
 
 (def ^:const RUN-SPEC-TESTS false)
 
-(def ^:const T-DB-TEST-NAME "zzz3")  
-(def ^:const T-CONSOLE-TESTS true)      
-(def ^:const T-DO-DYNAMODB-TESTS false)  
+(def ^:const T-DB-TEST-NAME "zzz3")
+(def ^:const T-CONSOLE-TESTS true)
+(def ^:const T-DO-DYNAMODB-TESTS false)
 (def ^:const T-TIME-STAMP #"^([\d]{4})-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T\d\d:\d\d:\d\d\.\d\d\dZ$")
- 
-(defn show-2-values [first-value second-value]
- (println "111111111111111111111111111111111111111")
- (println "1: " first-value)
- (println "222222222222222222222222222222222222222")
- (println "2: " second-value)
- (println "333333333333333333333333333333333333333")
-)
-
-
 
 
 (defn console-test
   ([test-name] (console-test test-name "-"))
   ([test-name test-area]
    (if T-CONSOLE-TESTS
-     (println "..." test-area test-name ))))
+     (println "..." test-area test-name))))
+
+;  (ddiff/pretty-print (ddiff/diff expected-get-index actual-get-index) )
+(defn rn-2-n
+  [rn-text]
+  (let [n-text (clj-str/replace rn-text  #"\r\n" "\n")
+        one-spaces  (clj-str/replace n-text  #"\s\s+" " ")
+        trimmed-unix (clj-str/trim one-spaces)]
+   trimmed-unix))
+
 
 (defn dampen-mongo-logging
   []
@@ -69,8 +68,11 @@
 (defn strip-white-space [my-text] (clj-str/replace my-text #"\s" ""))
 
 (defn reset-test-to-actual-data
-  [test-data actual-data]
-  (spit test-data actual-data))
+  [test-file actual-data]
+  (let  [test-path (str SCRAPED-TEST-DATA test-file)]
+    (println test-file test-path)
+ ; (spit test-path actual-data)
+    ))
 
 (defn print-block
   []

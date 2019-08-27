@@ -1,19 +1,11 @@
 
 (ns crash-screech.html-render
-
+  (:require [ring.util.response :as ring-response])
   (:require [net.cgrand.enlive-html :as enlive-html])
   (:require [clojure.string :as clj-str])
-  (:require [ring.util.response :as ring-response])
-  (:require [ring.middleware.reload :as ring-reload])
-
-  (:require [ring.adapter.jetty :as ring-jetty])
-
   (:require [global-consts  :refer :all])
-
   (:require [crash-screech.years-months  :refer [current-yyyy-mm current-month
                                                  prev-month prev-yyyy-mm date-to-yyyy-mm]])
-  (:require [crash-screech.sms-event  :refer [sms-to-phones]])
-  (:require [crash-screech.singular-service :refer [add-service remove-service]])
   (:require [java-time.local :as j-time]))
 
 (defn render-parts [html-pieces] (clj-str/join html-pieces))
@@ -98,7 +90,6 @@
 (defn get-two-months
   "has db test"
   [my-db-obj yyyy-mm]
-
   (let [get-all (:get-all my-db-obj)
         this-y-m (current-yyyy-mm yyyy-mm)
         last-y-m (prev-yyyy-mm yyyy-mm)
@@ -130,43 +121,8 @@
                                                                   yyyy-mm))
                                "text/html")))
 
-(defn make-request-fn
-  "has db test"
-  [temporize-func my-db-obj cron-url sms-data]
-  (fn request-handler
-    [request]
-    (let [the-uri (:uri request)
-          send-test-sms-url (:send-test-sms-url sms-data)
-testing-sms? false]
-;(println " request:" request)
-;(println " uri:" the-uri)
-;(println " show-data:" show-data)
-;(println " my-db-obj:" my-db-obj)
-      (if (= the-uri cron-url) (temporize-func))
-      (condp = the-uri
-        "/" (show-data my-db-obj)
-        cron-url (show-data my-db-obj)
-        send-test-sms-url (sms-to-phones sms-data testing-sms?)
-        "/base-styles.css" (ring-response/resource-response "base-styles.css" {:root ""})
-        (ring-response/not-found "404")))))
+(defn show-data-cron
+  [my-db-obj the-uri cron-url temporize-func]
+  (if (= the-uri cron-url) (temporize-func))
+  (show-data my-db-obj))
 
-;; https://stackoverflow.com/questions/54056579/how-to-avoid-global-state-in-clojure-when-using-wrap-reload
-;     https://github.com/panta82/clojure-webdev/blob/master/src/webdev/core.clj
-(def jetty-reloader #'ring-reload/reloader)
-
-(defn web-reload
-  []
-  (let [reload-jetty! (jetty-reloader ["src"] true)] (reload-jetty!)))
-
-(defn web-init
-  [server-port request-handler]
-  (remove-service "web-init")
-  (web-reload)
-  (let [web-server (ring-jetty/run-jetty request-handler
-                                         {:port server-port, :join? false})
-        my-kill-web (fn kill-web
-                      []
-                      (if-not (boolean (resolve 'DB-TEST-NAME)) (println "Killing web-service"))
-                      (.stop web-server))]
-    (add-service "web-init" my-kill-web)
-    my-kill-web))

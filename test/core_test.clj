@@ -11,18 +11,20 @@
    
 
 
-
-
 (def ^:const TEST-CHECK-DATA false)
 (def ^:const TEST-CHOOSE-DB false)
 (def ^:const TEST-CONFIG-ARGS false)
-(def ^:const TEST-CRON-SERVICE true)
+(def ^:const TEST-CRON-SERVICE false)
 (def ^:const TEST-DYNAMO-DB false)
-(def ^:const TEST-HTML-RENDER false)
+(def ^:const TEST-HTML-RENDER true)
 (def ^:const TEST-MONGO-DB false)
-(def ^:const TEST-SCRAPE-HTML false)     ;; weird qqq
+(def ^:const TEST-SCRAPE-HTML false)   
 (def ^:const TEST-SINGULAR-SERVICE false)
 (def ^:const TEST-SMS-EVENT false)
+
+(def ^:const TEST-WEB-SERVER false)
+
+
 (def ^:const TEST-YEARS-MONTHS false)
 
 (ns core-test
@@ -53,6 +55,7 @@
 
   (:require [tests-sms-event  :refer :all])
   (:require [tests-years-months  :refer :all])
+  (:require [tests-web-server  :refer :all])
 
   (:require   [sms-test :refer :all])      ; (-test-sms "../heroku-config.edn")
   (:require [prepare-tests :refer :all]))
@@ -68,6 +71,7 @@
 (load "spec-types/scrape-html-specs")
 (load "spec-types/singular-service-specs")
 (load "spec-types/sms-event-specs")
+(load "spec-types/web-server-specs")
 (load "spec-types/years-months-specs")
 
 (defn check-data-tests  []
@@ -77,8 +81,7 @@
   (tests-check-data/uni-derive-data)
   (tests-check-data/uni-uniquely-id)
   (tests-check-data/uni-ensure-has-date)
-  (tests-check-data/uni-prepare-data)
-)
+  (tests-check-data/uni-prepare-data))
 
 (defn choose-db-tests []
   (tests-choose-db/choose-db-specs)
@@ -89,16 +92,15 @@
   (tests-choose-db/uni-build-empty-month-dynoDb)
   (tests-choose-db/uni-build-today-error-mongoDb)
   (tests-choose-db/uni-build-today-error-dynoDb)
-  (tests-choose-db/uni-build-db)
-)
+  (tests-choose-db/uni-build-db))
 
-(defn config-args-tests []                 
+(defn config-args-tests []
   (tests-config-args/config-args-specs)
   (tests-config-args/uni-read-config-file)
   (tests-config-args/uni-merge-environment)
   (tests-config-args/uni-make-config))
 
-(defn cron-service-tests [] 
+(defn cron-service-tests []
   (tests-cron-service/cron-service-specs)
   (tests-cron-service/uni-build-cron-func)
   (tests-cron-service/uni-start-cron)
@@ -111,11 +113,14 @@
 (defn html-render-tests []
   (tests-html-render/html-render-specs)               ;;; we are here q*bert
   (tests-html-render/uni-day-hour-min)
+  (tests-html-render/uni-get-index)
+
+;  (tests-html-render/uni-show-data)
+
 )
 
 (defn mongo-db-tests []
   (tests-mongo-db/mongo-db-specs)
-
 
   (tests-mongo-db/uni-mongolabs-build)
 
@@ -142,6 +147,13 @@
   (tests-sms-event/uni-build-sms-send)
   (tests-sms-event/uni-sms-to-phones)
   (tests-sms-event/uni-single-cron-fn))
+
+(defn web-server-tests[]
+ (tests-web-server/web-server-specs)
+
+ (tests-web-server/web-server-specs)
+
+)
 
 (defn years-months-tests []
   (tests-years-months/years-months-specs)
@@ -189,6 +201,11 @@
     (singular-service-tests))
   (if TEST-SMS-EVENT
     (sms-event-tests))
+
+  (if TEST-WEB-SERVER
+    (web-server-tests))
+
+
   (if TEST-YEARS-MONTHS
     (years-months-tests)))
 

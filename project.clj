@@ -7,6 +7,7 @@
   :dependencies   [[org.clojure/clojure "1.10.0"]
 
 ;; july 8/stat - Copy (10) was first log4j thing
+[lambdaisland/deep-diff "0.0-47"]
 
                    [log4j/log4j "1.2.16" :exclusions [javax.mail/mail javax.jms/jms com.sun.jdmk/jmxtools com.sun.jmx/jmxri]]
 

@@ -11,28 +11,18 @@
   (:require [global-consts  :refer :all])
   (:require [global-vars  :refer :all])
 
-  (:require [crash-screech.choose-db :refer :all ])
+  (:require [crash-screech.choose-db :refer :all])
 
   (:require [crash-screech.sms-event :refer :all])
-  (:require [crash-screech.scrape-html :refer :all ])
+  (:require [crash-screech.scrape-html :refer :all])
 
   (:require [crash-screech.html-render  :refer :all])
   (:require [crash-screech.years-months  :refer :all])
   (:require [crash-screech.config-args :refer :all])
 
-(:require [java-time :refer [local-date?]])
+  (:require [java-time :refer [local-date?]])
 
-
-
-
-
-
-
-
-
-  (:require [prepare-tests :refer :all])
-)
-
+  (:require [prepare-tests :refer :all]))
 
 (defn scrape-html-specs []
   (if RUN-SPEC-TESTS
@@ -40,28 +30,16 @@
 
       (spec-test/instrument)
 
-      (spec-test/instrument 'count-scrapes)
+      (spec-test/instrument 'count-scrapes))))
 
-)))
-
-
-
-
- (def ^:const T-COUNT-SCRAPES-HTML " a_countable_scrape a_countable_scrape ")
+(def ^:const T-COUNT-SCRAPES-HTML " a_countable_scrape a_countable_scrape ")
 
 (deftest uni-count-scrapes
   (testing "test-count-scrapes : ssssssss "
-      (console-test  "uni-count-scrapes"  "scrape-html")
+    (console-test  "uni-count-scrapes"  "scrape-html")
     (let [expected-scrapes 2
           actual-scrapes (count-scrapes T-COUNT-SCRAPES-HTML)]
       (is (= expected-scrapes actual-scrapes)))))
-
-
-
-
-
-
-
 
 (defn sms-send-init [pages-to-check db-type]
   (let [[my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME
@@ -134,7 +112,7 @@
                                     IGNORE-ENV-VARS)
         purge-table (:purge-table my-db-obj)
         put-items (:put-items my-db-obj)
-        get-all (:get-all my-db-obj)
+     ;   get-all (:get-all my-db-obj)
         NOV-2000-DATE "2000-11-11-11:11:11.011Z"
         DEC-2000-DATE "2000-12-12-12:12:12.012Z"
         JAN-2001-DATE "2001-01-01-01:01:01.001Z"
