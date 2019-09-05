@@ -8,8 +8,7 @@
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
 
-  (:require [global-consts  :refer :all])
-  (:require [global-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
 
   (:require [crash-screech.choose-db :refer :all])
 
@@ -34,9 +33,9 @@
 
 (def ^:const T-COUNT-SCRAPES-HTML " a_countable_scrape a_countable_scrape ")
 
-(deftest uni-count-scrapes
+(deftest unit-count-scrapes
   (testing "test-count-scrapes : ssssssss "
-    (console-test  "uni-count-scrapes"  "scrape-html")
+    (console-test  "unit-count-scrapes"  "scrape-html")
     (let [expected-scrapes 2
           actual-scrapes (count-scrapes T-COUNT-SCRAPES-HTML)]
       (is (= expected-scrapes actual-scrapes)))))

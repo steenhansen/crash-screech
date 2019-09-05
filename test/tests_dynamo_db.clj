@@ -6,8 +6,7 @@
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
 
-  (:require [global-consts  :refer :all])
-  (:require [global-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
 
   (:require [crash-screech.config-args :refer [make-config compact-hash]])
   (:require [crash-screech.dynamo-db :refer :all])
@@ -26,7 +25,7 @@
 )))
 
 
-(deftest uni-dynamo-build
+(deftest unit-dynamo-build
   (testing "count-string : cccccccccccccccccccccc "
     (let [ db-type  "amazonica-db"
            the-config (make-config db-type TEST-CONFIG-FILE IGNORE-ENV-VARS)
@@ -34,7 +33,7 @@
                          :enlive-keys [:article :div.blog-item-wrap],
                          :at-least 1}]
                    a-dynamo-db       (dynamo-build the-config  T-DB-TEST-NAME pages-to-check)]
-      (console-test "uni-dynamo-build" "dynamo-db")
+      (console-test "unit-dynamo-build" "dynamo-db")
 
      (is (function?(:my-delete-table a-dynamo-db)))
      (is (function?(:my-purge-table a-dynamo-db)))

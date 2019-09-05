@@ -5,8 +5,7 @@
   (:require [clojure.string :as clj-str])
   (:require [clj-http.client :as http-client])
 
-  (:require [global-consts  :refer :all])
-  (:require [global-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
 
   (:require [crash-screech.config-args :refer [compact-hash]])
   (:require [crash-screech.check-data :refer [count-string]]))
@@ -122,6 +121,7 @@
       (if (not @*we-be-testing*)
         (println "the-time the-url process-time" the-time the-url process-time))
       (put-item check-record))
+  (reset! global-consts-vars/*pages-were-scraped* true)
     (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn)))  ; NB return values used
 
 

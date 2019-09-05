@@ -1,6 +1,6 @@
 
 
-;   a
+;   get-two-months
 
 ; https://github.com/clojure/tools.logging   => log4j.properties
 ; http://www.paullegato.com/blog/logging-clojure-clj-logging-config/
@@ -12,11 +12,16 @@
 
   (:require [clojure.string :as clj-str])
 
-  (:require [global-consts  :refer :all])
+  (:require [global-consts-vars  :refer :all])
 
   (:require [crash-screech.choose-db :refer :all]))
 
 (def ^:const RUN-SPEC-TESTS false)
+
+
+;(def ^:const T-TIME-TO-RUN-SCRAPE false)
+
+
 
 (def ^:const T-DB-TEST-NAME "zzz3")
 (def ^:const T-CONSOLE-TESTS true)
@@ -67,6 +72,7 @@
 
 (defn strip-white-space [my-text] (clj-str/replace my-text #"\s" ""))
 
+;; reset-expected-to-actual-data
 (defn reset-test-to-actual-data
   [test-file actual-data]
   (let  [test-path (str SCRAPED-TEST-DATA test-file)]

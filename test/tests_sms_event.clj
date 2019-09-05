@@ -3,8 +3,7 @@
   (:require [clojure.spec.alpha :as spec-alpha]
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
-  (:require [global-consts  :refer :all])
-  (:require [global-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
   (:require [crash-screech.sms-event :refer :all])
   (:require [crash-screech.scrape-html :refer :all])
   (:require [crash-screech.choose-db :refer :all])
@@ -24,7 +23,7 @@
 (spec-test/instrument 'make-api-call)
 (spec-test/instrument 'build-sms-send)
 (spec-test/instrument 'sms-to-phones)
-(spec-test/instrument 'single-cron-fn)
+(spec-test/instrument 'build-web-scrap)
 
 )))
 
@@ -34,9 +33,9 @@
                               :text "my-test-mess - https://fathomless-woodland-85635.herokuapp.com/"}
                 :content-type :json}})
 
-(deftest uni-make-api-call
+(deftest unit-make-api-call
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
-    (console-test "uni-make-api-call" "sms-event")
+    (console-test "unit-make-api-call" "sms-event")
 
     (let [db-type "monger-db"
           environment-utilize "use-environment"
@@ -56,9 +55,9 @@
                 :content-type :json}
    :testing-sms? true})
 
-(deftest uni-build-sms-send
+(deftest unit-build-sms-send
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
-    (console-test "uni-build-sms-send" "sms-event")
+    (console-test "unit-build-sms-send" "sms-event")
 
     (let [db-type "monger-db"
           environment-utilize "use-environment"
@@ -72,9 +71,9 @@
 
       (is (= TEST-SMS-MAP-LONG  test-sms)))))
 
-(deftest uni-sms-to-phones
+(deftest unit-sms-to-phones
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
-    (console-test "uni-sms-to-phones" "sms-event")
+    (console-test "unit-sms-to-phones" "sms-event")
 
     (let [db-type "monger-db"
           environment-utilize "use-environment"
@@ -88,9 +87,9 @@
 
       (is (= TEST-SMS-MAP-LONG  test-sms)))))
 
-(deftest uni-single-cron-fn
+(deftest unit-build-web-scrap
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
-    (console-test "uni-single-cron-fn" "sms-event")
+    (console-test "unit-build-web-scrap" "sms-event")
 
     (let [db-type "monger-db"
           environment-utilize "use-environment"
@@ -100,5 +99,5 @@
                                              TEST-CONFIG-FILE
                                              environment-utilize)
           testing-sms? true
-          temporize-func (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms?)]
+          temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms?)]
       (is (function? temporize-func)))))

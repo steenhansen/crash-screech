@@ -3,10 +3,11 @@
   (:require [ring.util.response :as ring-response])
   (:require [net.cgrand.enlive-html :as enlive-html])
   (:require [clojure.string :as clj-str])
-  (:require [global-consts  :refer :all])
+  (:require [global-consts-vars  :refer :all])
   (:require [crash-screech.years-months  :refer [current-yyyy-mm current-month
                                                  prev-month prev-yyyy-mm date-to-yyyy-mm]])
-  (:require [java-time.local :as j-time]))
+  (:require [java-time.local :as j-time])
+)
 
 (defn render-parts [html-pieces] (clj-str/join html-pieces))
 
@@ -87,6 +88,18 @@
   (enlive-html/content (map month-selector
                             month-sections)))
 
+;; (defn test-time
+;;   "has test"
+;;   [check-record]
+;;    (let [ test-time-check (assoc-in check-record [:the-time] 987654)]
+;;       test-time-check))
+
+;; (defn set-times
+;;   ""
+;;   [a-months-data]
+;;   (let [ time-tested-data (map test-time a-months-data) ]
+;;  (vec time-tested-data)))
+
 (defn get-two-months
   "has db test"
   [my-db-obj yyyy-mm]
@@ -96,7 +109,10 @@
         this-months (get-all this-y-m)
         last-months (get-all last-y-m)
         current-months (vec this-months)
-        previous-months (vec last-months)]
+        previous-months (vec last-months)
+     ;   current-months (set-times this-months)
+     ;   previous-months (set-times last-months)
+]
     [previous-months current-months]))
 
 (defn get-index
@@ -113,16 +129,4 @@
          page-html (render-parts (index-page db-data))]
      page-html)))
 
-(defn show-data
-  "has db test"
-  ([my-db-obj] (show-data my-db-obj (date-to-yyyy-mm (j-time/local-date))))
-  ([my-db-obj yyyy-mm]
-   (ring-response/content-type (ring-response/response (get-index my-db-obj
-                                                                  yyyy-mm))
-                               "text/html")))
-
-(defn show-data-cron
-  [my-db-obj the-uri cron-url temporize-func]
-  (if (= the-uri cron-url) (temporize-func))
-  (show-data my-db-obj))
 

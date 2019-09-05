@@ -6,7 +6,7 @@
 
   (:require [crash-screech.config-args :refer [compact-hash]])
   (:require [crash-screech.check-data :refer [prepare-data trunc-string]])
-  (:require [global-consts  :refer :all]))
+  (:require [global-consts-vars  :refer :all]))
 
 (defn left-pad2 [my-str] (format "%02d" my-str))
 
@@ -53,7 +53,7 @@
                                                 {:_id {$gte begins-with, $lt date-plus1}})]
                        all-records))
 
-     ;       (comment "year of www.sffaudio"
+     ;       (comment "year of www.sffaudio"   q
       ;       ((:get-url-monger my-db-obj) "2019" "www.sffaudio.com"))
         my-get-url   (fn get-url
                        [begins-with page-to-check]

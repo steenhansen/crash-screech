@@ -8,8 +8,7 @@
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
 
-  (:require [global-consts  :refer :all])
-  (:require [global-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
 
   (:require [crash-screech.config-args :refer :all])
 
@@ -57,26 +56,26 @@
    :monger-db {:MONGODB_URI "mongodb://localhost:27017/local"}})
 
 
-(deftest uni-read-config-file
+(deftest unit-read-config-file
   (testing "read-config-file : cccccccccccccccccccccc "
     (let [config-file "./local-config.edn"
           config-map (read-config-file config-file)]
-      (console-test "uni-read-config-file" "config-args")
+      (console-test "unit-read-config-file" "config-args")
       (is (= config-map TEST-READ-CONFIG)))))
 
-(deftest uni-merge-environment
+(deftest unit-merge-environment
   (testing "merge-environment : cccccccccccccccccccccc "
     (let [a-map-entry (first {:not_exist_key "a_value"})
           start-accum {}
           new-env (merge-environment start-accum a-map-entry)]
-      (console-test "uni-merge-environment" "config-args")
+      (console-test "unit-merge-environment" "config-args")
       (is (= new-env {:not_exist_key "a_value"})))))
 
-(deftest uni-make-config
+(deftest unit-make-config
   (testing "make-config : cccccccccccccccccccccc "
     (let [db-type "monger-db"
           config-file "./local-config.edn"
           environment-utilize  "ignore-environment"
           config-map (make-config db-type config-file environment-utilize)]
-      (console-test "uni-make-config" "config-args")
+      (console-test "unit-make-config" "config-args")
       (is (= config-map TEST-MAKE-CONFIG)))))

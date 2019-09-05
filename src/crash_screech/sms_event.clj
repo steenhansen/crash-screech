@@ -15,6 +15,8 @@
 ; GET
 ; 5 retries
 
+;(defonce ^:dynamic *sms-was-executed* (atom {}))
+
 
 (defn make-api-call
   ""
@@ -33,6 +35,7 @@
     [sms-message]
     (let [{:keys [till-url sms-params]} (make-api-call sms-data sms-message)
           test-sms (compact-hash till-url sms-params testing-sms?)]
+      (reset!  global-consts-vars/*sms-was-executed* true)
       (if-not testing-sms?
         (http-client/post till-url sms-params))
       test-sms)))
@@ -42,7 +45,7 @@
   (let [sms-send-fn (build-sms-send sms-data testing-sms?)]
     (sms-send-fn "test sms call")))
 
-(defn single-cron-fn
+(defn build-web-scrap
   [scrape-pages-fn my-db-obj pages-to-check sms-data testing-sms?]
   (let [sms-send-fn (build-sms-send sms-data testing-sms?)
         read-from-web true]

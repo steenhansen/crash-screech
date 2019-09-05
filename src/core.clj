@@ -1,9 +1,9 @@
 
 ; https://fathomless-woodland-85635.herokuapp.com/
  
-; A. cider-jack-in core.clj [==]
-; B. cider-repl-set-ns core.clj [--]
-; C. cider-ns-reload-all  [F12]
+; A. cider-jack-in core.clj [F5]
+; B. cider-repl-set-ns core.clj [F4]
+; C. cider-ns-reload-all  [F1]
 
 ; core> (-local-main "monger-db" "./local-config.edn")
 ; core> (kill-services)                 
@@ -23,7 +23,7 @@
 
   (:require     [start-local :refer :all])  ; (-local-main "monger-db" "./local-config.edn") 
                                             ; (-local-main "amazonica-db" "./local-config.edn")  
-  )
+  )  ;;;;
 
 
 

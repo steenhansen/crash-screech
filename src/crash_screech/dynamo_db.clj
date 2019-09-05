@@ -9,7 +9,7 @@
   (:require [crash-screech.config-args :refer  [compact-hash]])
   (:require [crash-screech.check-data  :refer [prepare-data]])
 
-  (:require [global-consts  :refer :all]))
+  (:require [global-consts-vars  :refer :all]))
 
 (defn dynamo-build
   [amazonica-config my-table-name pages-to-check]

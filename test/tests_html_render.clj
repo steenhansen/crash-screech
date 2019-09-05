@@ -7,9 +7,8 @@
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
 
-  (:require [global-consts  :refer :all])
+  (:require [global-consts-vars  :refer :all])
 
-  (:require [global-vars  :refer :all])
   (:require [crash-screech.choose-db :refer [build-db]])
   (:require [crash-screech.scrape-html :refer [read-html]])
   (:require [crash-screech.html-render :refer :all])
@@ -31,26 +30,26 @@
 
       (spec-test/instrument 'day-hour-min))))
 
-(deftest uni-day-hour-min
+(deftest unit-day-hour-min
   (testing "test-day-hour-min : cccccccccccccccccccccc "
-    (console-test  "uni-day-hour-min"  "html-render")
+    (console-test  "unit-day-hour-min"  "html-render")
     (let [expected-day-hour-min "05-06:07"
           actual-day-hour-min (day-hour-min "2019-04-05-06-07-46.173Z")]
       (is (= expected-day-hour-min actual-day-hour-min)))))
 
 
 
- ;; (deftest uni-get-two-months
+ ;; (deftest unit-get-two-months
  ;;   (testing "test-day-hour-min : cccccccccccccccccccccc "
- ;;     (console-test  "uni-day-hour-min"  "html-render")
+ ;;     (console-test  "unit-day-hour-min"  "html-render")
  ;;     (let [expected-day-hour-min "05-06:07"
  ;;         qqqq  actual-day-hour-min (day-hour-min "2019-04-05-06-07-46.173Z")]
  ;;       (is (= expected-day-hour-min actual-day-hour-min)))))
 
 
-(deftest uni-get-index
+(deftest unit-get-index
   (testing "test-day-hour-min : cccccccccccccccccccccc "
-    (console-test  "uni-get-index"  "html-render")
+    (console-test  "unit-get-index"  "html-render")
     (let [db-type "monger-db"
           [my-db-obj _ _ _] (build-db DB-TABLE-NAME
                                       {}

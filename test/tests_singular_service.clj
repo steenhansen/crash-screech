@@ -4,8 +4,7 @@
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
 
-  (:require [global-consts  :refer :all])
-  (:require [global-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
 
   (:require [crash-screech.singular-service :refer :all])
 
@@ -28,9 +27,9 @@
 )))
 
 
-(deftest uni-add-service
+(deftest unit-add-service
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
-    (console-test "uni-add-service" "singular-service")
+    (console-test "unit-add-service" "singular-service")
       
     (let [my-kill-func (fn kill-servce [])
           test-spawn-name (add-service "my-spawn1" my-kill-func)]
@@ -40,9 +39,9 @@
 ))
 
 
-(deftest uni-remove-service
+(deftest unit-remove-service
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
-    (console-test "uni-remove-service" "singular-service")
+    (console-test "unit-remove-service" "singular-service")
       
     (let [ test-spawn-name (remove-service "my-spawn2")]
       (is (= test-spawn-name "my-spawn2")))
@@ -50,9 +49,9 @@
 
 ))
 
-(deftest uni-kill-services
+(deftest unit-kill-services
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
-    (console-test "uni-kill-services" "singular-service")
+    (console-test "unit-kill-services" "singular-service")
       
     (let [ test-spawn-name (kill-services)]
       )

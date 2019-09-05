@@ -7,7 +7,7 @@
 
 (ns sms-test
 
-  (:require [global-consts  :refer :all])
+  (:require [global-consts-vars  :refer :all])
   (:require [crash-screech.choose-db :refer [build-db]])
   (:require [crash-screech.sms-event :refer [sms-to-phones]]))
 

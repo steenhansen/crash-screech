@@ -1,8 +1,7 @@
 
 (ns start-local
   (:gen-class)
-  (:require [global-consts  :refer :all])
-  (:require [global-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
 
   (:require [crash-screech.choose-db :refer [build-db]])
   (:require [crash-screech.cron-service :refer [cron-init]])
@@ -10,7 +9,7 @@
   (:require [crash-screech.scrape-html :refer [scrape-pages-fn]])
   (:require [crash-screech.singular-service :refer  [kill-services]])
 
-  (:require [crash-screech.sms-event :refer [build-sms-send single-cron-fn]]))
+  (:require [crash-screech.sms-event :refer [build-sms-send build-web-scrap]]))
 
 ; dev main, has scrape-pages-fn as an at-at scheduled job
 ; (kill-services) will delete web-server and at-at-scheduled job
@@ -26,11 +25,10 @@
 
 (defn -local-main
   ([db-type config-file] (-local-main db-type config-file IGNORE-ENV-VARS))
-
   ([db-type config-file environment-utilize]
-
    (kill-services)
    (reset! *we-be-testing* false)
+   (reset! *test-use-test-time* true)
    (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME
                                                           THE-CHECK-PAGES
                                                           db-type
@@ -58,8 +56,8 @@
                      :the-accurate false,
                      :the-time 12346}]
 testing-sms? true
-         temporize-func (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms?)
-         request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data)
+         temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms?)
+         request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms?)
          test-one {:the-url "www.sffaudio.com",
                    :the-date "2019-06-19-01:54:03.800Z",
                    :the-html "blah 5555",

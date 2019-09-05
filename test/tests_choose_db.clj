@@ -4,8 +4,7 @@
   (:require [clojure.spec.alpha :as spec-alpha]
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
-  (:require [global-consts  :refer :all])
-  (:require [global-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
   (:require [crash-screech.choose-db :refer  :all])
   (:require [java-time :refer [local-date?]])
   (:require [crash-screech.config-args :refer [make-config]])
@@ -20,14 +19,14 @@
       (spec-test/instrument 'get-phone-nums)
       (spec-test/instrument 'build-db))))
 
-(deftest uni-get-phone-nums
+(deftest unit-get-phone-nums
   (testing "test-get-phone-nums : cccccccccccccccccccccc "
-    (console-test "uni-get-phone-nums" "choose-db")
+    (console-test "unit-get-phone-nums" "choose-db")
     (let [expected-phone-nums ["12345678901" "01234567890"]
           actual-phone-nums (get-phone-nums "12345678901,01234567890")]
       (is (= expected-phone-nums actual-phone-nums)))))
 
-(defn uni-get-db-conn-type [db-type]
+(defn unit-get-db-conn-type [db-type]
   (let [the-config (make-config db-type TEST-CONFIG-FILE IGNORE-ENV-VARS)
         my-db-funcs (get-db-conn T-DB-TEST-NAME [] db-type the-config)]
     (is (function? (:my-delete-table my-db-funcs)))
@@ -37,18 +36,18 @@
     (is (function? (:my-put-item my-db-funcs)))
     (is (function? (:my-put-items my-db-funcs)))))
 
-(deftest uni-get-db-conn-mongoDb
+(deftest unit-get-db-conn-mongoDb
   (testing "test-build-db :"
-    (console-test "uni-get-db-conn-mongoDb" "choose-db")
-    (uni-get-db-conn-type "monger-db")))
+    (console-test "unit-get-db-conn-mongoDb" "choose-db")
+    (unit-get-db-conn-type "monger-db")))
 
-(deftest uni-get-db-conn-dynoDb
+(deftest unit-get-db-conn-dynoDb
   (testing "test-build-db :"
-    (console-test "uni-get-db-conn-dynoDb" "choose-db")
+    (console-test "unit-get-db-conn-dynoDb" "choose-db")
     (if T-DO-DYNAMODB-TESTS
-      (uni-get-db-conn-type    "amazonica-db"))))
+      (unit-get-db-conn-type    "amazonica-db"))))
 
-(defn  uni-build-empty-month-db [db-type]
+(defn  unit-build-empty-month-db [db-type]
   (let [[my-db-obj _ cron-url sms-data] (build-db T-DB-TEST-NAME
                                                   THE-CHECK-PAGES ; ["www.sffaudio.com"]
                                                   db-type
@@ -64,16 +63,16 @@
     ((:put-item my-db-obj) test-one)
     (is (false?   ((:empty-month? my-db-obj) "2000-01")))))
 
-(deftest uni-build-empty-month-mongoDb
+(deftest unit-build-empty-month-mongoDb
   (testing "test-build-db :"
     (console-test "int-build-empty-month-mongoDb" "choose-db")
-    (uni-build-empty-month-db  "monger-db")))
+    (unit-build-empty-month-db  "monger-db")))
 
-(deftest uni-build-empty-month-dynoDb
+(deftest unit-build-empty-month-dynoDb
   (testing "test-build-db :"
     (console-test "int-build-empty-month-dynoDb" "choose-db")
     (if T-DO-DYNAMODB-TESTS
-      (uni-build-empty-month-db     "amazonica-db"))))
+      (unit-build-empty-month-db     "amazonica-db"))))
 
 (defn  build-today-error-db [db-type]
   (let [[my-db-obj _ cron-url sms-data] (build-db T-DB-TEST-NAME
@@ -91,18 +90,18 @@
     ((:put-item my-db-obj) test-one)
     (is (true?   ((:today-error? my-db-obj) "2000-01-01")))))
 
-(deftest uni-build-today-error-mongoDb
+(deftest unit-build-today-error-mongoDb
   (testing "test-build-db :"
- (console-test "uni-build-today-error-mongoDb" "choose-db")
+ (console-test "unit-build-today-error-mongoDb" "choose-db")
     (build-today-error-db  "monger-db")))
 
-(deftest uni-build-today-error-dynoDb
+(deftest unit-build-today-error-dynoDb
   (testing "test-build-db :"
- (console-test "uni-build-today-error-dynoDb" "choose-db")
+ (console-test "unit-build-today-error-dynoDb" "choose-db")
     (if T-DO-DYNAMODB-TESTS
       (build-today-error-db     "amazonica-db"))))
 
-(defn uni-build-db-type [db-type]
+(defn unit-build-db-type [db-type]
   (let [[my-db-obj web-port cron-url sms-data] (build-db T-DB-TEST-NAME
                                                          []
                                                          db-type
@@ -117,20 +116,20 @@
     (is (is-string-number web-port))
     (is-url-dir cron-url)))
 
-(deftest uni-build-db-mongoDb
+(deftest unit-build-db-mongoDb
   (testing "test-build-db :"
-    (console-test "uni-build-db-mongoDb" "choose-db")
-    (uni-build-db-type "monger-db")))
+    (console-test "unit-build-db-mongoDb" "choose-db")
+    (unit-build-db-type "monger-db")))
 
-(deftest uni-build-db-dynoDb
+(deftest unit-build-db-dynoDb
   (testing "test-build-db :"
-    (console-test "uni-build-db-mongoDb" "choose-db")
+    (console-test "unit-build-db-mongoDb" "choose-db")
     (if T-DO-DYNAMODB-TESTS
-      (uni-build-db-type     "amazonica-db"))))
+      (unit-build-db-type     "amazonica-db"))))
 
-(deftest uni-build-db
+(deftest unit-build-db
   (testing "test-build-db :"
-    (uni-build-db-mongoDb)
-    (uni-build-db-dynoDb)))
+    (unit-build-db-mongoDb)
+    (unit-build-db-dynoDb)))
 
 

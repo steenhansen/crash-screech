@@ -4,8 +4,7 @@
 
 (ns start-heroku
   (:gen-class)
-  (:require [global-consts  :refer :all])
-  (:require [global-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
 
   (:require [crash-screech.choose-db :refer [build-db]])
   (:require [crash-screech.cron-service :refer [cron-init]])
@@ -13,7 +12,7 @@
 
   (:require [crash-screech.scrape-html :refer [scrape-pages-fn]])
   (:require [crash-screech.singular-service :refer [kill-services]])
-  (:require [crash-screech.sms-event :refer [build-sms-send single-cron-fn]]))
+  (:require [crash-screech.sms-event :refer [build-sms-send build-web-scrap]]))
 
 
 ; main called by Heroku, has no cron-init() job, relies on temporize-func()
@@ -34,8 +33,8 @@
                                                           environment-utilize)
          int-port (Integer/parseInt web-port)
          testing-sms? false
-         temporize-func (single-cron-fn scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms?)
-         request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data)]
+         temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms?)
+         request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms?)]
      (web-init int-port request-handler))))
 
 

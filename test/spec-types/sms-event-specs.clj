@@ -11,7 +11,7 @@
 (s/fdef s-e/sms-to-phones
   :args (s/cat :sms-data ::sms-data?? :testing-sms? boolean?))
 
-(s/fdef s-e/single-cron-fn
+(s/fdef s-e/build-web-scrap
   :args (s/cat :scrape-pages-fn  function?
                :my-db-obj coll?              
                :pages-to-check vector?

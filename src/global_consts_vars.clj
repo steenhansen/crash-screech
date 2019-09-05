@@ -1,7 +1,27 @@
 
 
-(ns global-consts
+; global testing vars      
+;  *service-kill-list*
+;  *we-be-testing*
+;; (defonce ^:dynamic *sms-was-executed* (atom {}))
+
+
+
+
+
+(ns global-consts-vars
   (:gen-class))
+
+(defonce ^:dynamic *we-be-testing* (atom {}))
+(defonce ^:dynamic *sms-was-executed* (atom {}))          ;;; need some testing flavor, *test-sms-was-executed
+(defonce ^:dynamic *pages-were-scraped* (atom {}))
+(defonce ^:dynamic *test-use-test-time* (atom {}))  ;;; ALSO SET TO FALSE 
+
+
+
+
+
+
 
 (def ^:const MONGER_DB "monger-db")
 (def ^:const AMAZONICA_DB "amazonica-db")

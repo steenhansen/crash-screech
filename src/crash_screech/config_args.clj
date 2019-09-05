@@ -1,7 +1,7 @@
 (ns crash-screech.config-args
   (:require [edn-config.core :as edn-read])
   (:require [me.raynes.fs :as file-sys])
-  (:require [global-consts :refer :all]))
+  (:require [global-consts-vars :refer :all]))
 
 (defmacro compact-hash [& vars] (list `zipmap (mapv keyword vars) (vec vars)))
 

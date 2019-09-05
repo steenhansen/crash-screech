@@ -6,7 +6,7 @@
   (:require [crash-screech.years-months  :refer [adjusted-date instant-time-fn]])
   (:require [crash-screech.config-args :refer [compact-hash]])
 
-  (:require [global-consts :refer :all]))
+  (:require [global-consts-vars :refer :all]))
 
 (defn count-string
   "has test"
@@ -24,6 +24,16 @@
     (subs the-string 0 (min (count the-string) num-chars))
     EMPTY-HTML))
 
+;    (reset! *service-kill-list* new-kills))))
+(defn test-time 
+  ""
+  [the-time]
+  (if (nil? (resolve 'T-DB-TEST-NAME))
+     the-time
+     (if @*test-use-test-time*
+         98765432
+         the-time)))
+
 (defn derive-data
   "has test"
   [check-record]
@@ -33,7 +43,8 @@
         check-bytes (count the-html)
         check-html (trunc-string the-html ERROR-KEEP-LENGTH)
         check-date (adjusted-date the-date)
-        check-time the-time
+;        check-time the-time
+        check-time (test-time the-time)
         new-record (compact-hash check-url
                                  check-date
                                  check-bytes

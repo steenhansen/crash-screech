@@ -4,8 +4,7 @@
   (:require [clojure.spec.alpha :as spec-alpha]
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
-  (:require [global-consts  :refer :all])
-  (:require [global-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
   (:require [crash-screech.check-data :refer :all])
   (:require [java-time :refer [local-date?]])
   (:require [prepare-tests :refer :all])
@@ -22,16 +21,16 @@
 (spec-test/instrument 'ensure-has-date)
 (spec-test/instrument 'prepare-data))))
 
-(deftest uni-count-string
-  (testing "count-string : cccccccccccccccccccccc "
+(deftest unit-count-string
+  (testing "count-string : qqqcccccccccccccccccccccc "
     (let [occurance-count (count-string "001001001000" #"1")]
-      (console-test "uni-count-string" "check-data")
+      (console-test "unit-count-string" "check-data")
       (is (= occurance-count 3)))))
 
-(deftest uni-trunc-string
+(deftest unit-trunc-string
   (testing "test-trunc-string : cccccccccccccccccccccc "
     (let [trunced-str (trunc-string "123456789" 3)]
-      (console-test "uni-trunc-string" "check-data")
+      (console-test "unit-trunc-string" "check-data")
       (is (= trunced-str "123")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
@@ -49,10 +48,10 @@
                                  :check-accurate true,
                                  :check-time 1234})
 
-(deftest uni-derive-data
+(deftest unit-derive-data
   (testing "test-dervive-data : cccccccccccccccccccccc "
     (let [derived-data (derive-data T-BEFORE-THE-DATA)]
-      (console-test "uni-derive-data" "check-data")
+      (console-test "unit-derive-data" "check-data")
       (is (= derived-data T-AFTER-CHECK-DATA)))))
 
 
@@ -71,10 +70,10 @@
                                 :check-accurate true,
                                 :check-time 1234})
 
-(deftest uni-uniquely-id
+(deftest unit-uniquely-id
   (testing "test-uniquely-id : cccccccccccccccccccccc "
     (let [unique-data (uniquely-id 1 T-BEFORE-UNIQUE-ID)]
-      (console-test  "uni-uniquely-id"  "check-data")
+      (console-test  "unit-uniquely-id"  "check-data")
       (is (= unique-data T-EXPECTED-UNIQUE-ID)))))
 
 
@@ -86,10 +85,10 @@
                             :the-accurate true,
                             :the-time 1234})
 
-(deftest uni-ensure-has-date
+(deftest unit-ensure-has-date
   (testing "est-ensure-has-date : DDDDDDDDDDDDD "
     (let [has-date (ensure-has-date T-ENSURE-DATA)]
-      (console-test "uni-ensure-has-date" "check-data")
+      (console-test "unit-ensure-has-date" "check-data")
       (is (contains? has-date :the-date)))))
 
 
@@ -126,10 +125,10 @@
     :check-accurate true,
     :check-time 12346}])
 
-(deftest uni-prepare-data
+(deftest unit-prepare-data
   (testing "prepare-tests-data : fffff "
     (let [prepared-data (prepare-data T-BEFORE-ENSURE-DATA)]
-      (console-test "uni-prepare-data" "check-data")
+      (console-test "unit-prepare-data" "check-data")
       (is (= prepared-data T-EXPECTED-PREPARE-DATA)))))
 
 ;;;;;;;;;;;;;

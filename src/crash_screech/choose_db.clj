@@ -3,8 +3,7 @@
   (:require [clojure.string :as clj-str])
   (:require [clojure.pprint :as prt-prn])
 
-  (:require [global-consts  :refer :all])
-  (:require [global-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
 
   (:require [crash-screech.config-args :refer [make-config compact-hash]])
   (:require [crash-screech.dynamo-db  :refer [dynamo-build]])
