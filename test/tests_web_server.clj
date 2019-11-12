@@ -14,80 +14,93 @@
 
   (:require [crash-screech.sms-event :refer [build-sms-send build-web-scrap]])
   (:require [crash-screech.scrape-html :refer [scrape-pages-fn]])
+
+  (:require [crash-screech.years-months :refer [date-with-now-time-fn instant-time-fn]])
+
   (:require [java-time :refer [local-date?]])
 
+  (:require [text-diff :refer [is-html-eq]])
+
   (:require [prepare-tests :refer :all]))
+
+;(load "spec-types/shared-types")
+;(load "spec-types/web-server-specs")
 
 (defn web-server-specs []
   (if RUN-SPEC-TESTS
     (do
-
+      (println "Speccing web-server")
       (spec-test/instrument)
-
       (spec-test/instrument 'make-request-fn))))
 
 
- (tests-web-server/integration-produce-page)    ;; SAVE-ACTUAL-TO-EXPECTED-DATA)
+; (tests-web-server/integration-produce-page)    ;; SAVE-ACTUAL-TO-EXPECTED-DATA)
+
 
 (deftest integration-produce-page
   (testing "test-day-hour-min : cccccccccccccccccccccc "
     (console-test  "integration-make-request-fn"  "web-server"))
 
-  (reset-test-to-actual-data test-file actual-data)           ;; to re-save the actual output into expected 
+  ;(reset-test-to-actual-data test-file actual-data)           ;; to re-save the actual output into expected 
 
    ; like in tests_check_data.clj
 
    ; need to ignore the-time / check-time
-
-)
-
+  )
 
 (deftest integration-make-request-fn
   (testing "test-day-hour-min : cccccccccccccccccccccc "
     (console-test  "integration-make-request-fn"  "web-server")
+    (reset! *test-use-test-time* true)
+
+(let [ 
+      test1  (date-with-now-time-fn "2019-07-04")
+      test2 (date-with-now-time-fn "2019-07-04") ]
+  (println "test1" (type test1) test1)
+ (println "test2" (type test2) test2)
+
+)
+
     (let [db-type "monger-db"
           [my-db-obj _ cron-url sms-data] (build-db DB-TABLE-NAME
                                                     THE-CHECK-PAGES
                                                     db-type
                                                     TEST-CONFIG-FILE
                                                     IGNORE-ENV-VARS)
- purge-table (:purge-table my-db-obj)         
- testing-sms? true
-          temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms?)
-          request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms?)
- send-test-sms-url (:send-test-sms-url sms-data)
-;cron-url-address (:uri cron-url)
-]
-
-;; if empty db do we send sms, and are pages scraped
- (reset! global-consts-vars/*sms-was-executed* false)
- (reset! global-consts-vars/*pages-were-scraped* false)
- (purge-table)
- (println "ddd" ( request-handler {:uri cron-url }))
- (println  cron-url "*pages-were-scraped*" @global-consts-vars/*pages-were-scraped*)
- (println send-test-sms-url "*sms-was-executed*" @global-consts-vars/*sms-was-executed*)
-
-
-; does send-sms send smsm
-(reset! global-consts-vars/*sms-was-executed* false)
-  (println "hhhhh" ( request-handler   {:uri send-test-sms-url}))
- (println send-test-sms-url "*sms-was-executed*" @global-consts-vars/*sms-was-executed*)
+          purge-table (:purge-table my-db-obj)
+          testing-sms? true
+test-date (date-with-now-time-fn "2019-10-01")     ;  9  aug
+;test2 (instant-time-fn)
+          temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms? test-date)
+          request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms? test-date)
+          send-test-sms-url (:send-test-sms-url sms-data)
+          the-request (request-handler  {:uri cron-url})
+          the-body (:body the-request)
+          file-expected (slurp  (str SCRAPED-TEST-DATA "tests_web_server_1.html"))]
 
 
 
-;; if empty db did we read 10 sites, by counting "a_countable_scrape"
-;; (countable-scraps the-test-return
-;; THE-CHECK-PAGES  has 8 members
-(purge-table)
-(println "ddd" ( request-handler {:uri "/"}))
 
+      (reset! global-consts-vars/*sms-was-executed* false)
+      (reset! global-consts-vars/*pages-were-scraped* false)
+      (purge-table)
+      (reset! global-consts-vars/*sms-was-executed* false)
+      (purge-table)
+     (let [ [text-diff-1 text-diff-2] (is-html-eq the-body file-expected)]
+          (is (= text-diff-1 text-diff-2)))
 
-; we can have the 8 members scraped data, at like a certain set time like 2010
-; then we fake read the file data and we should get the saved correct files....
-
-
-;      (is (= expected-day-hour-min actual-day-hour-min))
-      )))
+)))
 
 
 
+;; (defn web-server-tests[]
+;;  (tests-web-server/web-server-specs)
+;;  (tests-web-server/integration-make-request-fn)    ;; SAVE-ACTUAL-TO-EXPECTED-DATA)
+;;  (tests-web-server/integration-produce-page)    ;; SAVE-ACTUAL-TO-EXPECTED-DATA)
+
+;; )
+
+
+(defn do-tests []
+  (web-server-specs)
+  (run-tests 'tests-web-server))

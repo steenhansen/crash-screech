@@ -65,12 +65,6 @@
       (:body (http-client/get (str "https://" under-to-slashes))))
     (slurp (str SCRAPED-TEST-DATA check-page))))
 
-(defn first-error-today?
-  [prev-errors-today? my-db-obj]
-  (let [today-error? (:today-error? my-db-obj)
-        now-error? (today-error?)]
-    (if prev-errors-today? false now-error?)))
-
 (defn send-first-day-sms?
   [my-db-obj]
   (let [empty-month? (:empty-month? my-db-obj)
@@ -90,16 +84,50 @@
         put-item (:put-item my-db-obj)]
     (compact-hash today-error? send-hello-sms? prev-errors-today? put-item)))
 
+(defn first-error-today?
+  [prev-errors-today? my-db-obj]
+  (let [today-error? (:today-error? my-db-obj)
+        now-error? (today-error?)]
+ ;   (println "scrape-html.first-error-today? 7 prev-errors-today?" prev-errors-today?)
+  ;  (println "scrape-html.first-error-today? 7 now-error?" now-error?)
+    (if prev-errors-today? false now-error?)))
+
 (defn send-sms-message [prev-errors-today? my-db-obj send-hello-sms? sms-send-fn]
   (let [send-err-sms? (first-error-today? prev-errors-today? my-db-obj)
         no-sms-sent []]
-    (if send-hello-sms? (sms-send-fn SMS-NEW-MONTH))
-    (if send-err-sms?
-      (sms-send-fn SMS-FOUND-ERROR)
-      no-sms-sent)))
+
+   ; (println "scrape-html.send-sms-message 0 prev-errors-today?" prev-errors-today?)
+
+   ; (println "scrape-html.send-sms-message 0 send-err-sms?" send-err-sms?)
+  ;  (println "scrape-html.send-sms-message 1 send-hello-sms?" send-hello-sms?)
+  ;  (println "scrape-html.send-sms-message 2 SMS-NEW-MONTH"  SMS-NEW-MONTH)
+  ;  (println "scrape-html.send-sms-message 3 (sms-send-fn SMS-NEW-MONTH)"  (sms-send-fn SMS-NEW-MONTH))
+
+
+      (if send-err-sms?
+        (sms-send-fn SMS-FOUND-ERROR)
+        (if send-hello-sms?
+          (sms-send-fn SMS-NEW-MONTH)
+           no-sms-sent
+      ))
+
+
+    ;; (if send-hello-sms?
+    ;;   (sms-send-fn SMS-NEW-MONTH)
+    ;;   (if send-err-sms?
+    ;;     (sms-send-fn SMS-FOUND-ERROR)
+    ;;     no-sms-sent))
+
+
+)
+)
 
 (defn scrape-pages-fn
   [my-db-obj pages-to-check time-fn sms-send-fn read-from-web]
+
+
+(println "&&&&&&&&&&&&" (type time-fn) time-fn (time-fn) )
+
   (let [{:keys [today-error? send-hello-sms? prev-errors-today? put-item]} (get-db-objs my-db-obj)]
     (doseq [check-page-obj pages-to-check
             :let [{:keys [check-page enlive-keys at-least]} check-page-obj
@@ -118,11 +146,17 @@
                                              the-html
                                              the-accurate
                                              the-time)]]
-      (if (not @*we-be-testing*)
-        (println "the-time the-url process-time" the-time the-url process-time))
-      (put-item check-record))
-  (reset! global-consts-vars/*pages-were-scraped* true)
-    (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn)))  ; NB return values used
+  ;    (if (not @*we-be-testing*)
+   ;     (println "the-time the-url process-time" the-time the-url process-time))
+(println "*************************** the-record" the-date the-time the-url)     
+ (put-item check-record))
+    (reset! global-consts-vars/*pages-were-scraped* true)
+    (let [sms-mess-result (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn)]
+    ;(println "scrape-html.scrape-pages-fn 230u0us ****** " sms-mess-result)
+      sms-mess-result)
+ ;(println "scrape-html.scrape-pages-fn 230u0us ****** " (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn))
+  ;  (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn)
+))  ; NB return values used
 
 
 

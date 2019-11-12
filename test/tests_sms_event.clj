@@ -5,27 +5,26 @@
             [clojure.spec.test.alpha :as spec-test])
   (:require [global-consts-vars  :refer :all])
   (:require [crash-screech.sms-event :refer :all])
+  (:require [crash-screech.years-months :refer [adjusted-date]])
   (:require [crash-screech.scrape-html :refer :all])
   (:require [crash-screech.choose-db :refer :all])
   (:require [java-time :refer [local-date?]])
   (:require [prepare-tests :refer :all])
 )
 
+;(load "spec-types/shared-types")
+;(load "spec-types/sms-event-specs")
 
 
 (defn sms-event-specs []
   (if RUN-SPEC-TESTS
     (do
-
+(println "Speccing sms-event")
       (spec-test/instrument)
-
-
 (spec-test/instrument 'make-api-call)
 (spec-test/instrument 'build-sms-send)
 (spec-test/instrument 'sms-to-phones)
-(spec-test/instrument 'build-web-scrap)
-
-)))
+(spec-test/instrument 'build-web-scrap))))
 
 (def ^:const TEST-SMS-MAP-SHORT
   {:till-url "https://platform.tillmobile.com/api/send?username=abcdefghijklmnopqrstuvwxyz1234&api_key=1234567890abcdefghijklmnopqrstuvwxyz1234"
@@ -53,7 +52,8 @@
    :sms-params {:form-params {:phone ["12345678901" "12345678901" "12345678901"],
                               :text "test sms call - https://fathomless-woodland-85635.herokuapp.com/"}
                 :content-type :json}
-   :testing-sms? true})
+;; not expected   :testing-sms? true
+})
 
 (deftest unit-build-sms-send
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
@@ -99,5 +99,12 @@
                                              TEST-CONFIG-FILE
                                              environment-utilize)
           testing-sms? true
-          temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms?)]
+          temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms? (adjusted-date "2019-07-04T04:18:46.173Z"))]
       (is (function? temporize-func)))))
+
+
+(defn do-tests []
+ (sms-event-specs)
+  (run-tests 'tests-sms-event))
+
+

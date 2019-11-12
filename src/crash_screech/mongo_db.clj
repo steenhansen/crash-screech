@@ -29,6 +29,9 @@
         db-handle db
 
         my-put-items  (fn put-items [check-records]
+
+;(println "mongo-db-134-u " check-records)
+
                         (let [fixed-dates (prepare-data check-records)]
                           (mong-coll/insert-batch db-handle my-collection fixed-dates)))
 
@@ -63,4 +66,10 @@
                                               {$and [{:_id {$gte begins-with, $lt date-plus1}}
                                                      {:check-url page-to-check}]})))]
 
-    (compact-hash my-delete-table my-purge-table my-get-all my-get-url my-put-item my-put-items)))
+;(println "db" db)
+;(println "_conn" _conn)
+    (compact-hash my-delete-table my-purge-table my-get-all my-get-url my-put-item my-put-items)
+
+
+
+))

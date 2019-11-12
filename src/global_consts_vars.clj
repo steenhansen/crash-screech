@@ -20,6 +20,11 @@
 
 
 
+(def ^:const FAKE-TEST-TIME    98765432)
+(def ^:const FAKE-SCRAPE-BYTES 23456789)
+
+
+
 
 
 

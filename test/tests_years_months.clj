@@ -17,10 +17,14 @@
   (:require [prepare-tests :refer :all])
 )
 
+;(load "spec-types/shared-types")
+;(load "spec-types/years-months-specs")
+
+
 (defn years-months-specs []
   (if RUN-SPEC-TESTS
     (do
-
+  (println "Speccing years-months")
       (spec-test/instrument)
 (spec-test/instrument 'adjusted-date)
 (spec-test/instrument 'current-month)
@@ -33,9 +37,7 @@
 (spec-test/instrument 'prev-yyyy-mm)
 (spec-test/instrument 'trunc-yyyy-mm-dd)
 (spec-test/instrument 'trunc-yyyy-mm)
-(spec-test/instrument 'yyyy-mm-to-ints)
-
-)))
+(spec-test/instrument 'yyyy-mm-to-ints))))
 
 
 
@@ -88,7 +90,7 @@
 
       (is (= expected-yyyy-mm actual-yyyy-mm)))))
 
-;(def ^:const T-TIME-STAMP #"^([\d]{4})-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T\d\d:\d\d:\d\d\.\d\d\dZ$")
+;(def ^:const T-TIME-STAMP #"^=(20(0|1|2)[\d])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T\d\d:\d\d:\d\d\.\d\d\dZ$")
 
 (deftest unit-instant-time-fn
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
@@ -168,34 +170,9 @@
         (is (= expected-month-name actual-month-name)))))
 
 
-  (spec-test/instrument 'current-yyyy-mm-dd)
-
-  (spec-test/instrument 'current-yyyy-mm)
-
-
-  (spec-test/instrument 'date-to-yyyy-mm)
-
-     (spec-test/instrument 'instant-time-fn)
-   
-  (spec-test/instrument 'month-name)
-
-
-  (spec-test/instrument 'prev-month)
-
-  (spec-test/instrument 'prev-yyyy-mm)
-
-  (spec-test/instrument 'trunc-yyyy-mm-dd)
-
-  (spec-test/instrument 'trunc-yyyy-mm)
-
-
-
-  (spec-test/instrument 'yyyy-mm-to-ints)
-
-
-
-
-
+(defn do-tests []
+ (years-months-specs)
+  (run-tests 'tests-years-months))
 
 
 

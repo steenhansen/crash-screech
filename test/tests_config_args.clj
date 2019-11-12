@@ -16,17 +16,31 @@
 
   (:require [prepare-tests :refer :all]))
 
-(defn config-args-specs []
-  (if RUN-SPEC-TESTS
-    (do
 
+(alias 's 'clojure.spec.alpha)
+(alias 'c-a 'crash-screech.config-args)
+
+(s/fdef c-a/read-config-file
+  :args (s/cat :config-file :edn-filename?/test-specs))
+
+(s/fdef c-a/merge-environment
+  :args (s/cat :accum-environment :map-entry-or-emtpy?/test-specs
+               :env-object vector?))
+
+(s/fdef c-a/make-config
+  :args (s/cat :db-type string?
+               :config-file :edn-filename?/test-specs
+               :environment-utilize string? ))
+
+
+(defn config-args-specs []
+ (if RUN-SPEC-TESTS
+    (do
+  (println "Speccing config-args")
       (spec-test/instrument)
       (spec-test/instrument 'read-config-file)
       (spec-test/instrument 'merge-environment)
-      (spec-test/instrument 'make-config)
-
-
-)))
+      (spec-test/instrument 'make-config))))
 
 (def ^:const TEST-MAKE-CONFIG
   {:SEND_TEST_SMS_URL "/zxc"
@@ -79,3 +93,13 @@
           config-map (make-config db-type config-file environment-utilize)]
       (console-test "unit-make-config" "config-args")
       (is (= config-map TEST-MAKE-CONFIG)))))
+
+
+
+
+(defn do-tests []
+(config-args-specs)
+  (run-tests 'tests-config-args))
+
+
+

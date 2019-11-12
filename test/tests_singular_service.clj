@@ -14,17 +14,17 @@
   (:require [prepare-tests :refer :all])
 )
 
+;(load "spec-types/shared-types")
+;(load "spec-types/singular-service-specs")
+
 (defn singular-service-specs []
   (if RUN-SPEC-TESTS
     (do
-
+(println "Speccing singular-service")
       (spec-test/instrument)
 (spec-test/instrument 'add-service)
 (spec-test/instrument 'remove-service)
-(spec-test/instrument 'kill-services)
-
-
-)))
+(spec-test/instrument 'kill-services))))
 
 
 (deftest unit-add-service
@@ -58,4 +58,13 @@
 
 
 ))
+
+
+
+
+(defn do-tests []
+ (singular-service-specs)
+  (run-tests 'tests-singular-service))
+
+
 

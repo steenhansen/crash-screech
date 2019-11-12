@@ -13,7 +13,7 @@
 
                    [amazonica "0.3.142"]
                    [chrisjd/edn-config "0.1.1"]
-                   [com.novemberain/monger "3.1.0"]
+                   [com.novemberain/monger "3.5.0"]
                    [overtone/at-at "1.2.0"]
                    [clojure.java-time "0.3.2"]
                    [clj-http "3.10.0"]

@@ -15,9 +15,36 @@
 
   (:require [prepare-tests :refer :all]))
 
+
+
+(alias 's 'clojure.spec.alpha)
+(alias 'c-s 'crash-screech.cron-service)
+
+(s/fdef c-s/build-cron-func
+  :args (s/cat :cron-job function?
+               :my-db-obj coll?
+               :pages-to-check vector?
+               :sms-data :sms-data?/test-specs))
+
+(s/fdef c-s/start-cron
+  :args (s/cat :cron-job function?
+               :my-db-obj coll?
+               :pages-to-check vector?
+               :sms-data :sms-data?/test-specs))
+
+
+(s/fdef c-s/cron-init
+  :args (s/cat :cron-job function?
+               :my-db-obj coll?
+               :pages-to-check vector?
+               :sms-data :sms-data?/test-specs))
+
+
+
 (defn cron-service-specs []
-  (if RUN-SPEC-TESTS
+ (if RUN-SPEC-TESTS
     (do
+  (println "Speccing cron-service")
       (spec-test/instrument)
       (spec-test/instrument 'build-cron-func)
       (spec-test/instrument 'start-cron))))
@@ -77,3 +104,9 @@
           a-cron-func (cron-init cron-job my-db-obj pages-to-check sms-data)
           cron-type (str (type a-cron-func))]
       (is (= cron-type "class overtone.at_at.RecurringJob")))))
+
+
+(defn do-tests []
+(cron-service-specs)
+  (run-tests 'tests-cron-service))
+

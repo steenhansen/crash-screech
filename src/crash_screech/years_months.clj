@@ -7,7 +7,14 @@
   (:require [java-time.local :as j-time])
   (:require [java-time.core :as jt-core])
   (:require [java-time.amount :as jt-amount])
-  (:require [java-time.temporal :as jt-temporal]))
+  (:require [java-time.temporal :as jt-temporal]))   
+
+;;    (java-time/instant (java-time/offset-date-time 2019 11 12 ))
+
+;; (java-time/local-date)
+;;  (java-time/local-time)
+
+;; (clojure.java-time.temporal/local-time)
 
 (defn trunc-yyyy-mm
   "spec"
@@ -112,13 +119,27 @@
          ym-str (date-to-yyyy-mm last-month)]
      ym-str)))
 
+
+;; (java-time/local-date-time)
 (defn instant-time-fn []
   "spec"
+(println "in instatn-time-fn "  (str (jt-temporal/instant)))
   (str (jt-temporal/instant)))
 
 (defn adjusted-date [date-str]
   "spec"
   (clj-str/replace date-str #"T|:" "-"))
+
+(defn any-date-now-time-fn [ the-date]    ;; 2019-11-11
+ (let [ the-time (java-time/local-time) 
+        any-time  (str the-date "T" the-time)]
+   any-time))
+
+(defn date-with-now-time-fn [ the-date]    ;; 2019-11-11
+ (fn [] 
+    (let [ the-time (java-time/local-time) 
+        any-time  (str the-date "T" the-time)]
+   any-time)))
 
 
 

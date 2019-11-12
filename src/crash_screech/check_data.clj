@@ -8,6 +8,10 @@
 
   (:require [global-consts-vars :refer :all]))
 
+
+
+
+
 (defn count-string
   "has test"
   [hay-stack needle-regex]
@@ -31,7 +35,7 @@
   (if (nil? (resolve 'T-DB-TEST-NAME))
      the-time
      (if @*test-use-test-time*
-         98765432
+         FAKE-TEST-TIME
          the-time)))
 
 (defn derive-data
@@ -64,18 +68,57 @@
 (defn ensure-has-date
   "has test"
   [check-record]
+;(println "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" check-record)
+;(println "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
   (if (check-record :the-date)
     check-record
     (let [now-date (instant-time-fn)
           dated-check (assoc-in check-record [:the-date] now-date)]
       dated-check)))
 
+
+
+
+
+
+
+(comment 
+  (prepare-data [{:the-url "www.sffaudio.com",
+                  :the-date "2019-06-19-01:54:03.800Z",
+                  :the-html "blah 1111",
+                  :the-accurate true,
+                  :the-time 1234}
+                 {:the-url "sffaudio.herokuapp.com_rsd_rss",
+                  :the-date "2019-06-19-01:54:03.800Z",
+                  :the-html "bluh 2222",
+                  :the-accurate true,
+                  :the-time 12346}])
+ ; ({:check-url "www.sffaudio.com",
+ ;;  :check-date "2019-06-19-01-54-03.800Z",
+ ;;  :check-bytes 9,
+ ;;  :check-html "blah 1111",
+ ;;  :check-accurate true,
+ ;;  :check-time 1234,
+ ;;  :_id "2019-06-19-01-54-03.800Z+0"}
+ ;; {:check-url "sffaudio.herokuapp.com_rsd_rss",
+ ;;  :check-date "2019-06-19-01-54-03.800Z",
+ ;;  :check-bytes 9,
+ ;;  :check-html "bluh 2222",
+ ;;  :check-accurate true,
+ ;;  :check-time 12346,
+ ;;  :_id "2019-06-19-01-54-03.800Z+1"})
+)
 (defn prepare-data
   "has test"
   [check-records]
+
+;;;;(println "prepar-data check-records =" check-records)
+
   (let [records-dated (for [check-record check-records]
                         (ensure-has-date check-record))
         derived-data (for [dated-record records-dated]
                        (derive-data dated-record))
-        unique-data (map-indexed uniquely-id derived-data)]
+        unique-data (vec (map-indexed uniquely-id derived-data))]
+
+  ;(println "prepare-data un" unique-data)
     unique-data))

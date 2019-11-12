@@ -23,12 +23,15 @@
 
   (:require [prepare-tests :refer :all]))
 
+;(load "spec-types/shared-types")
+;(load "spec-types/scrape-html-specs")
+
+
 (defn scrape-html-specs []
   (if RUN-SPEC-TESTS
     (do
-
+    (println "Speccing html-specs")
       (spec-test/instrument)
-
       (spec-test/instrument 'count-scrapes))))
 
 (def ^:const T-COUNT-SCRAPES-HTML " a_countable_scrape a_countable_scrape ")
@@ -39,6 +42,12 @@
     (let [expected-scrapes 2
           actual-scrapes (count-scrapes T-COUNT-SCRAPES-HTML)]
       (is (= expected-scrapes actual-scrapes)))))
+
+
+
+
+
+
 
 (defn sms-send-init [pages-to-check db-type]
   (let [[my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME
@@ -56,6 +65,7 @@
                                         instant-time-fn
                                         sms-send-fn
                                         read-from-web?)]
+;(println "AAAA in get-actual-sms " actual-sms)
         actual-sms))
 
     (purge-table)
@@ -70,7 +80,22 @@
         read-from-web? false
         expected-sms (make-api-call sms-data SMS-FOUND-ERROR)]
     (let [actual-sms (get-actual-sms read-from-web?)]
+;(println "BBBB expected " expected-sms)
+;(println "CCCC   actual " actual-sms)
       (is (= expected-sms actual-sms)))))
+
+
+
+ (deftest test-1000
+   (testing "test-1000 :amazonica-db should send an sms message in sms-send-fn"
+     (sms-send-fn_error "amazonica-db")))
+
+ (deftest test-1001
+   (testing "test-1001 :monger-db should send an sms message in sms-send-fn"
+     (sms-send-fn_error "monger-db")))
+
+
+
 
 (defn sms-send-fn_ok [db-type]
   (let [pass-small 1
@@ -79,25 +104,22 @@
                          :at-least pass-small}]
         {:keys [my-db-obj sms-data sms-send-fn]}  (sms-send-init pages-to-check db-type)
         read-from-web? false
-        expected-sms SMS-NO-ERROR]
+       ; expected-sms SMS-NO-ERROR
+ expected-sms (make-api-call sms-data SMS-NEW-MONTH)
+]
     (let [actual-sms (get-actual-sms read-from-web?)]
+;(println "XXXX expected " expected-sms)
+;(println "VVVV   actual " actual-sms)
       (is (= expected-sms actual-sms)))))
 
-(deftest test-1000
-  (testing "test-1000 :amazonica-db should send an sms message in sms-send-fn"
-    (sms-send-fn_error "amazonica-db")))
 
-(deftest test-1001
-  (testing "test-1001 :monger-db should send an sms message in sms-send-fn"
-    (sms-send-fn_error "monger-db")))
+ (deftest test-1002
+   (testing "test-1002 :amazonica-db should send an sms message in sms-send-fn"
+     (sms-send-fn_ok "amazonica-db")))
 
-(deftest test-1002
-  (testing "test-1002 :amazonica-db should send an sms message in sms-send-fn"
-    (sms-send-fn_ok "amazonica-db")))
-
-(deftest test-1003
-  (testing "test-1003 :monger-db should send an sms message in sms-send-fn"
-    (sms-send-fn_ok "monger-db")))
+ (deftest test-1003
+   (testing "test-1003 :monger-db should send an sms message in sms-send-fn"
+     (sms-send-fn_ok "monger-db")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -105,7 +127,7 @@
 
 (defn init_1_2_3_4_months [db-type]
   (let [[my-db-obj _ _ _] (build-db T-DB-TEST-NAME
-                                    {}
+                                    []
                                     db-type
                                     TEST-CONFIG-FILE
                                     IGNORE-ENV-VARS)
@@ -161,9 +183,9 @@
 
 
 
-
-
-
+(defn do-tests []
+ (scrape-html-specs)
+  (run-tests 'tests-scrape-html))
 
 
 

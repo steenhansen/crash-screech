@@ -10,9 +10,37 @@
   (:require [crash-screech.config-args :refer [make-config]])
   (:require [prepare-tests :refer :all]))
 
+
+
+(alias 's 'clojure.spec.alpha)
+(alias 'c-db 'crash-screech.choose-db)
+
+(s/fdef c-db/get-phone-nums
+  :args (s/cat :phone-comma-string :phones-text?/test-specs))
+
+(s/fdef c-db/get-db-conn
+  :args (s/cat :table-name string?
+               :pages-to-check vector?
+               :db-type string?
+               :config-file :config-map?/test-specs))
+
+(s/fdef c-db/build-empty-month?
+  :args (s/cat :get-all-fn function?))
+
+(s/fdef c-db/build-today-error?
+  :args (s/cat :get-all-fn function?))
+
+(s/fdef c-db/build-db
+  :args (s/cat :table-name string?
+               :pages-to-check vector?
+               :db-type string?
+               :config-file string?
+               :environment-utilize string?))
+
 (defn choose-db-specs []
-  (if RUN-SPEC-TESTS
+ (if RUN-SPEC-TESTS
     (do
+  (println "Speccing choose-db")
       (spec-test/instrument)
       (spec-test/instrument 'get-db-conn)
       (spec-test/instrument 'build-today-error?)
@@ -65,12 +93,12 @@
 
 (deftest unit-build-empty-month-mongoDb
   (testing "test-build-db :"
-    (console-test "int-build-empty-month-mongoDb" "choose-db")
+    (console-test "unit-build-empty-month-mongoDb" "choose-db")
     (unit-build-empty-month-db  "monger-db")))
 
 (deftest unit-build-empty-month-dynoDb
   (testing "test-build-db :"
-    (console-test "int-build-empty-month-dynoDb" "choose-db")
+    (console-test "unit-build-empty-month-dynoDb" "choose-db")
     (if T-DO-DYNAMODB-TESTS
       (unit-build-empty-month-db     "amazonica-db"))))
 
@@ -133,3 +161,7 @@
     (unit-build-db-dynoDb)))
 
 
+
+(defn do-tests []
+  (choose-db-specs)
+  (run-tests 'tests-choose-db))

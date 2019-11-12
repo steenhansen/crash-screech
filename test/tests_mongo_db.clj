@@ -14,13 +14,29 @@
 
   (:require [prepare-tests :refer :all]))
 
+(alias 's 'clojure.spec.alpha)
+(alias 'm-d 'crash-screech.mongo-db)
+
+
+
+
+(s/fdef m-d/next-date-time
+  :args (s/cat :yyyy-mm   :yyyy?-mm?-dd?-hh?-mm?-ss/test-specs))
+
+(s/fdef m-d/mongolabs-build
+  :args (s/cat ::mongolabs-config :mongo-config?/test-specs
+               ::my-collection string?
+               ::pages-to-check vector?))
+
+
+
 (defn mongo-db-specs []
-  (if RUN-SPEC-TESTS
+ (if RUN-SPEC-TESTS
     (do
+(println "Speccing mongo-db")
       (spec-test/instrument)
       (spec-test/instrument 'next-date-time)
       (spec-test/instrument 'mongolabs-build))))
-
 
 
 
@@ -90,3 +106,11 @@
     (let [future-date (next-date-time "2004-04-04-04")]
       (console-test "unit-next-date-time" "mongo-db")
       (is (= future-date "2004-04-04-05")))))
+
+
+
+(defn do-tests []
+ (mongo-db-specs)
+  (run-tests 'tests-mongo-db))
+
+

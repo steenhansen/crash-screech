@@ -35,16 +35,20 @@
                         (enlive-html/add-class "speed_average")
                         (enlive-html/add-class "speed_good")))))
 
-(defn fill-date
-  [check-date]
-  (enlive-html/do-> (enlive-html/content (day-hour-min check-date))))
+(defn fill-date  [check-date]
+  (if @*test-use-test-time*
+   (enlive-html/do-> (enlive-html/content (str FAKE-TEST-TIME)))
+   (enlive-html/do-> (enlive-html/content (day-hour-min check-date)))
+  ) 
+)
 
 (defn fill-url [check-url] (enlive-html/do-> (enlive-html/content check-url)))
 
-(defn fill-bytes
-  "no test"
-  [check-bytes]
-  (enlive-html/do-> (enlive-html/content (str check-bytes))))
+(defn fill-bytes [check-bytes]
+
+ (if @*test-use-test-time*
+ (enlive-html/do-> (enlive-html/content (str FAKE-SCRAPE-BYTES)))
+  (enlive-html/do-> (enlive-html/content (str check-bytes)))))
 
 (defn fill-html
   [check-accurate check-html]
@@ -126,7 +130,15 @@
                   :month-sections
                   [{:month-type prev-name, :month-data previous-months}
                    {:month-type cur-name, :month-data current-months}]}
-         page-html (render-parts (index-page db-data))]
+
+         page-html (render-parts (index-page db-data))
+;;         page-html "aadfsa"
+
+]
+;;(println "page-html " db-data)
+
+
+
      page-html)))
 
 

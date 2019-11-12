@@ -9,7 +9,7 @@
   (:require [crash-screech.choose-db :refer [build-db]])
   (:require [crash-screech.cron-service :refer [cron-init]])
   (:require [crash-screech.web-server :refer [make-request-fn web-init]])
-
+  (:require [crash-screech.years-months :refer [instant-time-fn]])
   (:require [crash-screech.scrape-html :refer [scrape-pages-fn]])
   (:require [crash-screech.singular-service :refer [kill-services]])
   (:require [crash-screech.sms-event :refer [build-sms-send build-web-scrap]]))
@@ -33,7 +33,7 @@
                                                           environment-utilize)
          int-port (Integer/parseInt web-port)
          testing-sms? false
-         temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms?)
+         temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms? instant-time-fn)
          request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms?)]
      (web-init int-port request-handler))))
 

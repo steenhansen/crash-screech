@@ -16,13 +16,20 @@
 
   (:require [prepare-tests :refer :all])
 )
+(alias 's 'clojure.spec.alpha)
+(alias 'd-d ' crash-screech.dynamo-db)
+
+
+(s/fdef d-d/dynamo-build
+  :args (s/cat ::amazonica-config :dynamo-config?/test-specs
+               ::my-table-name string?
+               ::pages-to-check vector?))
 
 (defn dynamo-db-specs []
-  (if RUN-SPEC-TESTS
+ (if RUN-SPEC-TESTS
     (do
       (spec-test/instrument)
-      (spec-test/instrument 'dynamo-build)
-)))
+      (spec-test/instrument 'dynamo-build))))
 
 
 (deftest unit-dynamo-build
@@ -45,3 +52,12 @@
 ))
 
 )
+
+
+
+
+(defn do-tests []
+(dynamo-db-specs)
+  (run-tests 'tests-dynamo-db))
+
+

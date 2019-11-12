@@ -1,9 +1,9 @@
 
 ; https://fathomless-woodland-85635.herokuapp.com/
  
-; A. cider-jack-in core.clj [F5]
-; B. cider-repl-set-ns core.clj [F4]
-; C. cider-ns-reload-all  [F1]
+; A. in core.clj hit [F5] for cider-jack-in   (once in session)
+; B. in core.clj hit [F4] for cider-ns-reload-all
+; C. in core.clj hit [F3] for cider-repl-set-ns
 
 ; core> (-local-main "monger-db" "./local-config.edn")
 ; core> (kill-services)                 
@@ -17,13 +17,27 @@
 (ns core
   (:gen-class)
 
-; (:require [start-heroku :refer :all])     ; Never used in Cider, called by Heroku Procfile and "lein run "
+  ; Never used in Cider, called by Heroku Procfile and "lein run "
+  ; (:require [start-heroku :refer :all])  
 
-  (:require [crash-screech.singular-service :refer  [kill-services]]) ; (kill-services) - kills cron and ring 
+  ; (kill-services) - kills cron and ring 
+  (:require [crash-screech.singular-service :refer [kill-services]])
 
-  (:require     [start-local :refer :all])  ; (-local-main "monger-db" "./local-config.edn") 
-                                            ; (-local-main "amazonica-db" "./local-config.edn")  
-  )  ;;;;
+
+  ; (-local-heroku-main "monger-db" "./local-config.edn") 
+  (:require [start-local-heroku-db :refer [-local-heroku-main]])
+
+
+  ; (-local-main "monger-db" "./local-config.edn") 
+  ; (-local-main "amazonica-db" "./local-config.edn")  
+  (:require [start-local :refer [-local-main]])
+
+
+
+                                  ;(:require [start-local :refer :all])
+
+
+  )
 
 
 
