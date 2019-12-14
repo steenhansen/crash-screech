@@ -2,14 +2,14 @@
 
 ; A. in core_test.clj hit [F5] for cider-jack-in (once in session)
 ; C. in core_test.clj hit [F4] for cider-ns-reload-all
-; B. in core_test.clj hit [F3] for cider-repl-set-ns    
+; B. in core_test.clj hit [F3] for cider-repl-set-ns
 
 ; core-test> (do-tests)
 
-; core-test> (test-sms "../heroku-config.edn") 
+; core-test> (test-sms HEROKU_CONFIG)
 
-  
-   
+
+
 (ns core-test
   (:require [clojure.test :refer :all])
   (:require [clojure.spec.alpha :as spec-alpha]
@@ -31,14 +31,14 @@
   (:require [tests-years-months  :refer [years-months-specs]])
   (:require [tests-web-server  :refer [web-server-specs]])
   (:require [text-diff :refer [is-html-eq]])
-  (:require   [sms-test :refer :all])      ; (-test-sms "../heroku-config.edn")
+  (:require   [sms-test :refer :all])      ; (-test-sms HEROKU_CONFIG)
   (:require [prepare-tests :refer :all]))
 
 (defn check-testing []
   (local-dynamodb-on?)
   (dampen-mongo-logging)
   (local-mongo-on?)
-  (sms-is-in-test "monger-db"))
+  (sms-is-in-test USE_MONGER_DB))
 
 (defn console-divider []
   (println "............................................")
@@ -77,5 +77,3 @@
   (web-server-specs)
   (years-months-specs)
   (run-tests))
-
-

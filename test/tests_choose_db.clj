@@ -67,13 +67,13 @@
 (deftest unit-get-db-conn-mongoDb
   (testing "test-build-db :"
     (console-test "unit-get-db-conn-mongoDb" "choose-db")
-    (unit-get-db-conn-type "monger-db")))
+    (unit-get-db-conn-type USE_MONGER_DB)))
 
 (deftest unit-get-db-conn-dynoDb
   (testing "test-build-db :"
     (console-test "unit-get-db-conn-dynoDb" "choose-db")
     (if T-DO-DYNAMODB-TESTS
-      (unit-get-db-conn-type    "amazonica-db"))))
+      (unit-get-db-conn-type    USE_AMAZONICA_DB))))
 
 (defn  unit-build-empty-month-db [db-type]
   (let [[my-db-obj _ cron-url sms-data] (build-db T-DB-TEST-NAME
@@ -94,13 +94,13 @@
 (deftest unit-build-empty-month-mongoDb
   (testing "test-build-db :"
     (console-test "unit-build-empty-month-mongoDb" "choose-db")
-    (unit-build-empty-month-db  "monger-db")))
+    (unit-build-empty-month-db  USE_MONGER_DB)))
 
 (deftest unit-build-empty-month-dynoDb
   (testing "test-build-db :"
     (console-test "unit-build-empty-month-dynoDb" "choose-db")
     (if T-DO-DYNAMODB-TESTS
-      (unit-build-empty-month-db     "amazonica-db"))))
+      (unit-build-empty-month-db     USE_AMAZONICA_DB))))
 
 (defn  build-today-error-db [db-type]
   (let [[my-db-obj _ cron-url sms-data] (build-db T-DB-TEST-NAME
@@ -121,13 +121,13 @@
 (deftest unit-build-today-error-mongoDb
   (testing "test-build-db :"
  (console-test "unit-build-today-error-mongoDb" "choose-db")
-    (build-today-error-db  "monger-db")))
+    (build-today-error-db  USE_MONGER_DB)))
 
 (deftest unit-build-today-error-dynoDb
   (testing "test-build-db :"
  (console-test "unit-build-today-error-dynoDb" "choose-db")
     (if T-DO-DYNAMODB-TESTS
-      (build-today-error-db     "amazonica-db"))))
+      (build-today-error-db     USE_AMAZONICA_DB))))
 
 (defn unit-build-db-type [db-type]
   (let [[my-db-obj web-port cron-url sms-data] (build-db T-DB-TEST-NAME
@@ -147,13 +147,13 @@
 (deftest unit-build-db-mongoDb
   (testing "test-build-db :"
     (console-test "unit-build-db-mongoDb" "choose-db")
-    (unit-build-db-type "monger-db")))
+    (unit-build-db-type USE_MONGER_DB)))
 
 (deftest unit-build-db-dynoDb
   (testing "test-build-db :"
     (console-test "unit-build-db-mongoDb" "choose-db")
     (if T-DO-DYNAMODB-TESTS
-      (unit-build-db-type     "amazonica-db"))))
+      (unit-build-db-type     USE_AMAZONICA_DB))))
 
 (deftest unit-build-db
   (testing "test-build-db :"

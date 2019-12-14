@@ -52,7 +52,7 @@
 (def yyyy-mm-dd-hh-ii-ss #"^(20(0|1|2)[\d])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])-(2[0-3]|[01]?[0-9])-([0-5][0-9])-([0-5][0-9]).*$")
 (s/def :year-mon-day-hour-min-sec?/test-specs  (s/and string? #(re-matches yyyy-mm-dd-hh-ii-ss %)))
 
-(s/def :yyyy-mm?-dd?-hh?-mm?-ss/test-specs (s/or 
+(s/def :yyyy-mm?-dd?-hh?-mm?-ss/test-specs (s/or
 ;;;;;;;;;;;;         year-mon
           :yyyy-mm  :year-month?/test-specs
           :yyyy-mm  :year-mon-day?/test-specs
@@ -62,7 +62,7 @@
 
 ))
 
-(s/def :yyyy?-mm?-dd?-hh?-mm?-ss/test-specs (s/or 
+(s/def :yyyy?-mm?-dd?-hh?-mm?-ss/test-specs (s/or
           :yyyy-mm  :year-only?/test-specs
           :yyyy-mm  :year-month?/test-specs
           :yyyy-mm  :year-mon-day?/test-specs
@@ -73,7 +73,7 @@
 ))
 
 
-;;; replace this with above, and fix year-mon 
+;;; replace this with above, and fix year-mon
 (s/def :yyyy-mm-or-yyyy-mm-dd?/test-specs (s/or :yyyy-mm  :year-mon-day?/test-specs
                                        :yyyy-mm  :year-month?/test-specs))
 
@@ -106,9 +106,16 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(s/def :url-date-tuple?/test-specs  (s/keys :req-un [ ::the-url ::the-html ::the-accurate ::the-time]
-                                            :opt-un [ ::the-date]))
+;;;changed
+(s/def :url-date-tuple?/test-specs  (s/keys :req-un []
+                       :opt-un [ ::the-date      ::the-url ::the-html ::the-accurate ::the-time]))
 
+
+
+
+;;;;changed
+(s/def :data-map?/test-specs  (s/keys :req-un []
+    :opt-un [ ::the-url ::the-date ::the-html  ::the-accurate ::the-time]))
 
 
 
@@ -121,12 +128,6 @@
    ::TILL_URL  ::TILL_USERNAME  ::TESTING_SMS]))
 
 
-
-
-
-
-(s/def :data-map?/test-specs  (s/keys :req-un
- [ ::the-url ::the-date ::the-html  ::the-accurate ::the-time]))
 
 
 
@@ -154,20 +155,20 @@
  [ ::till-username ::till-url ::till-api-key ::phone-numbers ::heroku-app-name ::testing-sms?]))
 
 (s/def :mongo-config?/test-specs (s/keys :req-un
-[ ::SEND_TEST_SMS_URL 
-   ::PHONE_NUMBERS 
-  ::HEROKU_APP_NAME 
-   ::MONGODB_URI 
-   ::TILL_USERNAME 
-   ::TILL_API_KEY 
-   ::TILL_URL 
-   ::CRON_URL_DIR 
-   ::TESTING_SMS 
+[ ::SEND_TEST_SMS_URL
+   ::PHONE_NUMBERS
+  ::HEROKU_APP_NAME
+   ::MONGODB_URI
+   ::TILL_USERNAME
+   ::TILL_API_KEY
+   ::TILL_URL
+   ::CRON_URL_DIR
+   ::TESTING_SMS
    ::PORT  ]))
 
 (s/def :dynamo-config?/test-specs (s/keys :req-un
-[ ::access-key 
-   ::endpoint 
+[ ::access-key
+   ::endpoint
    ::secret-key  ]))
 
 
@@ -179,7 +180,7 @@
  (s/def :mongo-db-map?/test-specs  (s/keys :req-un
   [ ::MONGODB_URI]))
 
- 
+
 
 
 

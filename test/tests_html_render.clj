@@ -20,7 +20,7 @@
   (:require [lambdaisland.deep-diff :as ddiff])
 
  (:require [text-diff :refer :all])
- 
+
   )
 
 
@@ -83,7 +83,7 @@
       start-diff (map ())
    ]
 
-  
+
 
 
  )
@@ -93,7 +93,7 @@
 (deftest unit-get-index
   (testing "test-day-hour-min : cccccccccccccccccccccc "
     (console-test  "unit-get-index"  "html-render")
-    (let [db-type "monger-db"
+    (let [db-type USE_MONGER_DB
           [my-db-obj _ _ _] (build-db DB-TABLE-NAME
                                       []
                                       db-type
@@ -141,5 +141,3 @@
 (defn do-tests []
  (html-render-specs)
   (run-tests 'tests-html-render))
-
-

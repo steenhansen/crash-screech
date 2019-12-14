@@ -43,7 +43,7 @@
 
 (deftest unit-mongolabs-build
   (testing "count-string : cccccccccccccccccccccc "
-    (let [ db-type  "monger-db"
+    (let [ db-type  USE_MONGER_DB
            the-config (make-config db-type TEST-CONFIG-FILE IGNORE-ENV-VARS)
           pages-to-check [{:check-page "www.sffaudio.com",
                          :enlive-keys [:article :div.blog-item-wrap],
@@ -112,5 +112,3 @@
 (defn do-tests []
  (mongo-db-specs)
   (run-tests 'tests-mongo-db))
-
-

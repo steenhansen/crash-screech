@@ -8,11 +8,11 @@
 4 "aa" load core.clj buffer
 
 On http://localhost:8080/
-   
-5a core> (-local-main "monger-db" "./local-config.edn")          ;Local Mongodb 
 
-5b core> (-local-main "amazonica-db" "./local-config.edn")       ;Local Dynamodb 
+5a core> (-local-main USE_MONGER_DB LOCAL_CONFIG)          ;Local Mongodb
 
-5c all-main> (-local-heroku-main "monger-db" "../heroku-config.edn") ;Heroku Mlabs 
-  
+5b core> (-local-main USE_AMAZONICA_DB LOCAL_CONFIG)       ;Local Dynamodb
+
+5c all-main> (-local-heroku-main USE_MONGER_DB HEROKU_CONFIG) ;Heroku Mlabs
+
 6 all-main> (kill-services) ;Kill web-server and scheduled jobs

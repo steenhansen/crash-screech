@@ -57,8 +57,8 @@
           pages-to-check [{:check-page "www.sffaudio.com",
                            :enlive-keys [:article :div.blog-item-wrap],
                            :at-least pass-small}]
-          db-type "monger-db"
-          environment-utilize "use-environment"
+          db-type USE_MONGER_DB
+          environment-utilize USE_ENVIRONMENT
           [my-db-obj _ _ sms-data] (build-db DB-TABLE-NAME
                                              THE-CHECK-PAGES
                                              db-type
@@ -75,8 +75,8 @@
           pages-to-check [{:check-page "www.sffaudio.com",
                            :enlive-keys [:article :div.blog-item-wrap],
                            :at-least pass-small}]
-          db-type "monger-db"
-          environment-utilize "use-environment"
+          db-type USE_MONGER_DB
+          environment-utilize USE_ENVIRONMENT
           [my-db-obj _ _ sms-data] (build-db DB-TABLE-NAME
                                              THE-CHECK-PAGES
                                              db-type
@@ -94,8 +94,8 @@
           pages-to-check [{:check-page "www.sffaudio.com",
                            :enlive-keys [:article :div.blog-item-wrap],
                            :at-least pass-small}]
-          db-type "monger-db"
-          environment-utilize "use-environment"
+          db-type USE_MONGER_DB
+          environment-utilize USE_ENVIRONMENT
           [my-db-obj _ _ sms-data] (build-db DB-TABLE-NAME
                                              THE-CHECK-PAGES
                                              db-type
@@ -109,4 +109,3 @@
 (defn do-tests []
 (cron-service-specs)
   (run-tests 'tests-cron-service))
-

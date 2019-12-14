@@ -40,7 +40,10 @@
       (reset!  global-consts-vars/*sms-was-executed* true)
       (if-not testing-sms?
         (http-client/post till-url sms-params))
-      test-sms)))
+
+;      test-sms
+       sms-message     ;start of new month/ error    / ""
+)))
 
 (defn sms-to-phones
   [sms-data testing-sms?]
@@ -48,8 +51,7 @@
     (sms-send-fn "test sms call")))
 
 
-;;;;  build-web-scrapE
-(defn build-web-scrap
+(defn build-web-scrape
   [scrape-pages-fn my-db-obj pages-to-check sms-data testing-sms? date-time-fn]
   (let [sms-send-fn (build-sms-send sms-data testing-sms?)
         read-from-web true]
@@ -63,4 +65,3 @@
                       ; instant-time-fn
                        sms-send-fn
                        read-from-web))))
-

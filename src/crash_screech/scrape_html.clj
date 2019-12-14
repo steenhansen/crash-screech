@@ -4,7 +4,7 @@
   (:require [net.cgrand.enlive-html :as enlive-html])
   (:require [clojure.string :as clj-str])
   (:require [clj-http.client :as http-client])
-
+  (:require [crash-screech.years-months  :refer [instant-time-fn]])
   (:require [global-consts-vars  :refer :all])
 
   (:require [crash-screech.config-args :refer [compact-hash]])
@@ -58,11 +58,26 @@
 
 (defn real-slash-url [check-page] (clj-str/replace check-page #"_" "/"))
 
+(comment
+
+  (read-html  WWW-SFFAUDIO-COM true)
+
+
+;
+  )
+
 (defn read-html
   [check-page read-from-web]
   (if read-from-web
-    (let [under-to-slashes (clj-str/replace check-page #"_" "/")]
-      (:body (http-client/get (str "https://" under-to-slashes))))
+    (try
+      (let [under-to-slashes (clj-str/replace check-page #"_" "/")
+            time-stamp (instant-time-fn)
+            no-semi-time (clj-str/replace time-stamp #":" "-")
+            no-dot-time (clj-str/replace no-semi-time #"\." "-")
+            no-cache-url (str "https://" under-to-slashes no-dot-time)]
+        (println "read-html no-cache-url" no-cache-url)
+        (:body (http-client/get no-cache-url)))
+      (catch Exception e (str "404 found for " check-page)))
     (slurp (str SCRAPED-TEST-DATA check-page))))
 
 (defn send-first-day-sms?
@@ -88,55 +103,85 @@
   [prev-errors-today? my-db-obj]
   (let [today-error? (:today-error? my-db-obj)
         now-error? (today-error?)]
- ;   (println "scrape-html.first-error-today? 7 prev-errors-today?" prev-errors-today?)
-  ;  (println "scrape-html.first-error-today? 7 now-error?" now-error?)
     (if prev-errors-today? false now-error?)))
 
 (defn send-sms-message [prev-errors-today? my-db-obj send-hello-sms? sms-send-fn]
   (let [send-err-sms? (first-error-today? prev-errors-today? my-db-obj)
-        no-sms-sent []]
+        no-sms-sent ""]
+    (if send-err-sms?
+      (sms-send-fn SMS-FOUND-ERROR)
+      (if send-hello-sms?
+        (sms-send-fn SMS-NEW-MONTH)
+        no-sms-sent))))
 
-   ; (println "scrape-html.send-sms-message 0 prev-errors-today?" prev-errors-today?)
-
-   ; (println "scrape-html.send-sms-message 0 send-err-sms?" send-err-sms?)
-  ;  (println "scrape-html.send-sms-message 1 send-hello-sms?" send-hello-sms?)
-  ;  (println "scrape-html.send-sms-message 2 SMS-NEW-MONTH"  SMS-NEW-MONTH)
-  ;  (println "scrape-html.send-sms-message 3 (sms-send-fn SMS-NEW-MONTH)"  (sms-send-fn SMS-NEW-MONTH))
-
-
-      (if send-err-sms?
-        (sms-send-fn SMS-FOUND-ERROR)
-        (if send-hello-sms?
-          (sms-send-fn SMS-NEW-MONTH)
-           no-sms-sent
-      ))
-
-
-    ;; (if send-hello-sms?
-    ;;   (sms-send-fn SMS-NEW-MONTH)
-    ;;   (if send-err-sms?
-    ;;     (sms-send-fn SMS-FOUND-ERROR)
-    ;;     no-sms-sent))
+(comment
+  (let [pages-OK-check [{:check-page WWW-SFFAUDIO-COM   :enlive-keys SFFAUDIO-CHECK-KEYS :at-least HTML-OK-COUNT}]
+        pages-FAIL-check [{:check-page WWW-SFFAUDIO-COM :enlive-keys SFFAUDIO-CHECK-KEYS :at-least HTML-FAIL-COUNT}]
+        [my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
+        purge-table (:purge-table my-db-obj)
+        testing-sms? true
+        sms-send-fn (build-sms-send sms-data testing-sms?)
+        read-from-web? true
+        _ (purge-table)
+        start-month-sms (scrape-pages-fn my-db-obj pages-OK-check   instant-time-fn sms-send-fn read-from-web?)
+        no-error-sms    (scrape-pages-fn my-db-obj pages-OK-check   instant-time-fn sms-send-fn read-from-web?)
+        error-sms       (scrape-pages-fn my-db-obj pages-FAIL-check instant-time-fn sms-send-fn read-from-web?)]
+    [start-month-sms no-error-sms error-sms])
+  ; ["Start of a new SFFaudio month!" "" "Found an error"]
 
 
-)
-)
+  (let [pages-OK-check [{:check-page  WWW-SFF-SEARCH   :enlive-keys SFF-SEARCH-CHECK-KEYS :at-least HTML-OK-COUNT}]
+        pages-FAIL-check [{:check-page WWW-SFF-SEARCH :enlive-keys SFF-SEARCH-CHECK-KEYS :at-least HTML-FAIL-COUNT}]
+        [my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
+        purge-table (:purge-table my-db-obj)
+        testing-sms? true
+        sms-send-fn (build-sms-send sms-data testing-sms?)
+        read-from-web? true
+        _ (purge-table)
+        start-month-sms (scrape-pages-fn my-db-obj pages-OK-check   instant-time-fn sms-send-fn read-from-web?)
+        no-error-sms    (scrape-pages-fn my-db-obj pages-OK-check   instant-time-fn sms-send-fn read-from-web?)
+        error-sms       (scrape-pages-fn my-db-obj pages-FAIL-check instant-time-fn sms-send-fn read-from-web?)]
+    [start-month-sms no-error-sms error-sms])
+  ; ["Start of a new SFFaudio month!" "" "Found an error"]
+
+
+  (let [[my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME THE-CHECK-PAGES USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
+        purge-table (:purge-table my-db-obj)
+        testing-sms? true
+        sms-send-fn (build-sms-send sms-data testing-sms?)
+        read-from-web? true
+        _ (purge-table)
+        all-sms (scrape-pages-fn my-db-obj THE-CHECK-PAGES instant-time-fn sms-send-fn read-from-web?)]
+    [all-sms])
+  ; []
+
+
+
+
+  (let [pages-OK-check [{:check-page "www.sffaudio.com/not-exist-404"   :enlive-keys SFFAUDIO-CHECK-KEYS :at-least HTML-OK-COUNT}]
+        [my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
+        purge-table (:purge-table my-db-obj)
+        testing-sms? true
+        sms-send-fn (build-sms-send sms-data testing-sms?)
+        read-from-web? true
+        _ (purge-table)
+        start-month-sms (scrape-pages-fn my-db-obj pages-OK-check   instant-time-fn sms-send-fn read-from-web?)
+		]
+    [start-month-sms])
+    ["Found and error"]
+
+  )
 
 (defn scrape-pages-fn
   [my-db-obj pages-to-check time-fn sms-send-fn read-from-web]
-
-
-(println "&&&&&&&&&&&&" (type time-fn) time-fn (time-fn) )
-
-  (let [{:keys [today-error? send-hello-sms? prev-errors-today? put-item]} (get-db-objs my-db-obj)]
+  (let [{:keys [_today-error? send-hello-sms? prev-errors-today? put-item]} (get-db-objs my-db-obj)]
     (doseq [check-page-obj pages-to-check
             :let [{:keys [check-page enlive-keys at-least]} check-page-obj
                   start-timer (System/currentTimeMillis)
                   web-html (read-html check-page read-from-web)
                   the-time (figure-interval start-timer)
                   start-process (System/currentTimeMillis)
-                  {:keys [actual-matches the-accurate]}
-                  (enough-sections? web-html enlive-keys at-least)
+                  {:keys [actual-matches the-accurate]} (enough-sections? web-html enlive-keys at-least)
                   the-url (real-slash-url check-page)
                   the-date (time-fn)
                   the-html (remove-tags web-html)
@@ -146,19 +191,7 @@
                                              the-html
                                              the-accurate
                                              the-time)]]
-  ;    (if (not @*we-be-testing*)
-   ;     (println "the-time the-url process-time" the-time the-url process-time))
-(println "*************************** the-record" the-date the-time the-url)     
- (put-item check-record))
+      (put-item check-record))
     (reset! global-consts-vars/*pages-were-scraped* true)
     (let [sms-mess-result (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn)]
-    ;(println "scrape-html.scrape-pages-fn 230u0us ****** " sms-mess-result)
-      sms-mess-result)
- ;(println "scrape-html.scrape-pages-fn 230u0us ****** " (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn))
-  ;  (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn)
-))  ; NB return values used
-
-
-
-
-
+      sms-mess-result)))   ;; testing looks at array returned

@@ -61,11 +61,15 @@
        (let [yyyy-mm-dd (current-yyyy-mm-dd)
              url-checks (get-all-fn yyyy-mm-dd)
              error-found (reduce my-failed-check false url-checks)]
+;(println "today-error? no params yyyy-mm-dd" yyyy-mm-dd)
+;(println "today-error? no params url-checks" url-checks)
+;(println "today-error? no params error-found" error-found)
          error-found))
 
       ([yyyy-mm-dd]
        (let  [url-checks (get-all-fn yyyy-mm-dd)
               error-found (reduce my-failed-check false url-checks)]
+;(println "today-error? " yyyy-mm-dd)
          error-found)))))
 
 
@@ -87,14 +91,14 @@ have an default environment-utilize
         phone-comma-string (:PHONE_NUMBERS the-config)
         phone-numbers (get-phone-nums phone-comma-string)
         heroku-app-name (:HEROKU_APP_NAME the-config)
-        testing-sms? (:TESTING_SMS the-config)         
+        testing-sms? (:TESTING_SMS the-config)
         send-test-sms-url (:SEND_TEST_SMS_URL the-config)
         sms-data (compact-hash till-username
                                till-url
                                till-api-key
                                phone-numbers
                                heroku-app-name
-                               testing-sms?           
+                               testing-sms?
                                send-test-sms-url)
         get-all (:my-get-all my-db-funcs)
         my-db-obj {:delete-table (:my-delete-table my-db-funcs),

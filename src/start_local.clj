@@ -9,19 +9,18 @@
   (:require [crash-screech.scrape-html :refer [scrape-pages-fn]])
   (:require [crash-screech.singular-service :refer  [kill-services]])
   (:require [crash-screech.years-months :refer [instant-time-fn]])
-  (:require [crash-screech.sms-event :refer [build-sms-send build-web-scrap]]))
+  (:require [crash-screech.sms-event :refer [build-sms-send build-web-scrape]]))
 
 ; dev main, has scrape-pages-fn as an at-at scheduled job
 ; (kill-services) will delete web-server and at-at-scheduled job
 
 
-(comment "local monger db"
-         (-local-main  "./local-config.edn" "ignore-environment"))
-
-(comment "local amazonica db"
-         (-local-main "amazonica-db" "./local-config.edn" "ignore-environment"))
-(comment "real monger db, config file outside project"
-         (-local-main "monger-db" "../heroku-config.edn" "ignore-environment"))
+(comment
+         (-local-main USE_MONGER_DB LOCAL_CONFIG IGNORE-ENV-VARS )   "local monger db"
+         (-local-main USE_AMAZONICA_DB LOCAL_CONFIG IGNORE-ENV-VARS)  "local amazonica db"
+         (-local-main USE_MONGER_DB HEROKU_CONFIG IGNORE-ENV-VARS)   "real monger db, config file outside project"
+;
+)
 
 (defn -local-main
   ([db-type config-file] (-local-main db-type config-file IGNORE-ENV-VARS))
@@ -56,8 +55,8 @@
                      :the-accurate false,
                      :the-time 12346}]
 testing-sms? true
-         temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms? instant-time-fn)
-         request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms?)
+         temporize-func (build-web-scrape scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms? instant-time-fn)
+         request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms? instant-time-fn)
          test-one {:the-url "www.sffaudio.com",
                    :the-date "2019-06-19-01:54:03.800Z",
                    :the-html "blah 5555",

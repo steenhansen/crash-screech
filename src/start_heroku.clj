@@ -1,5 +1,5 @@
 
-; This is where Heroku starts  
+; This is where Heroku starts
 
 
 (ns start-heroku
@@ -12,15 +12,15 @@
   (:require [crash-screech.years-months :refer [instant-time-fn]])
   (:require [crash-screech.scrape-html :refer [scrape-pages-fn]])
   (:require [crash-screech.singular-service :refer [kill-services]])
-  (:require [crash-screech.sms-event :refer [build-sms-send build-web-scrap]]))
+  (:require [crash-screech.sms-event :refer [build-sms-send build-web-scrape]]))
 
 
 ; main called by Heroku, has no cron-init() job, relies on temporize-func()
 
 
 (comment "to start"
-         (-main "monger-db" "../heroku-config.edn")
-         (-main "monger-db" "../heroku-config.edn" "use-environment"))
+         (-main USE_MONGER_DB HEROKU_CONFIG)
+         (-main USE_MONGER_DB HEROKU_CONFIG USE_ENVIRONMENT))
 (defn -main
   ([db-type config-file] (-main db-type config-file USE_ENVIRONMENT))
 
@@ -33,11 +33,6 @@
                                                           environment-utilize)
          int-port (Integer/parseInt web-port)
          testing-sms? false
-         temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms? instant-time-fn)
+         temporize-func (build-web-scrape scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms? instant-time-fn)
          request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms?)]
      (web-init int-port request-handler))))
-
-
-
-
-

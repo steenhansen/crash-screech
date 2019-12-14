@@ -72,7 +72,7 @@
 
 (deftest unit-read-config-file
   (testing "read-config-file : cccccccccccccccccccccc "
-    (let [config-file "./local-config.edn"
+    (let [config-file LOCAL_CONFIG
           config-map (read-config-file config-file)]
       (console-test "unit-read-config-file" "config-args")
       (is (= config-map TEST-READ-CONFIG)))))
@@ -87,9 +87,9 @@
 
 (deftest unit-make-config
   (testing "make-config : cccccccccccccccccccccc "
-    (let [db-type "monger-db"
-          config-file "./local-config.edn"
-          environment-utilize  "ignore-environment"
+    (let [db-type USE_MONGER_DB
+          config-file LOCAL_CONFIG
+          environment-utilize  IGNORE-ENV-VARS
           config-map (make-config db-type config-file environment-utilize)]
       (console-test "unit-make-config" "config-args")
       (is (= config-map TEST-MAKE-CONFIG)))))
@@ -100,6 +100,3 @@
 (defn do-tests []
 (config-args-specs)
   (run-tests 'tests-config-args))
-
-
-

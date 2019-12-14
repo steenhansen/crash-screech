@@ -34,7 +34,7 @@
 
 (deftest unit-dynamo-build
   (testing "count-string : cccccccccccccccccccccc "
-    (let [ db-type  "amazonica-db"
+    (let [ db-type  USE_AMAZONICA_DB
            the-config (make-config db-type TEST-CONFIG-FILE IGNORE-ENV-VARS)
           pages-to-check [{:check-page "www.sffaudio.com",
                          :enlive-keys [:article :div.blog-item-wrap],
@@ -59,5 +59,3 @@
 (defn do-tests []
 (dynamo-db-specs)
   (run-tests 'tests-dynamo-db))
-
-

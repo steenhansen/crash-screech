@@ -18,7 +18,7 @@
   (:require [crash-screech.html-render  :refer :all])
   (:require [crash-screech.years-months  :refer :all])
   (:require [crash-screech.config-args :refer :all])
-
+  (:require [text-diff :refer [is-html-eq]])
   (:require [java-time :refer [local-date?]])
 
   (:require [prepare-tests :refer :all]))
@@ -30,7 +30,7 @@
 (defn scrape-html-specs []
   (if RUN-SPEC-TESTS
     (do
-    (println "Speccing html-specs")
+      (println "Speccing html-specs")
       (spec-test/instrument)
       (spec-test/instrument 'count-scrapes))))
 
@@ -42,12 +42,6 @@
     (let [expected-scrapes 2
           actual-scrapes (count-scrapes T-COUNT-SCRAPES-HTML)]
       (is (= expected-scrapes actual-scrapes)))))
-
-
-
-
-
-
 
 (defn sms-send-init [pages-to-check db-type]
   (let [[my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME
@@ -71,6 +65,14 @@
     (purge-table)
     (compact-hash my-db-obj sms-data sms-send-fn)))
 
+
+
+
+
+
+(comment
+  ; "1\n2\n3"
+  (sms-send-fn_error USE_MONGER_DB)             )
 (defn sms-send-fn_error [db-type]
   (let [fail-to-large 12345678
         pages-to-check [{:check-page "www.sffaudio.com",
@@ -78,24 +80,18 @@
                          :at-least fail-to-large}]
         {:keys [my-db-obj sms-data sms-send-fn]} (sms-send-init pages-to-check db-type)
         read-from-web? false
-        expected-sms (make-api-call sms-data SMS-FOUND-ERROR)]
-    (let [actual-sms (get-actual-sms read-from-web?)]
-;(println "BBBB expected " expected-sms)
-;(println "CCCC   actual " actual-sms)
-      (is (= expected-sms actual-sms)))))
+        expected-sms (make-api-call sms-data  SMS-FOUND-ERROR)]
+    (let [actual-sms (get-actual-sms read-from-web?)
+          [text-diff-1 text-diff-2] (is-html-eq actual-sms expected-sms)]
+      (is (= text-diff-1 text-diff-2)))))
 
+(deftest test-1000
+  (testing "test-1000 :amazonica-db should send an sms message in sms-send-fn"
+    (sms-send-fn_error USE_AMAZONICA_DB)))
 
-
- (deftest test-1000
-   (testing "test-1000 :amazonica-db should send an sms message in sms-send-fn"
-     (sms-send-fn_error "amazonica-db")))
-
- (deftest test-1001
-   (testing "test-1001 :monger-db should send an sms message in sms-send-fn"
-     (sms-send-fn_error "monger-db")))
-
-
-
+(deftest test-1001
+  (testing "test-1001 :monger-db should send an sms message in sms-send-fn"
+    (sms-send-fn_error USE_MONGER_DB)))
 
 (defn sms-send-fn_ok [db-type]
   (let [pass-small 1
@@ -105,21 +101,19 @@
         {:keys [my-db-obj sms-data sms-send-fn]}  (sms-send-init pages-to-check db-type)
         read-from-web? false
        ; expected-sms SMS-NO-ERROR
- expected-sms (make-api-call sms-data SMS-NEW-MONTH)
-]
+        expected-sms (make-api-call sms-data SMS-NEW-MONTH)]
     (let [actual-sms (get-actual-sms read-from-web?)]
 ;(println "XXXX expected " expected-sms)
 ;(println "VVVV   actual " actual-sms)
       (is (= expected-sms actual-sms)))))
 
+(deftest test-1002
+  (testing "test-1002 :amazonica-db should send an sms message in sms-send-fn"
+    (sms-send-fn_ok USE_AMAZONICA_DB)))
 
- (deftest test-1002
-   (testing "test-1002 :amazonica-db should send an sms message in sms-send-fn"
-     (sms-send-fn_ok "amazonica-db")))
-
- (deftest test-1003
-   (testing "test-1003 :monger-db should send an sms message in sms-send-fn"
-     (sms-send-fn_ok "monger-db")))
+(deftest test-1003
+  (testing "test-1003 :monger-db should send an sms message in sms-send-fn"
+    (sms-send-fn_ok USE_MONGER_DB)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -174,21 +168,12 @@
 
 (deftest test-2000
   (testing "test-2000 :monger-db should send an sms message in sms-send-fn"
-    (init_1_2_3_4_months "monger-db")))
+    (init_1_2_3_4_months USE_MONGER_DB)))
 
 (deftest test-2001
   (testing "test-2000 :monger-db should send an sms message in sms-send-fn"
-    (init_1_2_3_4_months "monger-db")))
-
-
-
+    (init_1_2_3_4_months USE_MONGER_DB)))
 
 (defn do-tests []
- (scrape-html-specs)
+ ;(scrape-html-specs)
   (run-tests 'tests-scrape-html))
-
-
-
-
-
-

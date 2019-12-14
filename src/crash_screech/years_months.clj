@@ -7,7 +7,7 @@
   (:require [java-time.local :as j-time])
   (:require [java-time.core :as jt-core])
   (:require [java-time.amount :as jt-amount])
-  (:require [java-time.temporal :as jt-temporal]))   
+  (:require [java-time.temporal :as jt-temporal]))
 
 ;;    (java-time/instant (java-time/offset-date-time 2019 11 12 ))
 
@@ -19,21 +19,30 @@
 (defn trunc-yyyy-mm
   "spec"
   [ym-extra]
-  (let [date-vector (clj-str/split ym-extra #"-")
+  (let [time-vector (clj-str/split ym-extra #"T")
+date-part (first time-vector)
+      date-vector (clj-str/split date-part #"-")
         ym-vector (take 2 date-vector)
         ym-str (clj-str/join "-" ym-vector)]
-   ; (if-not (= 2 (count date-vector))
-    ;  (throw (Exception. "trunc-yyyy-mm didn't have 2 items")))
     ym-str))
+
+
+(comment
+   (trunc-yyyy-mm-dd "2001-12-31")
+  ;"2001-12-31"
+ (trunc-yyyy-mm-dd "2001-12-31T123")
+  ;"2001-12-31"
+;
+)
 
 (defn trunc-yyyy-mm-dd
   "spec"
   [ymd-extra]
-  (let [date-vector (clj-str/split ymd-extra #"-")
+  (let [ time-vector (clj-str/split ymd-extra #"T")
+date-part (first time-vector)
+date-vector (clj-str/split date-part #"-")
         ymd-vector (take 3 date-vector)
         ymd-str (clj-str/join "-" ymd-vector)]
-  ;  (if-not (= 3 (count date-vector))
-      ;(throw (Exception. "trunc-yyyy-mm-dd didn't have 3 items")))
     ymd-str))
 
 (defn date-to-yyyy-mm
@@ -99,12 +108,12 @@
 
 (defn current-yyyy-mm
   "spec"
-  ([] (current-yyyy-mm (date-to-yyyy-mm (j-time/local-date))))
+  ([] (current-yyyy-mm (date-to-yyyy-mm (java-time.temporal/instant))))        ;;; was j-time/local-date <> instant() time for day
   ([yyyy-mm] (trunc-yyyy-mm yyyy-mm)))
 
 (defn current-yyyy-mm-dd
   "spec"
-  ([] (current-yyyy-mm-dd (date-to-yyyy-mm-dd (j-time/local-date))))
+ ([] (current-yyyy-mm-dd (date-to-yyyy-mm-dd (java-time.temporal/instant))))   ;;; was j-time/local-date  <>instant() time for day
   ([yyyy-mm-dd] (trunc-yyyy-mm-dd yyyy-mm-dd)))
 
 (defn prev-yyyy-mm
@@ -120,28 +129,29 @@
      ym-str)))
 
 
-;; (java-time/local-date-time)
 (defn instant-time-fn []
   "spec"
-(println "in instatn-time-fn "  (str (jt-temporal/instant)))
-  (str (jt-temporal/instant)))
+  (str (java-time.temporal/instant)))
 
 (defn adjusted-date [date-str]
   "spec"
   (clj-str/replace date-str #"T|:" "-"))
 
-(defn any-date-now-time-fn [ the-date]    ;; 2019-11-11
- (let [ the-time (java-time/local-time) 
-        any-time  (str the-date "T" the-time)]
+
+
+; (any-date-now-time-fn2 "2019-11-12")
+(defn any-date-now-time-fn2 [ the-date]    ;; 2019-11-11
+ (let [ utc-time (str (jt-temporal/instant))
+        utc-list (clj-str/split utc-time #"T")
+        utc-time (second utc-list)
+        any-time  (str the-date "T" utc-time)]
    any-time))
 
+; ((date-with-now-time-fn2 "2019-11-12"))
 (defn date-with-now-time-fn [ the-date]    ;; 2019-11-11
- (fn [] 
-    (let [ the-time (java-time/local-time) 
-        any-time  (str the-date "T" the-time)]
+  (fn []
+    (let [ utc-time (str (jt-temporal/instant))
+        utc-list (clj-str/split utc-time #"T")
+        utc-time (second utc-list)
+        any-time  (str the-date "T" utc-time)]
    any-time)))
-
-
-
-
-

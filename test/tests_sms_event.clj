@@ -24,7 +24,7 @@
 (spec-test/instrument 'make-api-call)
 (spec-test/instrument 'build-sms-send)
 (spec-test/instrument 'sms-to-phones)
-(spec-test/instrument 'build-web-scrap))))
+(spec-test/instrument 'build-web-scrape))))
 
 (def ^:const TEST-SMS-MAP-SHORT
   {:till-url "https://platform.tillmobile.com/api/send?username=abcdefghijklmnopqrstuvwxyz1234&api_key=1234567890abcdefghijklmnopqrstuvwxyz1234"
@@ -36,8 +36,8 @@
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
     (console-test "unit-make-api-call" "sms-event")
 
-    (let [db-type "monger-db"
-          environment-utilize "use-environment"
+    (let [db-type USE_MONGER_DB
+          environment-utilize USE_ENVIRONMENT
           [_ _ _ sms-data] (build-db DB-TABLE-NAME
                                      THE-CHECK-PAGES
                                      db-type
@@ -59,8 +59,8 @@
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
     (console-test "unit-build-sms-send" "sms-event")
 
-    (let [db-type "monger-db"
-          environment-utilize "use-environment"
+    (let [db-type USE_MONGER_DB
+          environment-utilize USE_ENVIRONMENT
           [_ _ _ sms-data] (build-db DB-TABLE-NAME
                                      THE-CHECK-PAGES
                                      db-type
@@ -75,8 +75,8 @@
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
     (console-test "unit-sms-to-phones" "sms-event")
 
-    (let [db-type "monger-db"
-          environment-utilize "use-environment"
+    (let [db-type USE_MONGER_DB
+          environment-utilize USE_ENVIRONMENT
           [_ _ _ sms-data] (build-db DB-TABLE-NAME
                                      THE-CHECK-PAGES
                                      db-type
@@ -87,24 +87,22 @@
 
       (is (= TEST-SMS-MAP-LONG  test-sms)))))
 
-(deftest unit-build-web-scrap
+(deftest unit-build-web-scrape
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
-    (console-test "unit-build-web-scrap" "sms-event")
+    (console-test "unit-build-web-scrape" "sms-event")
 
-    (let [db-type "monger-db"
-          environment-utilize "use-environment"
+    (let [db-type USE_MONGER_DB
+          environment-utilize USE_ENVIRONMENT
           [my-db-obj _ _ sms-data] (build-db DB-TABLE-NAME
                                              THE-CHECK-PAGES
                                              db-type
                                              TEST-CONFIG-FILE
                                              environment-utilize)
           testing-sms? true
-          temporize-func (build-web-scrap scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms? (adjusted-date "2019-07-04T04:18:46.173Z"))]
+          temporize-func (build-web-scrape scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms? (adjusted-date "2019-07-04T04:18:46.173Z"))]
       (is (function? temporize-func)))))
 
 
 (defn do-tests []
  (sms-event-specs)
   (run-tests 'tests-sms-event))
-
-

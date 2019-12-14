@@ -19,7 +19,7 @@
   "has db test"
 ;  ([my-db-obj] (show-data my-db-obj (date-to-yyyy-mm (j-time/local-date))))
   ([my-db-obj test-date]
-(println "show-datea " (type test-date))
+;(println "show-datea " (type test-date))
   (let [the-date-time (test-date) 
         yyyy-mm (current-yyyy-mm the-date-time) ]
     (ring-response/content-type (ring-response/response (get-index my-db-obj
@@ -29,7 +29,7 @@
 (defn show-data-cron
   [my-db-obj the-uri cron-url temporize-func test-date]
   (if (= the-uri cron-url) (temporize-func))
-(println "show-data-cron " (type test-date) )
+;(println "show-data-cron " (type test-date) )
   (show-data my-db-obj test-date))
 
 
@@ -37,14 +37,14 @@
 (defn make-request-fn
   "has db test"
   [temporize-func my-db-obj cron-url sms-data testing-sms? test-date]
-(println "make-request-fn " (type test-date))
+;(println "make-request-fn " (type test-date))
   (fn request-handler
     [request]
     (let [the-uri (:uri request)
           send-test-sms-url (:send-test-sms-url sms-data)
 ;;          testing-sms? false
 ]
-      (println "rewuesa-hanlder" (type test-date))
+   ;   (println "rewuesa-hanlder" (type test-date))
   ;(println "2222222")
 ;(println "3xx3 the-uri" the-uri)
       (condp = the-uri
