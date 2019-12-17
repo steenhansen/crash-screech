@@ -36,8 +36,7 @@
 
 (s/fdef h-r/get-two-months
   :args (s/cat :my-db-obj  coll?
-               :yyyy-mm   :year-month?/test-specs   ) )
-
+               :yyyy-mm   :year-month?/test-specs))
 
 
 (s/fdef h-r/get-index
@@ -94,7 +93,7 @@
   (testing "test-day-hour-min : cccccccccccccccccccccc "
     (console-test  "unit-get-index"  "html-render")
     (let [db-type USE_MONGER_DB
-          [my-db-obj _ _ _] (build-db DB-TABLE-NAME
+          [my-db-obj _ _ _] (build-db T-DB-TEST-NAME             ;;;;;;;;;; THIS IS THE WRONG ONE  T-DB-TEST-NAME
                                       []
                                       db-type
                                       TEST-CONFIG-FILE
@@ -108,25 +107,15 @@
           test-many [{:the-url "november-1" :the-date NOV-2000-DATE :the-html "blah 1" :the-accurate true :the-time 1111}
                      {:the-url "december-2" :the-date DEC-2000-DATE :the-html "blah 22" :the-accurate true :the-time 2222}
                      {:the-url "december-2" :the-date DEC-2000-DATE :the-html "blah 333" :the-accurate true :the-time 3333}]
-          read-from-disk false
-          expected-get-index (rn-2-n (read-html "tests_html_render_1.html" read-from-disk))]
+          read-from-web false
+          expected-get-index (conform-whitespace (read-html "tests_html_render_1.html" read-from-web))]
       (purge-table)
       (put-items test-many)
-      (let [actual-get-index (rn-2-n (get-index my-db-obj "2000-12"))]
+      (let [actual-get-index (conform-whitespace (get-index my-db-obj "2000-12"))]
 
-;       (ddiff/pretty-print (ddiff/diff expected-get-index actual-get-index) )
-;(println "111111111111111111111111111111111111111111111111111111111" )
-;(println "22" expected-get-index )
-;(println "33" actual-get-index)
-;(println "4444444444444444444444444444444444444444444444444444444444")
 
       (let [ [text-diff-1 text-diff-2] (is-html-eq expected-get-index actual-get-index)]
           (is (= text-diff-1 text-diff-2)))
-; (is-html-eq expected-get-index actual-get-index )
-
- ;(is (= (is-html-eq expected-get-index actual-get-index) ""))
-
-;(clojure.pprint/pprint (ddiff/diff expected-get-index actual-get-index))
 
     ;(is (= expected-get-index actual-get-index))
 ))))
@@ -134,6 +123,7 @@
 ; show-data
 
 ; show-data-cron
+
 
 
 

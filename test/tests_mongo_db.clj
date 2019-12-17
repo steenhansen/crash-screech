@@ -25,7 +25,7 @@
 
 (s/fdef m-d/mongolabs-build
   :args (s/cat ::mongolabs-config :mongo-config?/test-specs
-               ::my-collection string?
+               ::table-name string?
                ::pages-to-check vector?))
 
 

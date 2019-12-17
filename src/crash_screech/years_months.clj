@@ -4,43 +4,37 @@
 (ns crash-screech.years-months
 
   (:require [clojure.string :as clj-str])
-  (:require [java-time.local :as j-time])
+;  (:require [java-time.local :as j-time])
   (:require [java-time.core :as jt-core])
   (:require [java-time.amount :as jt-amount])
   (:require [java-time.temporal :as jt-temporal]))
 
-;;    (java-time/instant (java-time/offset-date-time 2019 11 12 ))
 
-;; (java-time/local-date)
-;;  (java-time/local-time)
-
-;; (clojure.java-time.temporal/local-time)
 
 (defn trunc-yyyy-mm
   "spec"
   [ym-extra]
   (let [time-vector (clj-str/split ym-extra #"T")
-date-part (first time-vector)
-      date-vector (clj-str/split date-part #"-")
+        date-part (first time-vector)
+        date-vector (clj-str/split date-part #"-")
         ym-vector (take 2 date-vector)
         ym-str (clj-str/join "-" ym-vector)]
     ym-str))
 
-
 (comment
-   (trunc-yyyy-mm-dd "2001-12-31")
+  (trunc-yyyy-mm-dd "2001-12-31")
   ;"2001-12-31"
- (trunc-yyyy-mm-dd "2001-12-31T123")
+  (trunc-yyyy-mm-dd "2001-12-31T123")
   ;"2001-12-31"
 ;
-)
+  )
 
 (defn trunc-yyyy-mm-dd
   "spec"
   [ymd-extra]
-  (let [ time-vector (clj-str/split ymd-extra #"T")
-date-part (first time-vector)
-date-vector (clj-str/split date-part #"-")
+  (let [time-vector (clj-str/split ymd-extra #"T")
+        date-part (first time-vector)
+        date-vector (clj-str/split date-part #"-")
         ymd-vector (take 3 date-vector)
         ymd-str (clj-str/join "-" ymd-vector)]
     ymd-str))
@@ -62,7 +56,7 @@ date-vector (clj-str/split date-part #"-")
 (defn month-name
   "spec"
   ([month-offset]
-   (let [now-yyyy-mm (date-to-yyyy-mm (j-time/local-date))]
+   (let [now-yyyy-mm (date-to-yyyy-mm (java-time.temporal/instant))]
      (month-name month-offset now-yyyy-mm)))
   ([month-offset yyyy-mm]
    (let [month-names {:0 "December",
@@ -108,26 +102,40 @@ date-vector (clj-str/split date-part #"-")
 
 (defn current-yyyy-mm
   "spec"
-  ([] (current-yyyy-mm (date-to-yyyy-mm (java-time.temporal/instant))))        ;;; was j-time/local-date <> instant() time for day
+  ([] (current-yyyy-mm (date-to-yyyy-mm (java-time.temporal/instant))))
   ([yyyy-mm] (trunc-yyyy-mm yyyy-mm)))
 
 (defn current-yyyy-mm-dd
   "spec"
- ([] (current-yyyy-mm-dd (date-to-yyyy-mm-dd (java-time.temporal/instant))))   ;;; was j-time/local-date  <>instant() time for day
+  ([] (current-yyyy-mm-dd (date-to-yyyy-mm-dd (java-time.temporal/instant))))
   ([yyyy-mm-dd] (trunc-yyyy-mm-dd yyyy-mm-dd)))
+
+(comment
+
+  (prev-yyyy-mm "2019-12")
+  (prev-yyyy-mm "2019-01")
+  (prev-yyyy-mm "2019-10")
+  (prev-yyyy-mm "2019-09")
+;
+)
 
 (defn prev-yyyy-mm
   "spec"
-  ([] (prev-yyyy-mm (date-to-yyyy-mm (j-time/local-date))))
+  ([] (prev-yyyy-mm (date-to-yyyy-mm (java-time.temporal/instant))))
   ([yyyy-mm]
    (let [[yyyy-int mm-int] (yyyy-mm-to-ints yyyy-mm)
-         local-date (j-time/local-date yyyy-int mm-int)
-         last-month (jt-core/minus
-                     local-date
-                     (jt-amount/months 1))
-         ym-str (date-to-yyyy-mm last-month)]
-     ym-str)))
+]
 
+
+
+  (if (= 1 mm-int)
+   (str (- yyyy-int 1) "-" 12)
+   (if (> mm-int 10)
+     (str yyyy-int "-" (- mm-int 1))
+     (str yyyy-int "-0" (- mm-int 1))
+  ))
+
+)))
 
 (defn instant-time-fn []
   "spec"
@@ -140,18 +148,20 @@ date-vector (clj-str/split date-part #"-")
 
 
 ; (any-date-now-time-fn2 "2019-11-12")
-(defn any-date-now-time-fn2 [ the-date]    ;; 2019-11-11
- (let [ utc-time (str (jt-temporal/instant))
+
+
+(defn any-date-now-time-fn2 [the-date]    ;; 2019-11-11
+  (let [utc-time (str (jt-temporal/instant))
         utc-list (clj-str/split utc-time #"T")
         utc-time (second utc-list)
         any-time  (str the-date "T" utc-time)]
-   any-time))
+    any-time))
 
 ; ((date-with-now-time-fn2 "2019-11-12"))
-(defn date-with-now-time-fn [ the-date]    ;; 2019-11-11
+(defn date-with-now-time-fn [the-date]    ;; 2019-11-11
   (fn []
-    (let [ utc-time (str (jt-temporal/instant))
-        utc-list (clj-str/split utc-time #"T")
-        utc-time (second utc-list)
-        any-time  (str the-date "T" utc-time)]
-   any-time)))
+    (let [utc-time (str (jt-temporal/instant))
+          utc-list (clj-str/split utc-time #"T")
+          utc-time (second utc-list)
+          any-time  (str the-date "T" utc-time)]
+      any-time)))

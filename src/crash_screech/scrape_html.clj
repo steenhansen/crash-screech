@@ -1,12 +1,10 @@
 
 (ns crash-screech.scrape-html
-
   (:require [net.cgrand.enlive-html :as enlive-html])
   (:require [clojure.string :as clj-str])
   (:require [clj-http.client :as http-client])
   (:require [crash-screech.years-months  :refer [instant-time-fn]])
   (:require [global-consts-vars  :refer :all])
-
   (:require [crash-screech.config-args :refer [compact-hash]])
   (:require [crash-screech.check-data :refer [count-string]]))
 
@@ -127,7 +125,6 @@
         no-error-sms    (scrape-pages-fn my-db-obj pages-OK-check   instant-time-fn sms-send-fn read-from-web?)
         error-sms       (scrape-pages-fn my-db-obj pages-FAIL-check instant-time-fn sms-send-fn read-from-web?)]
     [start-month-sms no-error-sms error-sms])
-  ; ["Start of a new SFFaudio month!" "" "Found an error"]
 
 
   (let [pages-OK-check [{:check-page  WWW-SFF-SEARCH   :enlive-keys SFF-SEARCH-CHECK-KEYS :at-least HTML-OK-COUNT}]
@@ -142,7 +139,6 @@
         no-error-sms    (scrape-pages-fn my-db-obj pages-OK-check   instant-time-fn sms-send-fn read-from-web?)
         error-sms       (scrape-pages-fn my-db-obj pages-FAIL-check instant-time-fn sms-send-fn read-from-web?)]
     [start-month-sms no-error-sms error-sms])
-  ; ["Start of a new SFFaudio month!" "" "Found an error"]
 
 
   (let [[my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME THE-CHECK-PAGES USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
@@ -192,6 +188,5 @@
                                              the-accurate
                                              the-time)]]
       (put-item check-record))
-    (reset! global-consts-vars/*pages-were-scraped* true)
     (let [sms-mess-result (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn)]
       sms-mess-result)))   ;; testing looks at array returned

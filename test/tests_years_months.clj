@@ -6,7 +6,7 @@
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
 
-  (:require [java-time.local :as j-time])
+ ; (:require [java-time.local :as j-time])
 
   (:require [global-consts-vars  :refer :all])
 
@@ -86,7 +86,7 @@
   (testing "test-date-to-yyyy-mm : java.date to YYYY-MM like 2000-12 "
     (console-test "unit-date-to-yyyy-mm" "years-months")
     (let [expected-yyyy-mm "1999-12"
-          actual-yyyy-mm (date-to-yyyy-mm (j-time/local-date 1999 12 31))]
+          actual-yyyy-mm (date-to-yyyy-mm (java-time.temporal/instant 1999 12))]      ; 31))]
 
       (is (= expected-yyyy-mm actual-yyyy-mm)))))
 
@@ -138,7 +138,7 @@
 
  (deftest unit-prev-yyyy-mm
    (testing "test-prev-yyyy-mm : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
-  (console-test "unit-prev-yyyy-mm" "years-months")    
+  (console-test "unit-prev-yyyy-mm" "years-months")
  (let [expected-yyyy-mm "1999-12"
            actual-yyyy-mm (prev-yyyy-mm "2000-01")]
 
@@ -147,14 +147,14 @@
 
 (deftest unit-trunc-yyyy-mm-dd
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
-  (console-test "unit-trunc-yyyy-mm-dd" "years-months")    
+  (console-test "unit-trunc-yyyy-mm-dd" "years-months")
 (let [expected-yyyy-mm "2019-07-04-04-18-46.173Z"
           actual-yyyy-mm (adjusted-date "2019-07-04T04:18:46.173Z")]
       (is (= expected-yyyy-mm actual-yyyy-mm)))))
 
 (deftest unit-trunc-yyyy-mm
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
- (console-test "unit-trunc-yyyy-mm" "years-months")   
+ (console-test "unit-trunc-yyyy-mm" "years-months")
     (let [expected-yyyy-mm "2019-07-04-04-18-46.173Z"
           actual-yyyy-mm (adjusted-date "2019-07-04T04:18:46.173Z")]
       (is (= expected-yyyy-mm actual-yyyy-mm)))))
@@ -163,7 +163,7 @@
 
   (deftest unit-yyyy-mm-to-ints
     (testing "test-yyyy-mm-to-ints : offset -1 over year "
- (console-test "unit-yyyy-mm-to-ints" "years-months")   
+ (console-test "unit-yyyy-mm-to-ints" "years-months")
       (let [expected-month-name [2234 12]
             actual-month-name (yyyy-mm-to-ints "2234-12")]
 
@@ -173,7 +173,3 @@
 (defn do-tests []
  (years-months-specs)
   (run-tests 'tests-years-months))
-
-
-
-

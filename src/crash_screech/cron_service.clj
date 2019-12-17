@@ -1,12 +1,9 @@
 (ns crash-screech.cron-service
   (:require [overtone.at-at :as at-at])
   (:require [crash-screech.singular-service :refer [remove-service add-service]])
-
   (:require [global-consts-vars  :refer :all])
   (:require [crash-screech.sms-event :refer [build-sms-send]])
-
   (:require [crash-screech.years-months :refer [instant-time-fn current-yyyy-mm]]))
-
 
 (defn build-cron-func [cron-job my-db-obj pages-to-check sms-data]
   (let [testing-sms? false
@@ -15,7 +12,7 @@
     (fn cron-func
       []
       (cron-job my-db-obj
-               pages-to-check
+                pages-to-check
                 instant-time-fn
                 sms-send-fn
                 read-from-web))))

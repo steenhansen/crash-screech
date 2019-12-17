@@ -1,19 +1,15 @@
 (ns crash-screech.choose-db
-
   (:require [clojure.string :as clj-str])
   (:require [clojure.pprint :as prt-prn])
-
   (:require [global-consts-vars  :refer :all])
-
   (:require [crash-screech.config-args :refer [make-config compact-hash]])
   (:require [crash-screech.dynamo-db  :refer [dynamo-build]])
   (:require [crash-screech.mongo-db :refer [mongolabs-build]])
   (:require [crash-screech.years-months :refer [current-yyyy-mm current-yyyy-mm-dd]]))
 
-
 (defn get-phone-nums
   "get string with phone numbers delimeted by commas, return them in a vector"
- [phone-comma-string]
+  [phone-comma-string]
   (let [phone-spaces (clj-str/split phone-comma-string #",")
         phone-numbers (map clj-str/trim phone-spaces)
         phone-vector (vec phone-numbers)]
@@ -61,18 +57,12 @@
        (let [yyyy-mm-dd (current-yyyy-mm-dd)
              url-checks (get-all-fn yyyy-mm-dd)
              error-found (reduce my-failed-check false url-checks)]
-;(println "today-error? no params yyyy-mm-dd" yyyy-mm-dd)
-;(println "today-error? no params url-checks" url-checks)
-;(println "today-error? no params error-found" error-found)
          error-found))
 
       ([yyyy-mm-dd]
        (let  [url-checks (get-all-fn yyyy-mm-dd)
               error-found (reduce my-failed-check false url-checks)]
-;(println "today-error? " yyyy-mm-dd)
          error-found)))))
-
-
 
 (defn build-db
   "return an object with database functions
@@ -108,9 +98,10 @@ have an default environment-utilize
                    :put-item (:my-put-item my-db-funcs),
                    :put-items (:my-put-items my-db-funcs),
                    :empty-month? (build-empty-month? get-all),
-                   :today-error? (build-today-error? get-all)}]
+                   :today-error? (build-today-error? get-all)
+                   :table-name table-name}]
 
-    (if (not @*we-be-testing*)
+    (if  (= DB-TABLE-NAME table-name)
       (prt-prn/pprint the-config))
 
     [my-db-obj web-port cron-url sms-data]))

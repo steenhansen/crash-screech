@@ -22,7 +22,7 @@
 
   ([config-file testing-sms? environment-utilize]
    (let [db-type USE_MONGER_DB
-         [_ _ _ sms-data] (build-db DB-TABLE-NAME
+         [_ _ _ sms-data] (build-db T-DB-TEST-NAME
                                     THE-CHECK-PAGES
                                     db-type
                                     config-file

@@ -207,7 +207,7 @@
 
 
 
-(def ^:const T-DB-TEST-NAME "zzz3")
+;(def ^:const T-DB-TEST-NAME "zzz3")
 (def ^:const T-CONSOLE-TESTS true)
 (def ^:const T-DO-DYNAMODB-TESTS false)
 (def ^:const T-TIME-STAMP #"^(20(0|1|2)[\d])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T\d\d:\d\d:\d\d\.\d\d\dZ$")
@@ -220,11 +220,16 @@
      (println "..." test-area test-name))))
 
 ;  (ddiff/pretty-print (ddiff/diff expected-get-index actual-get-index) )
-(defn rn-2-n
+(defn conform-whitespace
   [rn-text]
-  (let [n-text (clj-str/replace rn-text  #"\r\n" "\n")
-        one-spaces  (clj-str/replace n-text  #"\s\s+" " ")
-        trimmed-unix (clj-str/trim one-spaces)]
+  (let [
+       n-text (clj-str/replace rn-text  #"\r\n" "\n")
+       no-eoln (clj-str/replace n-text  #"\n" "")
+        one-spaces  (clj-str/replace no-eoln  #"\s\s+" " ")
+
+        bracket-space  (clj-str/replace one-spaces  #">\s<" "><")
+
+        trimmed-unix (clj-str/trim bracket-space)]
    trimmed-unix))
 
 

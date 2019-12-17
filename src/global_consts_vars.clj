@@ -1,10 +1,5 @@
 
 
-; global testing vars
-;  *service-kill-list*
-;  *we-be-testing*
-;; (defonce ^:dynamic *sms-was-executed* (atom {}))
-
 
 
 
@@ -12,20 +7,22 @@
 (ns global-consts-vars
   (:gen-class))
 
-(defonce ^:dynamic *we-be-testing* (atom {}))
-(defonce ^:dynamic *sms-was-executed* (atom {}))          ;;; need some testing flavor, *test-sms-was-executed
-(defonce ^:dynamic *pages-were-scraped* (atom {}))
-(defonce ^:dynamic *test-use-test-time* (atom {}))  ;;; ALSO SET TO FALSE
 
 
 
 
-(def ^:const FAKE-TEST-TIME    98765432)
+
+
+(def ^:const FAKE-TEST-DATE    98765432)
 (def ^:const FAKE-SCRAPE-BYTES 23456789)
+(def ^:const FAKE-SCRAPE-SPEED 11223344)
+
+
+(def ^:const DB-TABLE-NAME "iii8")
+(def ^:const T-DB-TEST-NAME "zzz3")
 
 
 
-;(def ^:const T-DB-TEST-NAME "zzz3")
 (def ^:const HTML-FAIL-COUNT 123456789)
 (def ^:const HTML-OK-COUNT 1)
 
@@ -40,7 +37,6 @@
 
 (def ^:const START_CRON "start-cron")
 
-(def ^:const DB-TABLE-NAME "iii8")
 (def ^:const SCRAPED-TEST-DATA "./test/scraped-data/")
 
 (def ^:const EMPTY-HTML "-")
@@ -61,9 +57,9 @@
 
 (def ^:const SMS-FOUND-ERROR "Found an error")
 (def ^:const SMS-NEW-MONTH "Start of a new month test!")
+(def ^:const SMS-TEST-CALL "Test sms call")
 
-(def ^:const WWW-SFFAUDIO-COM "www.sffaudio.com_?")
-(def ^:const SFFAUDIO-CHECK-KEYS  [:article :div.blog-item-wrap] )
+
 
 
 (def ^:const WWW-SFF-SEARCH "sffaudio-search.herokuapp.com_?author=" )
@@ -74,36 +70,39 @@
    :enlive-keys SFF-SEARCH-CHECK-KEYS
    :at-least 6400})
 
+(def ^:const WWW-SFFAUDIO-COM "www.sffaudio.com_?")
+(def ^:const SFFAUDIO-CHECK-KEYS  [:article :div.blog-item-wrap] )
+
 (def ^:const SFF-AUDIO
   {:check-page WWW-SFFAUDIO-COM
    :enlive-keys SFFAUDIO-CHECK-KEYS
    :at-least 6})
 
-(def ^:const WWW-SFF-RSD "sffaudio-search.herokuapp.com_table_rss_?" )
+(def ^:const WWW-SFF-RSD "sffaudio.herokuapp.com_rsd_rss_?" )
 (def ^:const SFF-RSD-CHECK-KEYS  [:item] )
 
 (def ^:const SFF-RSD
   {:check-page WWW-SFF-RSD
-  :enlive-keys SFF-RSD-CHECK-KEYS,
-   :at-least 1})
+  :enlive-keys  SFF-RSD-CHECK-KEYS,
+   :at-least 100 })
 
 
-(def ^:const WWW-SFF-PODCAST "sffaudio-search.herokuapp.com_podcast_table_?" )
+(def ^:const WWW-SFF-PODCAST "sffaudio.herokuapp.com_podcast_rss_?" )
 (def ^:const SFF-PODCAST-CHECK-KEYS  [:item] )
 
 (def ^:const SFF-PODCAST
   {:check-page WWW-SFF-PODCAST
    :enlive-keys SFF-PODCAST-CHECK-KEYS
-   :at-least 525})
+   :at-least 500})
 
 
-(def ^:const WWW-SFF-PDF "sffaudio-search.herokuapp.com_pdf_table_?" )
+(def ^:const WWW-SFF-PDF "sffaudio.herokuapp.com_pdf_rss_?" )
 (def ^:const SFF-PDF-CHECK-KEYS  [:item] )
 
 (def ^:const SFF-PDF
   {:check-page WWW-SFF-PDF
      :enlive-keys SFF-PDF-CHECK-KEYS
-   :at-least 6100})
+   :at-least 6000})
 
 
 (def ^:const WWW-SFF-MEDIA "sffaudio-graph-ql.herokuapp.com/media-radio-lists?" )
@@ -136,7 +135,7 @@
   [
 SFF-AUDIO
    SFF-RSD
-   SFF-PODCAST
+  SFF-PODCAST
    SFF-PDF
    SFF-SEARCH
    CANADIAN-QUOTATIONS

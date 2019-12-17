@@ -10,6 +10,8 @@
   (:require [crash-screech.choose-db :refer :all])
   (:require [java-time :refer [local-date?]])
   (:require [prepare-tests :refer :all])
+
+  (:require [text-diff :refer [is-html-eq]])
 )
 
 ;(load "spec-types/shared-types")
@@ -38,7 +40,7 @@
 
     (let [db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-          [_ _ _ sms-data] (build-db DB-TABLE-NAME
+          [_ _ _ sms-data] (build-db T-DB-TEST-NAME
                                      THE-CHECK-PAGES
                                      db-type
                                      TEST-CONFIG-FILE
@@ -50,7 +52,7 @@
 (def ^:const TEST-SMS-MAP-LONG
   {:till-url "https://platform.tillmobile.com/api/send?username=abcdefghijklmnopqrstuvwxyz1234&api_key=1234567890abcdefghijklmnopqrstuvwxyz1234"
    :sms-params {:form-params {:phone ["12345678901" "12345678901" "12345678901"],
-                              :text "test sms call - https://fathomless-woodland-85635.herokuapp.com/"}
+                              :text "Test sms call - https://fathomless-woodland-85635.herokuapp.com/"}
                 :content-type :json}
 ;; not expected   :testing-sms? true
 })
@@ -61,15 +63,21 @@
 
     (let [db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-          [_ _ _ sms-data] (build-db DB-TABLE-NAME
+          [_ _ _ sms-data] (build-db T-DB-TEST-NAME
                                      THE-CHECK-PAGES
                                      db-type
                                      TEST-CONFIG-FILE
                                      environment-utilize)
           testing-sms? true
-          test-sms (sms-to-phones sms-data testing-sms?)]
+          test-sms (sms-to-phones sms-data testing-sms?)
 
-      (is (= TEST-SMS-MAP-LONG  test-sms)))))
+ [text-diff-1 text-diff-2] (is-html-eq TEST-SMS-MAP-LONG test-sms)]
+      (is (= text-diff-1 text-diff-2))
+
+
+
+;;      (is (= TEST-SMS-MAP-LONG  test-sms))
+)))
 
 (deftest unit-sms-to-phones
   (testing "test-adjusted-date : java.date to YYYY-MM like 1999-12 if it is 2000-1-1 "
@@ -77,7 +85,7 @@
 
     (let [db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-          [_ _ _ sms-data] (build-db DB-TABLE-NAME
+          [_ _ _ sms-data] (build-db T-DB-TEST-NAME
                                      THE-CHECK-PAGES
                                      db-type
                                      TEST-CONFIG-FILE
@@ -93,7 +101,7 @@
 
     (let [db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-          [my-db-obj _ _ sms-data] (build-db DB-TABLE-NAME
+          [my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME
                                              THE-CHECK-PAGES
                                              db-type
                                              TEST-CONFIG-FILE

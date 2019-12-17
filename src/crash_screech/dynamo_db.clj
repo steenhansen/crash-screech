@@ -73,7 +73,7 @@
 
         my-put-item  (fn put-item [check-record]
                        (when-not (my-table-exist? my-table-name) (my-make-table))
-                       (let [fixed-dates (prepare-data [check-record])
+                       (let [fixed-dates (prepare-data [check-record] my-table-name)
                              fixed-item (first fixed-dates)]
                          (aws-dyn/put-item connection-opts
                                            :table-name my-table-name
@@ -81,7 +81,7 @@
 
         my-put-items  (fn put-items [check-records]
                         (when-not (my-table-exist? my-table-name) (my-make-table))
-                        (let [fixed-dates (prepare-data check-records)
+                        (let [fixed-dates (prepare-data check-records my-table-name )
                               has-puts (for [fixed-date fixed-dates]
                                          {:put-request {:item fixed-date}})]
                           (aws-dyn/batch-write-item connection-opts

@@ -48,23 +48,7 @@
   (println "............................................")
   (println "............................................"))
 
-(defn do-tests []
-  (reset! *we-be-testing* true)
-  (kill-services)
-  (check-testing)
-  (console-divider)
-  (run-tests
-   'tests-check-data
-   'tests-choose-db
-   'tests-config-args
-   'tests-cron-service
-   'tests-dynamo-db
-   'tests-html-render
-   'tests-mongo-db
-   'tests-scrape-html
-   'tests-sms-event
-   'tests-web-server
-   'tests-years-months)
+(defn check-specs []
   (check-data-specs)
   (choose-db-specs)
   (config-args-specs)
@@ -76,4 +60,30 @@
   (sms-event-specs)
   (web-server-specs)
   (years-months-specs)
-  (run-tests))
+
+)
+
+(defn do-tests []
+  (kill-services)
+  (check-testing)
+  (console-divider)
+  (check-specs)
+
+
+   (run-tests
+    'tests-check-data
+    'tests-choose-db
+    'tests-config-args
+    'tests-cron-service
+    'tests-dynamo-db
+    'tests-html-render
+    'tests-mongo-db
+    'tests-scrape-html
+   'tests-sms-event        ; sms-to-phones only returns a string now, need to return whole url call
+
+    'tests-web-server
+   'tests-years-months
+)
+;;;;;;;;;;;;;;;;;;  (run-tests)
+
+)

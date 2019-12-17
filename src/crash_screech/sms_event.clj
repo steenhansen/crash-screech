@@ -1,6 +1,6 @@
 
 (ns crash-screech.sms-event
-
+  (:require [global-consts-vars  :refer :all])
   (:require [clj-http.client :as http-client])
   (:require [crash-screech.config-args :refer [compact-hash]])
   (:require [crash-screech.years-months :refer [instant-time-fn]]))
@@ -14,8 +14,6 @@
 ;    https://fathomless-woodland-85635.herokuapp.com/temporize-call
 ; GET
 ; 5 retries
-
-;(defonce ^:dynamic *sms-was-executed* (atom {}))
 
 
 (defn make-api-call
@@ -34,34 +32,24 @@
   (fn sms-send-fn
     [sms-message]
     (let [{:keys [till-url sms-params]} (make-api-call sms-data sms-message)
-;;; testing-sms? was not in expected value from make-api-call          test-sms (compact-hash till-url sms-params testing-sms?)
-          test-sms (compact-hash till-url sms-params)
-]
-      (reset!  global-consts-vars/*sms-was-executed* true)
+          test-sms (compact-hash till-url sms-params)]
       (if-not testing-sms?
         (http-client/post till-url sms-params))
-
-;      test-sms
-       sms-message     ;start of new month/ error    / ""
-)))
+      test-sms)))
 
 (defn sms-to-phones
   [sms-data testing-sms?]
   (let [sms-send-fn (build-sms-send sms-data testing-sms?)]
-    (sms-send-fn "test sms call")))
-
+    (sms-send-fn SMS-TEST-CALL)))
 
 (defn build-web-scrape
   [scrape-pages-fn my-db-obj pages-to-check sms-data testing-sms? date-time-fn]
   (let [sms-send-fn (build-sms-send sms-data testing-sms?)
         read-from-web true]
-; q*bert
-;(println "time in here  " (instant-time-fn))
     (fn temporize-func
       []
       (scrape-pages-fn my-db-obj
                        pages-to-check
                        date-time-fn
-                      ; instant-time-fn
                        sms-send-fn
                        read-from-web))))

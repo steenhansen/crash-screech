@@ -25,7 +25,6 @@
   ([db-type config-file] (-main db-type config-file USE_ENVIRONMENT))
 
   ([db-type config-file environment-utilize]
-   (reset! *we-be-testing* false)
    (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME
                                                           THE-CHECK-PAGES
                                                           db-type

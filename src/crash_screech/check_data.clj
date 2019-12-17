@@ -8,7 +8,7 @@
 (comment
   (count-string "00x00x00" #"x")
   ; 2
-)
+  )
 (defn count-string
   "has test"
   [hay-stack needle-regex]
@@ -19,7 +19,7 @@
 (comment
   (trunc-string "1234" 2)
   ; "12"
-)
+  )
 (defn trunc-string
   "has test"
   [the-string num-chars]
@@ -27,40 +27,37 @@
     (subs the-string 0 (min (count the-string) num-chars))
     EMPTY-HTML))
 
-;    (reset! *service-kill-list* new-kills))))
-(defn test-time
+(defn ms-load-time
   ""
-  [the-time]
-  (if (nil? (resolve 'T-DB-TEST-NAME))
-     the-time
-     (if @*test-use-test-time*
-         FAKE-TEST-TIME
-         the-time)))
-
+  [millisecond-load table-name]
+  (if (= DB-TABLE-NAME table-name)
+    millisecond-load
+    FAKE-TEST-DATE))
 
 (comment
   (derive-data  {:the-url "www.sffaudio.com",
-                                :the-date "2019-06-19-01:54:03.800Z",
-                                :the-html "123456789",
-                                :the-accurate true,
-                                :the-time FAKE-TEST-TIME})
+                 :the-date "2019-06-19-01:54:03.800Z",
+                 :the-html "123456789",
+                 :the-accurate true,
+                 :the-time FAKE-TEST-DATE}
+                T-DB-TEST-NAME)
   ; {:check-url "www.sffaudio.com",
   ; :check-date "2019-06-19-01-54-03.800Z",
   ; :check-bytes 9,
   ; :check-html "123456789",
   ; :check-accurate true,
   ; :check-time 98765432}
-)
+  )
 (defn derive-data
   "has test"
-  [check-record]
+  [check-record table-name]
   (let [{:keys [the-url the-date the-html the-accurate the-time]} check-record
         check-url the-url
         check-accurate the-accurate
         check-bytes (count the-html)
         check-html (trunc-string the-html ERROR-KEEP-LENGTH)
         check-date (adjusted-date the-date)
-        check-time (test-time the-time)
+        check-time (ms-load-time the-time table-name)
         new-record (compact-hash check-url
                                  check-date
                                  check-bytes
@@ -80,19 +77,11 @@
 (defn ensure-has-date
   "has test"
   [check-record]
-;(println "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" check-record)
-;(println "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
   (if (check-record :the-date)
     check-record
     (let [now-date (instant-time-fn)
           dated-check (assoc-in check-record [:the-date] now-date)]
       dated-check)))
-
-
-
-
-
-
 
 (comment
   (prepare-data [{:the-url "www.sffaudio.com",
@@ -104,7 +93,8 @@
                   :the-date "2019-06-19-01:54:03.800Z",
                   :the-html "bluh 2222",
                   :the-accurate true,
-                  :the-time 12346}])
+                  :the-time 12346}]
+                T-DB-TEST-NAME)
  ; ({:check-url "www.sffaudio.com",
  ;;  :check-date "2019-06-19-01-54-03.800Z",
  ;;  :check-bytes 9,
@@ -119,20 +109,13 @@
  ;;  :check-accurate true,
  ;;  :check-time 12346,
  ;;  :_id "2019-06-19-01-54-03.800Z+1"})
-)
+  )
 (defn prepare-data
   "has test"
-  [check-records]
-
-;(println "IIIIIIIIIIIIIIIIIIIIIIIIII ")
-;(println  check-records)
-;(println "IIIIIIIIIIIIIIIIIIIIIIIIII ")
-
+  [check-records table-name]
   (let [records-dated (for [check-record check-records]
                         (ensure-has-date check-record))
         derived-data (for [dated-record records-dated]
-                       (derive-data dated-record))
+                       (derive-data dated-record table-name))
         unique-data (vec (map-indexed uniquely-id derived-data))]
-
-  ;(println "prepare-data un" unique-data)
     unique-data))

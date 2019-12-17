@@ -102,10 +102,12 @@
         read-from-web? false
        ; expected-sms SMS-NO-ERROR
         expected-sms (make-api-call sms-data SMS-NEW-MONTH)]
-    (let [actual-sms (get-actual-sms read-from-web?)]
+    (let [actual-sms (get-actual-sms read-from-web?)
+[text-diff-1 text-diff-2] (is-html-eq actual-sms expected-sms)
+  ]
 ;(println "XXXX expected " expected-sms)
 ;(println "VVVV   actual " actual-sms)
-      (is (= expected-sms actual-sms)))))
+      (is (= text-diff-1 text-diff-2)))))
 
 (deftest test-1002
   (testing "test-1002 :amazonica-db should send an sms message in sms-send-fn"

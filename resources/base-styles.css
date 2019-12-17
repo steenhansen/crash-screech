@@ -5,7 +5,7 @@ h2 {
 }
 
 .a_countable_scrape{
-/* to count test records */ 
+/* to count test records */
 }
 
 .status_good{
@@ -52,7 +52,7 @@ div.month_content > div > div  {
 
 .scrape_url{
 	background-color: #cccccc;
-    width: 330px;
+    width: 340px;
 }
 
 .scrape_date{
@@ -62,7 +62,7 @@ div.month_content > div > div  {
 .scrape_bytes{
 	background-color: #cccccc;
     text-align: right;
-    width: 60px;
+    width: 70px;
 }
 
 .scrape_html{

@@ -36,9 +36,8 @@
 (deftest integration-make-request-fn
   (testing "test-day-hour-min : cccccccccccccccccccccc "
     (console-test  "integration-make-request-fn"  "web-server")
-    (reset! *test-use-test-time* true)
     (let [db-type USE_MONGER_DB
-          [my-db-obj _ cron-url sms-data] (build-db DB-TABLE-NAME
+          [my-db-obj _ cron-url sms-data] (build-db T-DB-TEST-NAME
                                                     THE-CHECK-PAGES
                                                     db-type
                                                     TEST-CONFIG-FILE
@@ -51,13 +50,20 @@
           send-test-sms-url (:send-test-sms-url sms-data)
           the-request (request-handler  {:uri cron-url})
           the-body (:body the-request)
-          file-expected (slurp  (str SCRAPED-TEST-DATA "tests_web_server_1.html"))]
-      (reset! global-consts-vars/*sms-was-executed* false)
-      (reset! global-consts-vars/*pages-were-scraped* false)
+          file-expected (slurp  (str SCRAPED-TEST-DATA "tests_web_server_1.html"))
+
+
+    conformed-actual (conform-whitespace the-body)
+    conformed-expected (conform-whitespace file-expected)
+
+]
       (purge-table)
-      (reset! global-consts-vars/*sms-was-executed* false)
       (purge-table)
-      (let [[text-diff-1 text-diff-2] (is-html-eq the-body file-expected)]
+
+;_ (println "**********************************")
+;_ (println the-body)
+;_ (println "**********************************")
+      (let [[text-diff-1 text-diff-2] (is-html-eq conformed-actual conformed-expected)]
         (is (= text-diff-1 text-diff-2))))))
 
 (defn do-tests []

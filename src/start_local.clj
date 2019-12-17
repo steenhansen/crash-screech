@@ -26,8 +26,6 @@
   ([db-type config-file] (-local-main db-type config-file IGNORE-ENV-VARS))
   ([db-type config-file environment-utilize]
    (kill-services)
-   (reset! *we-be-testing* false)
-   (reset! *test-use-test-time* true)
    (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME
                                                           THE-CHECK-PAGES
                                                           db-type
@@ -66,4 +64,5 @@ testing-sms? true
     ;((:put-item my-db-obj) test-one)
      (web-init int-port request-handler)
      (cron-init scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)
-     (println "after cron-init"))))
+;     (println "after cron-init")
+)))

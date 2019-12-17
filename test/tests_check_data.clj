@@ -14,17 +14,25 @@
 (alias 'c-d 'crash-screech.check-data)
 
 (s/fdef c-d/prepare-data
-  :args (s/cat :check-records (s/coll-of :url-date-tuple?/test-specs)))
+  :args (s/cat :check-records (s/coll-of :url-date-tuple?/test-specs)
+                :table-name string?))
 
 (s/fdef c-d/count-string
   :args (s/cat :hay-stack string?
                :needle-regex #(instance? java.util.regex.Pattern %)))
 
 (s/fdef c-d/trunc-string
-  :args (s/cat :the-string string? :num-chars integer?))
+  :args (s/cat :the-string (s/nilable string?) :num-chars integer?))
+
+(s/fdef c-d/ms-load-time
+  :args (s/cat :the-time (s/nilable integer?)
+               :table-name string?))
+
+
 
 (s/fdef c-d/derive-data
-  :args (s/cat :check-record :data-map?/test-specs))
+  :args (s/cat :check-record :data-map?/test-specs
+               ::table-name string?))
 
 (s/fdef c-d/uniquely-id
   :args (s/cat :may-index integer? :many-item :check-map?/test-specs))
@@ -56,13 +64,13 @@
       (console-test "unit-trunc-string" "check-data")
       (is (= trunced-str "123")))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def ^:const T-BEFORE-THE-DATA {:the-url "www.sffaudio.com",
                                 :the-date "2019-06-19-01:54:03.800Z",
                                 :the-html "123456789",
                                 :the-accurate true,
-                                :the-time FAKE-TEST-TIME})
+                                :the-time FAKE-TEST-DATE})
 ;                                :the-time 9876543})
 
 (def ^:const T-AFTER-CHECK-DATA {:check-url "www.sffaudio.com",
@@ -70,11 +78,11 @@
                                  :check-html "123456789",
                                  :check-bytes 9
                                  :check-accurate true,
-                                 :check-time FAKE-TEST-TIME})
+                                 :check-time FAKE-TEST-DATE})
 
 (deftest unit-derive-data
   (testing "test-dervive-data : cccccccccccccccccccccc "
-    (let [derived-data (derive-data T-BEFORE-THE-DATA)]
+    (let [derived-data (derive-data T-BEFORE-THE-DATA T-DB-TEST-NAME)]
       (console-test "unit-derive-data" "check-data")
       (is (= derived-data T-AFTER-CHECK-DATA)))))
 
@@ -149,7 +157,7 @@
 
 (deftest unit-prepare-data
   (testing "prepare-tests-data : fffff "
-    (let [prepared-data (prepare-data T-BEFORE-ENSURE-DATA)
+    (let [prepared-data (prepare-data T-BEFORE-ENSURE-DATA T-DB-TEST-NAME)
 
                [diff-1 diff-2] (is-html-eq prepared-data T-EXPECTED-PREPARE-DATA)
 
@@ -170,5 +178,3 @@
 (defn do-tests []
   (check-data-specs)
   (run-tests 'tests-check-data))
-
-
