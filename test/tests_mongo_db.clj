@@ -48,7 +48,7 @@
           pages-to-check [{:check-page "www.sffaudio.com",
                          :enlive-keys [:article :div.blog-item-wrap],
                          :at-least 1}]
-                   a-mongo-db       (mongolabs-build the-config  T-DB-TEST-NAME pages-to-check)]
+                   a-mongo-db       (mongolabs-build the-config  T-TEST-COLLECTION pages-to-check)]
       (console-test "unit-mongolabs-build" "mongo-db")
 
      (is (function?(:my-delete-table a-mongo-db)))

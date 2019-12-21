@@ -40,8 +40,9 @@
 
     (let [db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-          [_ _ _ sms-data] (build-db T-DB-TEST-NAME
-                                     THE-CHECK-PAGES
+the-check-pages (make-check-pages 0)
+          [_ _ _ sms-data] (build-db T-TEST-COLLECTION
+                                     the-check-pages
                                      db-type
                                      TEST-CONFIG-FILE
                                      environment-utilize)
@@ -63,8 +64,9 @@
 
     (let [db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-          [_ _ _ sms-data] (build-db T-DB-TEST-NAME
-                                     THE-CHECK-PAGES
+ the-check-pages (make-check-pages 0)
+          [_ _ _ sms-data] (build-db T-TEST-COLLECTION
+                                     the-check-pages
                                      db-type
                                      TEST-CONFIG-FILE
                                      environment-utilize)
@@ -85,8 +87,9 @@
 
     (let [db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-          [_ _ _ sms-data] (build-db T-DB-TEST-NAME
-                                     THE-CHECK-PAGES
+the-check-pages (make-check-pages 0)
+          [_ _ _ sms-data] (build-db T-TEST-COLLECTION
+                                     the-check-pages
                                      db-type
                                      TEST-CONFIG-FILE
                                      environment-utilize)
@@ -101,13 +104,14 @@
 
     (let [db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-          [my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME
-                                             THE-CHECK-PAGES
+the-check-pages (make-check-pages 0)
+          [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
+                                             the-check-pages
                                              db-type
                                              TEST-CONFIG-FILE
                                              environment-utilize)
           testing-sms? true
-          temporize-func (build-web-scrape scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms? (adjusted-date "2019-07-04T04:18:46.173Z"))]
+          temporize-func (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? (adjusted-date "2019-07-04T04:18:46.173Z"))]
       (is (function? temporize-func)))))
 
 

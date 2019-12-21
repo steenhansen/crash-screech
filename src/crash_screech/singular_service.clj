@@ -27,6 +27,6 @@
 (defn kill-services
   []
   (let [kill-list @*service-kill-list*]
-    (if (nil? (resolve 'T-DB-TEST-NAME))
+    (if (nil? (resolve 'T-TEST-COLLECTION))
       (println "Killing all services:"))
     (for [[service-key kill-service] kill-list] (kill-service))))

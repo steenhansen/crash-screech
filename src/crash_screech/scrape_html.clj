@@ -115,7 +115,7 @@
 (comment
   (let [pages-OK-check [{:check-page WWW-SFFAUDIO-COM   :enlive-keys SFFAUDIO-CHECK-KEYS :at-least HTML-OK-COUNT}]
         pages-FAIL-check [{:check-page WWW-SFFAUDIO-COM :enlive-keys SFFAUDIO-CHECK-KEYS :at-least HTML-FAIL-COUNT}]
-        [my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
+        [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
         purge-table (:purge-table my-db-obj)
         testing-sms? true
         sms-send-fn (build-sms-send sms-data testing-sms?)
@@ -129,7 +129,7 @@
 
   (let [pages-OK-check [{:check-page  WWW-SFF-SEARCH   :enlive-keys SFF-SEARCH-CHECK-KEYS :at-least HTML-OK-COUNT}]
         pages-FAIL-check [{:check-page WWW-SFF-SEARCH :enlive-keys SFF-SEARCH-CHECK-KEYS :at-least HTML-FAIL-COUNT}]
-        [my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
+        [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
         purge-table (:purge-table my-db-obj)
         testing-sms? true
         sms-send-fn (build-sms-send sms-data testing-sms?)
@@ -141,13 +141,14 @@
     [start-month-sms no-error-sms error-sms])
 
 
-  (let [[my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME THE-CHECK-PAGES USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
+  (let [  the-check-pages (make-check-pages 0)
+[my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION the-check-pages USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
         purge-table (:purge-table my-db-obj)
         testing-sms? true
         sms-send-fn (build-sms-send sms-data testing-sms?)
         read-from-web? true
         _ (purge-table)
-        all-sms (scrape-pages-fn my-db-obj THE-CHECK-PAGES instant-time-fn sms-send-fn read-from-web?)]
+        all-sms (scrape-pages-fn my-db-obj the-check-pages instant-time-fn sms-send-fn read-from-web?)]
     [all-sms])
   ; []
 
@@ -155,7 +156,7 @@
 
 
   (let [pages-OK-check [{:check-page "www.sffaudio.com/not-exist-404"   :enlive-keys SFFAUDIO-CHECK-KEYS :at-least HTML-OK-COUNT}]
-        [my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
+        [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
         purge-table (:purge-table my-db-obj)
         testing-sms? true
         sms-send-fn (build-sms-send sms-data testing-sms?)

@@ -35,7 +35,7 @@
                ::table-name string?))
 
 (s/fdef c-d/uniquely-id
-  :args (s/cat :may-index integer? :many-item :check-map?/test-specs))
+  :args (s/cat :many-index integer? :many-item :check-map?/test-specs))
 
 (s/fdef c-d/ensure-has-date
   :args (s/cat :check-record :url-date-tuple?/test-specs))
@@ -70,7 +70,7 @@
                                 :the-date "2019-06-19-01:54:03.800Z",
                                 :the-html "123456789",
                                 :the-accurate true,
-                                :the-time FAKE-TEST-DATE})
+                                :the-time FAKE-SCRAPE-SPEED})
 ;                                :the-time 9876543})
 
 (def ^:const T-AFTER-CHECK-DATA {:check-url "www.sffaudio.com",
@@ -78,13 +78,16 @@
                                  :check-html "123456789",
                                  :check-bytes 9
                                  :check-accurate true,
-                                 :check-time FAKE-TEST-DATE})
+                                 :check-time FAKE-SCRAPE-SPEED})
 
 (deftest unit-derive-data
   (testing "test-dervive-data : cccccccccccccccccccccc "
-    (let [derived-data (derive-data T-BEFORE-THE-DATA T-DB-TEST-NAME)]
+    (let [derived-data (derive-data T-BEFORE-THE-DATA T-TEST-COLLECTION)
+     [diff-1 diff-2] (is-html-eq derived-data T-AFTER-CHECK-DATA)]
       (console-test "unit-derive-data" "check-data")
-      (is (= derived-data T-AFTER-CHECK-DATA)))))
+    (is (= diff-1 diff-2))
+    ;  (is (= derived-data T-AFTER-CHECK-DATA))
+)))
 
 (def ^:const T-BEFORE-UNIQUE-ID {:check-url "www.sffaudio.com",
                                  :check-date "2019-06-19-01:54:03.800Z",
@@ -146,18 +149,18 @@
     :check-html "blah 1111",
     :check-bytes 9
     :check-accurate true,
-    :check-time 98765432}
+    :check-time FAKE-SCRAPE-SPEED}
    {:check-url "sffaudio.herokuapp.com_rsd_rss",
     :_id "2019-06-19-01-54-03.800Z+1",
     :check-date "2019-06-19-01-54-03.800Z",
     :check-html "bluh 2222",
     :check-bytes 9
     :check-accurate true,
-    :check-time 98765432}])
+    :check-time FAKE-SCRAPE-SPEED}])
 
 (deftest unit-prepare-data
   (testing "prepare-tests-data : fffff "
-    (let [prepared-data (prepare-data T-BEFORE-ENSURE-DATA T-DB-TEST-NAME)
+    (let [prepared-data (prepare-data T-BEFORE-ENSURE-DATA T-TEST-COLLECTION)
 
                [diff-1 diff-2] (is-html-eq prepared-data T-EXPECTED-PREPARE-DATA)
 

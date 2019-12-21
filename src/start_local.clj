@@ -26,8 +26,9 @@
   ([db-type config-file] (-local-main db-type config-file IGNORE-ENV-VARS))
   ([db-type config-file environment-utilize]
    (kill-services)
-   (let [[my-db-obj web-port cron-url sms-data] (build-db DB-TABLE-NAME
-                                                          THE-CHECK-PAGES
+   (let [the-check-pages (make-check-pages 0)
+[my-db-obj web-port cron-url sms-data] (build-db PRODUCTION-COLLECTION
+                                                          the-check-pages
                                                           db-type
                                                           config-file
                                                           environment-utilize)
@@ -53,7 +54,7 @@
                      :the-accurate false,
                      :the-time 12346}]
 testing-sms? true
-         temporize-func (build-web-scrape scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data testing-sms? instant-time-fn)
+         temporize-func (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
          request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms? instant-time-fn)
          test-one {:the-url "www.sffaudio.com",
                    :the-date "2019-06-19-01:54:03.800Z",
@@ -63,6 +64,6 @@ testing-sms? true
     ;((:put-items my-db-obj) test-many)
     ;((:put-item my-db-obj) test-one)
      (web-init int-port request-handler)
-     (cron-init scrape-pages-fn my-db-obj THE-CHECK-PAGES sms-data)
+     (cron-init scrape-pages-fn my-db-obj the-check-pages sms-data)
 ;     (println "after cron-init")
 )))

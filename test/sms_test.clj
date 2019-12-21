@@ -22,8 +22,9 @@
 
   ([config-file testing-sms? environment-utilize]
    (let [db-type USE_MONGER_DB
-         [_ _ _ sms-data] (build-db T-DB-TEST-NAME
-                                    THE-CHECK-PAGES
+          the-check-pages (make-check-pages 0)
+         [_ _ _ sms-data] (build-db T-TEST-COLLECTION
+                                    the-check-pages
                                     db-type
                                     config-file
                                     environment-utilize)]

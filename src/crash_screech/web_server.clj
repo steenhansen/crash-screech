@@ -8,11 +8,9 @@
   (:require [crash-screech.sms-event  :refer [sms-to-phones]])
   (:require [crash-screech.years-months  :refer [current-yyyy-mm current-month
                                                  prev-month prev-yyyy-mm date-to-yyyy-mm]])
-;  (:require [java-time.local :as j-time])
   )
 
 (defn show-data
-  "has db test"
   ([my-db-obj test-date]
    (let [the-date-time (test-date)
          yyyy-mm (current-yyyy-mm the-date-time)]

@@ -44,7 +44,7 @@
       (is (= expected-scrapes actual-scrapes)))))
 
 (defn sms-send-init [pages-to-check db-type]
-  (let [[my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME
+  (let [[my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
                                            pages-to-check
                                            db-type
                                            TEST-CONFIG-FILE
@@ -122,7 +122,7 @@
 
 
 (defn init_1_2_3_4_months [db-type]
-  (let [[my-db-obj _ _ _] (build-db T-DB-TEST-NAME
+  (let [[my-db-obj _ _ _] (build-db T-TEST-COLLECTION
                                     []
                                     db-type
                                     TEST-CONFIG-FILE

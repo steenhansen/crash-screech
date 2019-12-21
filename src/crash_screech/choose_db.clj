@@ -7,14 +7,25 @@
   (:require [crash-screech.mongo-db :refer [mongolabs-build]])
   (:require [crash-screech.years-months :refer [current-yyyy-mm current-yyyy-mm-dd]]))
 
+(comment
+  (get-phone-nums "12345678901,01234567890")
+  ; ["12345678901" "01234567890"]
+  )
 (defn get-phone-nums
-  "get string with phone numbers delimeted by commas, return them in a vector"
   [phone-comma-string]
   (let [phone-spaces (clj-str/split phone-comma-string #",")
         phone-numbers (map clj-str/trim phone-spaces)
         phone-vector (vec phone-numbers)]
     phone-vector))
 
+(comment
+  (let  [the-config (make-config USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
+         my-db-funcs (get-db-conn T-TEST-COLLECTION [] USE_MONGER_DB the-config)]
+    my-db-funcs)
+  ; {:my-delete-table
+  ;  #function[crash-screech.mongo-db/mongolabs-build/delete-table--126143],
+  ;  :my-purge-table ...
+  )
 (defn get-db-conn
   [table-name pages-to-check db-type the-config]
   (let [db-keyword (keyword db-type)]
@@ -38,7 +49,6 @@
     ([yyyy-mm]
      (let [url-checks (get-all-fn yyyy-mm)
            months-checks (count url-checks)]
-
        (if (zero? months-checks) true false)))))
 
 (defn build-today-error?
@@ -49,8 +59,7 @@
                           [found-error? url-check]
                           (if (:check-accurate url-check)
                             ALL-ACCURATE-CHECKS            ; return true early once a
-                            (reduced FOUND-FAILED-CHECK)))   ; failed check is found
-        ]
+                            (reduced FOUND-FAILED-CHECK)))]   ; failed check is found
     (fn today-error?
 
       ([]
@@ -64,12 +73,35 @@
               error-found (reduce my-failed-check false url-checks)]
          error-found)))))
 
+(comment
+  (let [[my-db-obj web-port cron-url sms-data] (build-db T-TEST-COLLECTION
+                                                         []
+                                                         USE_MONGER_DB
+                                                         TEST-CONFIG-FILE
+                                                         IGNORE-ENV-VARS)]
+    [my-db-obj web-port cron-url sms-data])
+  ; [{:get-url  #function[crash-screech.mongo-db/mongolabs-build/get-url--126151],
+  ;   :empty-month? #function[crash-screech.choose-db/build-empty-month?/empty-month?--126161],
+  ;   :put-items #function[crash-screech.mongo-db/mongolabs-build/put-items--126141],
+  ;   :today-error?  #function[crash-screech.choose-db/build-today-error?/today-error?--126166],
+  ;   :put-item  #function[crash-screech.mongo-db/mongolabs-build/put-item--126147],
+  ;   :delete-table  #function[crash-screech.mongo-db/mongolabs-build/delete-table--126143],
+  ;   :get-all  #function[crash-screech.mongo-db/mongolabs-build/get-all--126149],
+  ;   :table-name "_test_collection_",
+  ;   :purge-table  #function[crash-screech.mongo-db/mongolabs-build/purge-table--126145]}
+  ;      "8080"
+  ;      "/url-for-cron-execution"
+  ;  {:till-username "abcdefghijklmnopqrstuvwxyz1234",
+  ;   :till-url "https://platform.tillmobile.com/api/send",
+  ;   :till-api-key "1234567890abcdefghijklmnopqrstuvwxyz1234",
+  ;   :phone-numbers ["12345678901" "12345678901" "12345678901"],
+  ;   :heroku-app-name
+  ;   "https://fathomless-woodland-85635.herokuapp.com/",
+  ;   :testing-sms? true,
+  ;   :send-test-sms-url "/zxc"}]
+  )
+
 (defn build-db
-  "return an object with database functions
-
-have an default environment-utilize
-
-"
   [table-name pages-to-check db-type config-file environment-utilize]
   (let [the-config (make-config db-type config-file environment-utilize)
         my-db-funcs (get-db-conn table-name pages-to-check db-type the-config)
@@ -100,8 +132,6 @@ have an default environment-utilize
                    :empty-month? (build-empty-month? get-all),
                    :today-error? (build-today-error? get-all)
                    :table-name table-name}]
-
-    (if  (= DB-TABLE-NAME table-name)
+    (if  (= PRODUCTION-COLLECTION table-name)
       (prt-prn/pprint the-config))
-
     [my-db-obj web-port cron-url sms-data]))

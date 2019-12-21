@@ -59,8 +59,9 @@
                            :at-least pass-small}]
           db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-          [my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME
-                                             THE-CHECK-PAGES
+ the-check-pages (make-check-pages 0)
+          [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
+                                             the-check-pages
                                              db-type
                                              TEST-CONFIG-FILE
                                              environment-utilize)
@@ -77,8 +78,9 @@
                            :at-least pass-small}]
           db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-          [my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME
-                                             THE-CHECK-PAGES
+the-check-pages (make-check-pages 0)
+          [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
+                                             the-check-pages
                                              db-type
                                              TEST-CONFIG-FILE
                                              environment-utilize)
@@ -96,8 +98,9 @@
                            :at-least pass-small}]
           db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-          [my-db-obj _ _ sms-data] (build-db T-DB-TEST-NAME
-                                             THE-CHECK-PAGES
+the-check-pages (make-check-pages 0)
+          [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
+                                             the-check-pages
                                              db-type
                                              TEST-CONFIG-FILE
                                              environment-utilize)

@@ -93,7 +93,7 @@
   (testing "test-day-hour-min : cccccccccccccccccccccc "
     (console-test  "unit-get-index"  "html-render")
     (let [db-type USE_MONGER_DB
-          [my-db-obj _ _ _] (build-db T-DB-TEST-NAME             ;;;;;;;;;; THIS IS THE WRONG ONE  T-DB-TEST-NAME
+          [my-db-obj _ _ _] (build-db T-TEST-COLLECTION
                                       []
                                       db-type
                                       TEST-CONFIG-FILE

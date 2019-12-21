@@ -39,7 +39,7 @@
           pages-to-check [{:check-page "www.sffaudio.com",
                          :enlive-keys [:article :div.blog-item-wrap],
                          :at-least 1}]
-                   a-dynamo-db       (dynamo-build the-config  T-DB-TEST-NAME pages-to-check)]
+                   a-dynamo-db       (dynamo-build the-config  T-TEST-COLLECTION pages-to-check)]
       (console-test "unit-dynamo-build" "dynamo-db")
 
      (is (function?(:my-delete-table a-dynamo-db)))

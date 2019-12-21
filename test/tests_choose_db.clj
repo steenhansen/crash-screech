@@ -56,7 +56,7 @@
 
 (defn unit-get-db-conn-type [db-type]
   (let [the-config (make-config db-type TEST-CONFIG-FILE IGNORE-ENV-VARS)
-        my-db-funcs (get-db-conn T-DB-TEST-NAME [] db-type the-config)]
+        my-db-funcs (get-db-conn T-TEST-COLLECTION [] db-type the-config)]
     (is (function? (:my-delete-table my-db-funcs)))
     (is (function? (:my-purge-table my-db-funcs)))
     (is (function? (:my-get-all my-db-funcs)))
@@ -76,8 +76,9 @@
       (unit-get-db-conn-type    USE_AMAZONICA_DB))))
 
 (defn  unit-build-empty-month-db [db-type]
-  (let [[my-db-obj _ cron-url sms-data] (build-db T-DB-TEST-NAME
-                                                  THE-CHECK-PAGES ; ["www.sffaudio.com"]
+  (let [ the-check-pages (make-check-pages 0)
+              [my-db-obj _ cron-url sms-data] (build-db T-TEST-COLLECTION
+                                                  the-check-pages
                                                   db-type
                                                   TEST-CONFIG-FILE
                                                   IGNORE-ENV-VARS)
@@ -103,8 +104,9 @@
       (unit-build-empty-month-db     USE_AMAZONICA_DB))))
 
 (defn  build-today-error-db [db-type]
-  (let [[my-db-obj _ cron-url sms-data] (build-db T-DB-TEST-NAME
-                                                  THE-CHECK-PAGES ; ["www.sffaudio.com"][]
+  (let [the-check-pages (make-check-pages 0)
+         [my-db-obj _ cron-url sms-data] (build-db T-TEST-COLLECTION
+                                                  the-check-pages
                                                   db-type
                                                   TEST-CONFIG-FILE
                                                   IGNORE-ENV-VARS)
@@ -130,7 +132,7 @@
       (build-today-error-db     USE_AMAZONICA_DB))))
 
 (defn unit-build-db-type [db-type]
-  (let [[my-db-obj web-port cron-url sms-data] (build-db T-DB-TEST-NAME
+  (let [[my-db-obj web-port cron-url sms-data] (build-db T-TEST-COLLECTION
                                                          []
                                                          db-type
                                                          TEST-CONFIG-FILE

@@ -32,9 +32,6 @@
 
 (declare fill-bytes)
 
-(defn fill-html
-  [check-accurate check-html]
-  (enlive-html/do-> (enlive-html/content (if check-accurate "" check-html))))
 
 (defn get-two-months
   "has db test"
@@ -62,9 +59,21 @@
                   [{:month-type prev-name, :month-data previous-months}
                    {:month-type cur-name, :month-data current-months}]}]
 
+(defn fill-html
+  [check-accurate check-html]
+  (if  (= PRODUCTION-COLLECTION table-name)
+     (enlive-html/do-> (enlive-html/content (if check-accurate "" check-html)))
+
+  (enlive-html/do-> (enlive-html/content FAKE-FAIL-CONTENT)
+
+   )))
+
+
+
+
      (defn fill-time
        [check-time]
-       (if  (= DB-TABLE-NAME table-name)
+       (if  (= PRODUCTION-COLLECTION table-name)
 
          (enlive-html/do-> (enlive-html/content (str check-time))
                            (if (> check-time 2000)
@@ -77,12 +86,12 @@
                            (enlive-html/add-class "speed_test"))))
 
      (defn fill-date  [check-date]
-       (if  (= DB-TABLE-NAME table-name)
+       (if  (= PRODUCTION-COLLECTION table-name)
          (enlive-html/do-> (enlive-html/content (day-hour-min check-date)))
          (enlive-html/do-> (enlive-html/content (str FAKE-TEST-DATE)))))
 
      (defn fill-bytes [check-bytes]
-       (if  (= DB-TABLE-NAME table-name)
+       (if  (= PRODUCTION-COLLECTION table-name)
          (enlive-html/do-> (enlive-html/content (str check-bytes))))
        (enlive-html/do-> (enlive-html/content (str FAKE-SCRAPE-BYTES))))
 

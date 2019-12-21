@@ -203,11 +203,9 @@
 (def ^:const RUN-SPEC-TESTS true)
 
 
-;(def ^:const T-TIME-TO-RUN-SCRAPE false)
 
 
 
-;(def ^:const T-DB-TEST-NAME "zzz3")
 (def ^:const T-CONSOLE-TESTS true)
 (def ^:const T-DO-DYNAMODB-TESTS false)
 (def ^:const T-TIME-STAMP #"^(20(0|1|2)[\d])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T\d\d:\d\d:\d\d\.\d\d\dZ$")
@@ -275,7 +273,7 @@
    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"))
 
 (defn sms-is-in-test [db-type]
-  (let [[_ _ _ sms-data] (build-db T-DB-TEST-NAME
+  (let [[_ _ _ sms-data] (build-db T-TEST-COLLECTION
                                    []
                                    db-type
                                    TEST-CONFIG-FILE
