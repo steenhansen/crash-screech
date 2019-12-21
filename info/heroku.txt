@@ -1,10 +1,10 @@
- 
 
 
 
 
+goto the directory
 
-heroku logs --tail -a fathomless-woodland-85635  
+heroku logs --tail -a fathomless-woodland-85635
 
 
 
@@ -17,16 +17,3 @@ heroku logs --tail -a fathomless-woodland-85635
 prepare for Heroku
 
 - lein uberjar       ; if this fails so will Heroku deploy
-
-
-
-
-
-
-
-
-
-
-
-
-     

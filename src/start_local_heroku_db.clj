@@ -29,5 +29,5 @@
          int-port (Integer/parseInt web-port)
          testing-sms? true
          temporize-func (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
-         request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms?)]
+         request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms? instant-time-fn)]
      (web-init int-port request-handler))))
