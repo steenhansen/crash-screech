@@ -5,7 +5,7 @@
 
   (:require [crash-screech.choose-db :refer [build-db]])
   (:require [crash-screech.cron-service :refer [cron-init]])
-  (:require [crash-screech.web-server :refer [make-request-fn web-init]])
+  (:require [crash-screech.web-server :refer [build-express-serve web-init]])
   (:require [crash-screech.scrape-html :refer [scrape-pages-fn]])
   (:require [crash-screech.singular-service :refer  [kill-services]])
   (:require [crash-screech.years-months :refer [instant-time-fn]])
@@ -54,8 +54,8 @@
                      :the-accurate false,
                      :the-time 12346}]
 testing-sms? true
-         temporize-func (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
-         request-handler (make-request-fn temporize-func my-db-obj cron-url sms-data testing-sms? instant-time-fn)
+         web-scraper (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
+         express-server (build-express-serve web-scraper my-db-obj cron-url sms-data testing-sms? instant-time-fn)
          test-one {:the-url "www.sffaudio.com",
                    :the-date "2019-06-19-01:54:03.800Z",
                    :the-html "blah 5555",
@@ -63,7 +63,9 @@ testing-sms? true
                    :the-time 1234}]
     ;((:put-items my-db-obj) test-many)
     ;((:put-item my-db-obj) test-one)
-     (web-init int-port request-handler)
+   (println "1111")
+     (web-init int-port express-server)
+   (println "2222")
      (cron-init scrape-pages-fn my-db-obj the-check-pages sms-data)
-;     (println "after cron-init")
+   (println "33333")
 )))

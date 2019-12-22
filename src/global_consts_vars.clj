@@ -76,7 +76,7 @@
 
 (def ^:const WWW-JERKER-SEARCHER "www.jerkersearcher.com_?")
 (def ^:const JERKER-SEARCHER-CHECK-KEYS  [:article.post :h2.entry-title])
-(def ^:const JERKER-SEARCHER-AMOUNT 1000)       ;   testing failure on real site 10)
+(def ^:const JERKER-SEARCHER-AMOUNT 10)       ;   testing failure on real site 10)
 
 (defn make-check-pages [fail-extra]
   (let [SFF-SEARCH {:check-page WWW-SFF-SEARCH

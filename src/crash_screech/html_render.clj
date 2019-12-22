@@ -92,8 +92,8 @@
 
      (defn fill-bytes [check-bytes]
        (if  (= PRODUCTION-COLLECTION table-name)
-         (enlive-html/do-> (enlive-html/content (str check-bytes))))
-       (enlive-html/do-> (enlive-html/content (str FAKE-SCRAPE-BYTES))))
+         (enlive-html/do-> (enlive-html/content (str check-bytes)))
+       (enlive-html/do-> (enlive-html/content (str FAKE-SCRAPE-BYTES)))))
 
      (enlive-html/defsnippet row-selector
        BASE-HTML-TEMPLATE

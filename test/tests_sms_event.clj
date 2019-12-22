@@ -111,8 +111,8 @@ the-check-pages (make-check-pages 0)
                                              TEST-CONFIG-FILE
                                              environment-utilize)
           testing-sms? true
-          temporize-func (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? (adjusted-date "2019-07-04T04:18:46.173Z"))]
-      (is (function? temporize-func)))))
+          web-scraper (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? (adjusted-date "2019-07-04T04:18:46.173Z"))]
+      (is (function? web-scraper)))))
 
 
 (defn do-tests []

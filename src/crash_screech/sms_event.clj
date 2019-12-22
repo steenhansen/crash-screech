@@ -46,7 +46,7 @@
   [scrape-pages-fn my-db-obj pages-to-check sms-data testing-sms? date-time-fn]
   (let [sms-send-fn (build-sms-send sms-data testing-sms?)
         read-from-web true]
-    (fn temporize-func
+    (fn web-scraper
       []
       (scrape-pages-fn my-db-obj
                        pages-to-check
