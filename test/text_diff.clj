@@ -85,7 +85,7 @@
 ; FAIL in () (form-init1629240743054083851.clj:363)
 ; expected (= diff-1 diff-2)
 ; actual (not (= "\r\n_" "\n-"))
-; false			
+; false
   )
 
 (def SIZE-PARTITION-SHORT 30)
@@ -162,10 +162,12 @@
     ordered-str))
 
 (comment
+  (get-middle "1234567890" 3 5)
   ;"45"
-  (get-middle "1234567890" 3 5))
+)
 (defn get-middle [str-text start-length end-pos]
-  (if (= end-pos 0)
+  (println str-text "xx" start-length "yy" end-pos)
+  (if (or (= end-pos 0) (> start-length end-pos))
     ""
     (subs str-text start-length end-pos)))
 
@@ -478,8 +480,12 @@
   ([html-1 html-2 char-colors] (is-html-eq html-1 html-2 char-colors DEFAULT-SANDWICH-SIZE SIZE-PARTITION-SHORT))
   ([html-1 html-2 char-colors sandwich-size] (is-html-eq html-1 html-2 char-colors sandwich-size SIZE-PARTITION-SHORT))
   ([html-1 html-2 char-colors sandwich-size partition-size]
+
+;(println "1111" html-1)
+;(println "2222" html-2)
+;(println "3333")
+
    (let [[color-diff plain-1-diff plain-2-diff] (show-diff html-1 html-2 char-colors sandwich-size partition-size)]
      (if (not (= plain-1-diff plain-2-diff))
        (println color-diff))
      [plain-1-diff plain-2-diff])))
-

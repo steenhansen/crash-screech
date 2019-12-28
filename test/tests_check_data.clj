@@ -5,13 +5,13 @@
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
   (:require [global-consts-vars  :refer :all])
-  (:require [crash-screech.check-data :refer :all])
+  (:require [crash-sms.check-data :refer :all])
   (:require [java-time :refer [local-date?]])
   (:require [text-diff :refer [is-html-eq]])
   (:require [prepare-tests :refer :all]))
 
 (alias 's 'clojure.spec.alpha)
-(alias 'c-d 'crash-screech.check-data)
+(alias 'c-d 'crash-sms.check-data)
 
 (s/fdef c-d/prepare-data
   :args (s/cat :check-records (s/coll-of :url-date-tuple?/test-specs)
@@ -28,8 +28,6 @@
   :args (s/cat :the-time (s/nilable integer?)
                :table-name string?))
 
-
-
 (s/fdef c-d/derive-data
   :args (s/cat :check-record :data-map?/test-specs
                ::table-name string?))
@@ -41,8 +39,6 @@
   :args (s/cat :check-record :url-date-tuple?/test-specs))
 
 (defn check-data-specs []
-  (if RUN-SPEC-TESTS
-    (do
   (println "Speccing check-data")
   (spec-test/instrument)
   (spec-test/instrument 'count-string)
@@ -50,19 +46,17 @@
   (spec-test/instrument 'derive-data)
   (spec-test/instrument 'uniquely-id)
   (spec-test/instrument 'ensure-has-date)
-  (spec-test/instrument 'prepare-data))))
+  (spec-test/instrument 'prepare-data))
 
 (deftest unit-count-string
-  (testing "count-string : qqqcccccccccccccccccccccc "
     (let [occurance-count (count-string "001001001000" #"1")]
       (console-test "unit-count-string" "check-data")
-      (is (= occurance-count 3)))))
+      (is (= occurance-count 3))))
 
 (deftest unit-trunc-string
-  (testing "test-trunc-string : cccccccccccccccccccccc "
     (let [trunced-str (trunc-string "123456789" 3)]
       (console-test "unit-trunc-string" "check-data")
-      (is (= trunced-str "123")))))
+      (is (= trunced-str "123"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -81,13 +75,11 @@
                                  :check-time FAKE-SCRAPE-SPEED})
 
 (deftest unit-derive-data
-  (testing "test-dervive-data : cccccccccccccccccccccc "
     (let [derived-data (derive-data T-BEFORE-THE-DATA T-TEST-COLLECTION)
      [diff-1 diff-2] (is-html-eq derived-data T-AFTER-CHECK-DATA)]
       (console-test "unit-derive-data" "check-data")
     (is (= diff-1 diff-2))
-    ;  (is (= derived-data T-AFTER-CHECK-DATA))
-)))
+))
 
 (def ^:const T-BEFORE-UNIQUE-ID {:check-url "www.sffaudio.com",
                                  :check-date "2019-06-19-01:54:03.800Z",
@@ -105,10 +97,9 @@
                                    :check-time 1234})
 
 (deftest unit-uniquely-id
-  (testing "test-uniquely-id : cccccccccccccccccccccc "
     (let [unique-data (uniquely-id 1 T-BEFORE-UNIQUE-ID)]
       (console-test  "unit-uniquely-id"  "check-data")
-      (is (= unique-data T-EXPECTED-UNIQUE-ID)))))
+      (is (= unique-data T-EXPECTED-UNIQUE-ID))))
 
 
 ;;;;;;;;;;;;;;
@@ -120,10 +111,9 @@
                             :the-time 1234})
 
 (deftest unit-ensure-has-date
-  (testing "est-ensure-has-date : DDDDDDDDDDDDD "
     (let [has-date (ensure-has-date T-ENSURE-DATA)]
       (console-test "unit-ensure-has-date" "check-data")
-      (is (contains? has-date :the-date)))))
+      (is (contains? has-date :the-date))))
 
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -159,24 +149,15 @@
     :check-time FAKE-SCRAPE-SPEED}])
 
 (deftest unit-prepare-data
-  (testing "prepare-tests-data : fffff "
     (let [prepared-data (prepare-data T-BEFORE-ENSURE-DATA T-TEST-COLLECTION)
 
                [diff-1 diff-2] (is-html-eq prepared-data T-EXPECTED-PREPARE-DATA)
 
          ]
       (console-test "unit-prepare-data" "check-data")
-; (ddiff/pretty-print (ddiff/diff prepared-data T-EXPECTED-PREPARE-DATA) )
-;(println "11" prepared-data )
-
-
-
    (is (= diff-1 diff-2))   ;; so here we are comparaing strings, so much easier  ;; abbacab
 
-;(println "22" "----" )
-;(println "33" T-EXPECTED-PREPARE-DATA)
-;;;;;;;;;;;;
-      (is (= prepared-data T-EXPECTED-PREPARE-DATA)))))
+      (is (= prepared-data T-EXPECTED-PREPARE-DATA))))
 
 (defn do-tests []
   (check-data-specs)

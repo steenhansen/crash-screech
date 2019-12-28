@@ -45,7 +45,7 @@
                                (constantly @#'io.aviso.repl/pretty-pst))
                (alter-var-root #'clojure.repl/pst                    ; nicer (pst) 
                                (constantly @#'io.aviso.repl/pretty-pst))]     ; (print stack trace) 
-  :uberjar-name "crash-screech.jar"
+  :uberjar-name "crash-sms.jar"
   :min-lein-version "2.0.0"
   :main ^:skip-aot start-heroku            ; the main() that heroku calls
   :target-path "target/%s"

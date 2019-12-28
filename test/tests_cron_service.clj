@@ -8,8 +8,8 @@
 
   (:require [global-consts-vars  :refer :all])
 
-  (:require [crash-screech.cron-service :refer :all])
-  (:require [crash-screech.choose-db :refer [build-db]])
+  (:require [crash-sms.cron-service :refer :all])
+  (:require [crash-sms.choose-db :refer [build-db]])
 
   (:require [java-time :refer [local-date?]])
 
@@ -18,7 +18,7 @@
 
 
 (alias 's 'clojure.spec.alpha)
-(alias 'c-s 'crash-screech.cron-service)
+(alias 'c-s 'crash-sms.cron-service)
 
 (s/fdef c-s/build-cron-func
   :args (s/cat :cron-job function?
@@ -42,15 +42,12 @@
 
 
 (defn cron-service-specs []
- (if RUN-SPEC-TESTS
-    (do
   (println "Speccing cron-service")
       (spec-test/instrument)
       (spec-test/instrument 'build-cron-func)
-      (spec-test/instrument 'start-cron))))
+      (spec-test/instrument 'start-cron))
 
 (deftest unit-build-cron-func
-  (testing "test-get-phone-nums : cccccccccccccccccccccc "
     (console-test "unit-build-cron-func" "cron-service")
     (let [cron-job (fn my-cron-job [])
           pass-small 1
@@ -59,17 +56,16 @@
                            :at-least pass-small}]
           db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
- the-check-pages (make-check-pages 0)
+          the-check-pages (make-check-pages 0)
           [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
                                              the-check-pages
                                              db-type
                                              TEST-CONFIG-FILE
                                              environment-utilize)
           a-cron-func (build-cron-func cron-job my-db-obj pages-to-check sms-data)]
-      (is (function? a-cron-func)))))
+      (is (function? a-cron-func))))
 
 (deftest unit-start-cron
-  (testing "test-get-phone-nums : cccccccccccccccccccccc "
     (console-test "unit-start-cron-func" "cron-service")
     (let [cron-job (fn my-cron-job [])
           pass-small 1
@@ -78,7 +74,7 @@
                            :at-least pass-small}]
           db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-the-check-pages (make-check-pages 0)
+          the-check-pages (make-check-pages 0)
           [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
                                              the-check-pages
                                              db-type
@@ -86,10 +82,9 @@ the-check-pages (make-check-pages 0)
                                              environment-utilize)
           a-cron-func (start-cron cron-job my-db-obj pages-to-check sms-data)
           cron-type (str (type a-cron-func))]
-      (is (= cron-type "class overtone.at_at.RecurringJob")))))
+      (is (= cron-type "class overtone.at_at.RecurringJob"))))
 
 (deftest unit-cron-init
-  (testing "test-get-phone-nums : cccccccccccccccccccccc "
     (console-test "unit-start-cron-func" "cron-service")
     (let [cron-job (fn my-cron-job [])
           pass-small 1
@@ -98,7 +93,7 @@ the-check-pages (make-check-pages 0)
                            :at-least pass-small}]
           db-type USE_MONGER_DB
           environment-utilize USE_ENVIRONMENT
-the-check-pages (make-check-pages 0)
+          the-check-pages (make-check-pages 0)
           [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
                                              the-check-pages
                                              db-type
@@ -106,7 +101,7 @@ the-check-pages (make-check-pages 0)
                                              environment-utilize)
           a-cron-func (cron-init cron-job my-db-obj pages-to-check sms-data)
           cron-type (str (type a-cron-func))]
-      (is (= cron-type "class overtone.at_at.RecurringJob")))))
+      (is (= cron-type "class overtone.at_at.RecurringJob"))))
 
 
 (defn do-tests []

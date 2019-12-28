@@ -3,6 +3,11 @@
 launch
 	c:\_progs_\dynamo-db  java "-Djava.library.path=./DynamoDBLocal_lib" -jar DynamoDBLocal.jar -sharedDb
 
+warning
+        Can only start once, on second start "Connection Pool Shutdown" error
+
+
+
 GUI
 	http://localhost:8000/shell/
 	control-space for suggestions
@@ -12,13 +17,13 @@ dynamodb.listTables().eachPage(function(e, d) {
     if (e) { ppJson(e); } else if (d) { ppJson(d); } });
 
 //list table
-var p = { TableName: 'zzz2'};
+var p = { TableName: '_test_collection_'};
 docClient.scan(p, function(e, d) { if (e) ppJson(e); else ppJson(d);});
 
 
 // delete items
 dynamodb.deleteItem({
-    "TableName": "apple", 
+    "TableName": "apple",
     "Key" : { "id":{ "N": "11"} }
 }, function (err, data) {
     if (err) {  console.log('FAIL:  Error deleting item from dynamodb - ' + err); }

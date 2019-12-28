@@ -9,9 +9,9 @@
 
   (:require [global-consts-vars  :refer :all])
 
-  (:require [crash-screech.choose-db :refer [build-db]])
-  (:require [crash-screech.scrape-html :refer [read-html]])
-  (:require [crash-screech.html-render :refer :all])
+  (:require [crash-sms.choose-db :refer [build-db]])
+  (:require [crash-sms.scrape-html :refer [read-html]])
+  (:require [crash-sms.html-render :refer :all])
 
   (:require [java-time :refer [local-date?]])
 
@@ -26,7 +26,7 @@
 
 
 (alias 's 'clojure.spec.alpha)
-(alias 'h-r 'crash-screech.html-render)
+(alias 'h-r 'crash-sms.html-render)
 
 
 (s/fdef h-r/day-hour-min
@@ -46,51 +46,20 @@
 
 
 (defn html-render-specs []
- (if RUN-SPEC-TESTS
-    (do
   (println "Speccing html-render")
       (spec-test/instrument)
 
-      (spec-test/instrument 'day-hour-min))))
+      (spec-test/instrument 'day-hour-min))
 
 (deftest unit-day-hour-min
-  (testing "test-day-hour-min : cccccccccccccccccccccc "
     (console-test  "unit-day-hour-min"  "html-render")
     (let [expected-day-hour-min "05-06:07"
           actual-day-hour-min (day-hour-min "2019-04-05-06-07-46.173Z")]
-      (is (= expected-day-hour-min actual-day-hour-min)))))
+      (is (= expected-day-hour-min actual-day-hour-min))))
 
 
-
- ;; (deftest unit-get-two-months
- ;;   (testing "test-day-hour-min : cccccccccccccccccccccc "
- ;;     (console-test  "unit-day-hour-min"  "html-render")
- ;;     (let [expected-day-hour-min "05-06:07"
- ;;         qqqq  actual-day-hour-min (day-hour-min "2019-04-05-06-07-46.173Z")]
- ;;       (is (= expected-day-hour-min actual-day-hour-min)))))
-
-(defn return-diffXX [char-1 char-2]
-  (if (= char-1 char-2)
-      ["." "-"]
-       [char-1 char-2])
-)
-
-(defn str-diffXX [str-1 str-2]
- ( let [seq-1 (seq str-1)
-        seq-2 (seq str-2)
-
-      start-diff (map ())
-   ]
-
-
-
-
- )
-
-)
 
 (deftest unit-get-index
-  (testing "test-day-hour-min : cccccccccccccccccccccc "
     (console-test  "unit-get-index"  "html-render")
     (let [db-type USE_MONGER_DB
           [my-db-obj _ _ _] (build-db T-TEST-COLLECTION
@@ -112,20 +81,9 @@
       (purge-table)
       (put-items test-many)
       (let [actual-get-index (conform-whitespace (get-index my-db-obj "2000-12"))]
-
-
       (let [ [text-diff-1 text-diff-2] (is-html-eq expected-get-index actual-get-index)]
           (is (= text-diff-1 text-diff-2)))
-
-    ;(is (= expected-get-index actual-get-index))
-))))
-;
-; show-data
-
-; show-data-cron
-
-
-
+)))
 
 
 (defn do-tests []

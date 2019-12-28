@@ -8,8 +8,8 @@
 (ns sms-test
 
   (:require [global-consts-vars  :refer :all])
-  (:require [crash-screech.choose-db :refer [build-db]])
-  (:require [crash-screech.sms-event :refer [sms-to-phones]]))
+  (:require [crash-sms.choose-db :refer [build-db]])
+  (:require [crash-sms.sms-event :refer [sms-to-phones]]))
 
 (comment "to send sms message to phone"
          (-sms-test HEROKU_CONFIG)

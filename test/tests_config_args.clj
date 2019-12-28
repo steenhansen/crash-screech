@@ -10,7 +10,7 @@
 
   (:require [global-consts-vars  :refer :all])
 
-  (:require [crash-screech.config-args :refer :all])
+  (:require [crash-sms.config-args :refer :all])
 
   (:require [java-time :refer [local-date?]])
 
@@ -18,7 +18,7 @@
 
 
 (alias 's 'clojure.spec.alpha)
-(alias 'c-a 'crash-screech.config-args)
+(alias 'c-a 'crash-sms.config-args)
 
 (s/fdef c-a/read-config-file
   :args (s/cat :config-file :edn-filename?/test-specs))
@@ -34,13 +34,11 @@
 
 
 (defn config-args-specs []
- (if RUN-SPEC-TESTS
-    (do
   (println "Speccing config-args")
       (spec-test/instrument)
       (spec-test/instrument 'read-config-file)
       (spec-test/instrument 'merge-environment)
-      (spec-test/instrument 'make-config))))
+      (spec-test/instrument 'make-config))
 
 (def ^:const TEST-MAKE-CONFIG
   {:SEND_TEST_SMS_URL "/zxc"
@@ -71,28 +69,25 @@
 
 
 (deftest unit-read-config-file
-  (testing "read-config-file : cccccccccccccccccccccc "
     (let [config-file LOCAL_CONFIG
           config-map (read-config-file config-file)]
       (console-test "unit-read-config-file" "config-args")
-      (is (= config-map TEST-READ-CONFIG)))))
+      (is (= config-map TEST-READ-CONFIG))))
 
 (deftest unit-merge-environment
-  (testing "merge-environment : cccccccccccccccccccccc "
     (let [a-map-entry (first {:not_exist_key "a_value"})
           start-accum {}
           new-env (merge-environment start-accum a-map-entry)]
       (console-test "unit-merge-environment" "config-args")
-      (is (= new-env {:not_exist_key "a_value"})))))
+      (is (= new-env {:not_exist_key "a_value"}))))
 
 (deftest unit-make-config
-  (testing "make-config : cccccccccccccccccccccc "
     (let [db-type USE_MONGER_DB
           config-file LOCAL_CONFIG
           environment-utilize  IGNORE-ENV-VARS
           config-map (make-config db-type config-file environment-utilize)]
       (console-test "unit-make-config" "config-args")
-      (is (= config-map TEST-MAKE-CONFIG)))))
+      (is (= config-map TEST-MAKE-CONFIG))))
 
 
 

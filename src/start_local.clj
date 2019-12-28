@@ -3,31 +3,31 @@
   (:gen-class)
   (:require [global-consts-vars  :refer :all])
 
-  (:require [crash-screech.choose-db :refer [build-db]])
-  (:require [crash-screech.cron-service :refer [cron-init]])
-  (:require [crash-screech.web-server :refer [build-express-serve web-init]])
-  (:require [crash-screech.scrape-html :refer [scrape-pages-fn]])
-  (:require [crash-screech.singular-service :refer  [kill-services]])
-  (:require [crash-screech.years-months :refer [instant-time-fn]])
-  (:require [crash-screech.sms-event :refer [build-sms-send build-web-scrape]]))
+  (:require [crash-sms.choose-db :refer [build-db]])
+  (:require [crash-sms.cron-service :refer [cron-init]])
+  (:require [crash-sms.web-server :refer [build-express-serve web-init]])
+  (:require [crash-sms.scrape-html :refer [scrape-pages-fn]])
+  (:require [crash-sms.singular-service :refer  [kill-services]])
+  (:require [crash-sms.years-months :refer [instant-time-fn]])
+  (:require [crash-sms.sms-event :refer [build-sms-send build-web-scrape]]))
 
 ; dev main, has scrape-pages-fn as an at-at scheduled job
 ; (kill-services) will delete web-server and at-at-scheduled job
 
 
 (comment
-         (-local-main USE_MONGER_DB LOCAL_CONFIG IGNORE-ENV-VARS )   "local monger db"
-         (-local-main USE_AMAZONICA_DB LOCAL_CONFIG IGNORE-ENV-VARS)  "local amazonica db"
-         (-local-main USE_MONGER_DB HEROKU_CONFIG IGNORE-ENV-VARS)   "real monger db, config file outside project"
+  (-local-main USE_MONGER_DB LOCAL_CONFIG IGNORE-ENV-VARS)   "local monger db"
+  (-local-main USE_AMAZONICA_DB LOCAL_CONFIG IGNORE-ENV-VARS)  "local amazonica db"
+  (-local-main USE_MONGER_DB HEROKU_CONFIG IGNORE-ENV-VARS)   "real monger db, config file outside project"
 ;
-)
+  )
 
 (defn -local-main
   ([db-type config-file] (-local-main db-type config-file IGNORE-ENV-VARS))
   ([db-type config-file environment-utilize]
    (kill-services)
    (let [the-check-pages (make-check-pages 0)
-[my-db-obj web-port cron-url sms-data] (build-db PRODUCTION-COLLECTION
+         [my-db-obj web-port cron-url sms-data] (build-db PRODUCTION-COLLECTION
                                                           the-check-pages
                                                           db-type
                                                           config-file
@@ -53,7 +53,7 @@
                      :the-html "bluhss 4444",
                      :the-accurate false,
                      :the-time 12346}]
-testing-sms? true
+         testing-sms? true
          web-scraper (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
          express-server (build-express-serve web-scraper my-db-obj cron-url sms-data testing-sms? instant-time-fn)
          test-one {:the-url "www.sffaudio.com",
@@ -63,9 +63,8 @@ testing-sms? true
                    :the-time 1234}]
     ;((:put-items my-db-obj) test-many)
     ;((:put-item my-db-obj) test-one)
-   (println "1111")
+     (println "1111")
      (web-init int-port express-server)
-   (println "2222")
+     (println "2222")
      (cron-init scrape-pages-fn my-db-obj the-check-pages sms-data)
-   (println "33333")
-)))
+     (println "33333"))))

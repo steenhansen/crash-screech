@@ -4,13 +4,13 @@
   (:gen-class)
   (:require [global-consts-vars  :refer :all])
 
-  (:require [crash-screech.choose-db :refer [build-db]])
-  (:require [crash-screech.cron-service :refer [cron-init]])
-  (:require [crash-screech.web-server :refer [build-express-serve web-init]])
-  (:require [crash-screech.years-months :refer [instant-time-fn]])
-  (:require [crash-screech.scrape-html :refer [scrape-pages-fn]])
-  (:require [crash-screech.singular-service :refer [kill-services]])
-  (:require [crash-screech.sms-event :refer [build-sms-send build-web-scrape]]))
+  (:require [crash-sms.choose-db :refer [build-db]])
+  (:require [crash-sms.cron-service :refer [cron-init]])
+  (:require [crash-sms.web-server :refer [build-express-serve web-init]])
+  (:require [crash-sms.years-months :refer [instant-time-fn]])
+  (:require [crash-sms.scrape-html :refer [scrape-pages-fn]])
+  (:require [crash-sms.singular-service :refer [kill-services]])
+  (:require [crash-sms.sms-event :refer [build-sms-send build-web-scrape]]))
 
 (comment "to start"
          (-local-heroku-main USE_MONGER_DB HEROKU_CONFIG))

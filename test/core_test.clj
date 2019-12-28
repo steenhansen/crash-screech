@@ -16,7 +16,7 @@
             [clojure.spec.gen.alpha :as spec-gen]
             [clojure.spec.test.alpha :as spec-test])
   (:require [global-consts-vars  :refer :all])
-  (:require [crash-screech.singular-service :refer  [kill-services]])
+  (:require [crash-sms.singular-service :refer  [kill-services]])
   (:require [java-time :refer [local-date?]])
   (:require [tests-check-data  :refer [check-data-specs]])
   (:require [tests-choose-db  :refer [choose-db-specs]])
@@ -32,13 +32,26 @@
   (:require [tests-web-server  :refer [web-server-specs]])
   (:require [text-diff :refer [is-html-eq]])
   (:require   [sms-test :refer :all])      ; (-test-sms HEROKU_CONFIG)
+
+  (:require [crash-sms.choose-db :refer  :all])
+
   (:require [prepare-tests :refer :all]))
 
 (defn check-testing []
-  (local-dynamodb-on?)
-  (dampen-mongo-logging)
-  (local-mongo-on?)
-  (sms-is-in-test USE_MONGER_DB))
+  (let [the-check-pages (make-check-pages 0)
+        [my-db-dynamo _ _ _] (build-db T-TEST-COLLECTION
+                                       the-check-pages
+                                       USE_AMAZONICA_DB
+                                       TEST-CONFIG-FILE
+                                       IGNORE-ENV-VARS)
+        [my-db-mongo _ _ _] (build-db T-TEST-COLLECTION
+                                      the-check-pages
+                                      USE_MONGER_DB
+                                      TEST-CONFIG-FILE
+                                      IGNORE-ENV-VARS)]
+    (dampen-mongo-logging)
+    (sms-is-in-test USE_MONGER_DB))
+)
 
 (defn console-divider []
   (println "............................................")
@@ -57,11 +70,10 @@
   (html-render-specs)
   (mongo-db-specs)
   (scrape-html-specs)
+  (singular-service-specs)
   (sms-event-specs)
   (web-server-specs)
-  (years-months-specs)
-
-)
+  (years-months-specs))
 
 (defn do-tests []
   (kill-services)
@@ -69,21 +81,20 @@
   (console-divider)
   (check-specs)
 
-
-   (run-tests
-    'tests-check-data
-    'tests-choose-db
-    'tests-config-args
-    'tests-cron-service
-    'tests-dynamo-db
-    'tests-html-render
-    'tests-mongo-db
-    'tests-scrape-html
+  (run-tests
+   'tests-check-data
+   'tests-choose-db
+   'tests-config-args
+   'tests-cron-service
+   'tests-dynamo-db
+   'tests-html-render
+   'tests-mongo-db
+   'tests-scrape-html
    'tests-sms-event        ; sms-to-phones only returns a string now, need to return whole url call
 
-    'tests-web-server
-   'tests-years-months
-)
-;;;;;;;;;;;;;;;;;;  (run-tests)
+   'tests-web-server
+   'tests-years-months)
 
+
+;
 )

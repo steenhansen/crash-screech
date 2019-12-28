@@ -21,7 +21,7 @@
   ; (:require [start-heroku :refer :all])
 
   ; (kill-services) - kills cron and ring
- ; (:require [crash-screech.singular-service :refer [kill-services]])
+ ; (:require [crash-sms.singular-service :refer [kill-services]])
 
   ; (-local-heroku-main USE_MONGER_DB LOCAL_CONFIG)
   (:require [start-local-heroku-db :refer [-local-heroku-main]])
@@ -33,19 +33,19 @@
 
   (:require [global-consts-vars  :refer :all])
 
-  (:require [crash-screech.check-data :refer :all])
-  (:require [crash-screech.choose-db :refer :all])
-  (:require [crash-screech.config-args :refer :all])
-  (:require [crash-screech.cron-service :refer :all])
-  (:require [crash-screech.dynamo-db :refer :all])
+  (:require [crash-sms.check-data :refer :all])
+  (:require [crash-sms.choose-db :refer :all])
+  (:require [crash-sms.config-args :refer :all])
+  (:require [crash-sms.cron-service :refer :all])
+  (:require [crash-sms.dynamo-db :refer :all])
 
- (:require [crash-screech.html-render :refer :all])
-  (:require [crash-screech.mongo-db :refer :all])
-  (:require [crash-screech.scrape-html :refer :all])
-  (:require [crash-screech.singular-service :refer :all])
+ (:require [crash-sms.html-render :refer :all])
+  (:require [crash-sms.mongo-db :refer :all])
+  (:require [crash-sms.scrape-html :refer :all])
+  (:require [crash-sms.singular-service :refer :all])
 
-   (:require [crash-screech.sms-event :refer :all])
-   (:require [crash-screech.web-server :refer :all])
-   (:require [crash-screech.years-months :refer :all])
+   (:require [crash-sms.sms-event :refer :all])
+   (:require [crash-sms.web-server :refer :all])
+   (:require [crash-sms.years-months :refer :all])
 
   )

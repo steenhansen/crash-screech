@@ -7,7 +7,6 @@
 (ns global-consts-vars
   (:gen-class))
 
-(def ^:const FAKE-TEST-DATE    "31-23:59")
 (def ^:const FAKE-SCRAPE-BYTES 1000009)
 (def ^:const FAKE-SCRAPE-SPEED 800007)
 (def ^:const FAKE-FAIL-CONTENT "failing html content")
@@ -26,7 +25,7 @@
 
 (def ^:const START_CRON "start-cron")
 
-(def ^:const SCRAPED-TEST-DATA "./test/scraped-data/")
+(def ^:const SCRAPED-TEST-DATA "./test/test-data/")
 
 (def ^:const EMPTY-HTML "-")
 (def ^:const DATE-MAX-LENGTH 19)
@@ -53,6 +52,8 @@
 (def ^:const SFF-SEARCH-AMOUNT 6400)
 
 (def ^:const WWW-SFFAUDIO-COM "www.sffaudio.com_?")
+(def ^:const WWW-SFFAUDIO-COM-SLASH "www.sffaudio.com/?")
+
 (def ^:const SFFAUDIO-CHECK-KEYS  [:article :div.blog-item-wrap])
 (def ^:const SFFAUDIO-AMOUNT  6)
 (def ^:const WWW-SFF-RSD "sffaudio.herokuapp.com_rsd_rss_?")
