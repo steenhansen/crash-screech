@@ -45,10 +45,15 @@
 ;   (clojure.test/test-vars [#'tests-web-server/all-correct])
 (deftest all-correct
   (console-test  "web-server all-correct")
-  (let [[text-diff-1 text-diff-2] (html-correct  USE_MONGER_DB)]
+  (let [[text-diff-1 text-diff-2] (html-correct  USE_FAKE_DB)]
     (is (= text-diff-1 text-diff-2)))
-  (let [[text-diff-1 text-diff-2] (html-correct  USE_AMAZONICA_DB)]
-    (is (= text-diff-1 text-diff-2))))
+
+  ;; (let [[text-diff-1 text-diff-2] (html-correct  USE_MONGER_DB)]
+  ;;   (is (= text-diff-1 text-diff-2)))
+
+  ;; (let [[text-diff-1 text-diff-2] (html-correct  USE_AMAZONICA_DB)]
+  ;;   (is (= text-diff-1 text-diff-2)))
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -80,11 +85,14 @@
 ;   (clojure.test/test-vars [#'tests-web-server/all-wrong])
 (deftest all-wrong
   (console-test  "web-server all-wrong")
-  (html-wrong USE_MONGER_DB)
-  (html-wrong USE_AMAZONICA_DB))
+  (html-wrong USE_FAKE_DB)
+ ; (html-wrong USE_MONGER_DB)
+ ; (html-wrong USE_AMAZONICA_DB)
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; below actually reads the real web pages, making it slow
 (defn save-record [yyyy-mm-dd my-db-obj sms-data db-type]
   (console-test  "web-server save-record" db-type yyyy-mm-dd)
   (let [sff-audio [{:check-page WWW-SFFAUDIO-COM
@@ -122,6 +130,7 @@
       [text-diff-1 text-diff-2])))
 
 (defn one-year [db-type]
+  (console-test  "web-server one-year" db-type)
   (let [[jan-act jan-exp] (make-pair "2009-12-01" "2010-01-01" "tests_01_web_server_jan_2010.html" db-type)]
     (is (= jan-act jan-exp)))
   (let [[feb-act feb-exp] (make-pair "2010-01-01" "2010-02-01" "tests_02_web_server_feb_2010.html" db-type)]
@@ -151,11 +160,16 @@
   (let [[feb-act feb-exp] (make-pair "2011-01-01" "2011-02-01" "tests_14_web_server_feb_2011.html" db-type)]
     (is (= feb-act feb-exp))))
 
+
+
+
 ;   (clojure.test/test-vars [#'tests-web-server/every-month])
 (deftest every-month
   (console-test  "web-server every-month")
-  (one-year USE_MONGER_DB)
-  (one-year USE_AMAZONICA_DB))
+  (one-year USE_FAKE_DB)
+;  (one-year USE_MONGER_DB)
+ ; (one-year USE_AMAZONICA_DB)
+  )
 
 ; tests-web-server> (do-tests)
 (defn do-tests []

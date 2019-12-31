@@ -38,7 +38,21 @@
         my-put-item      (fn put-item [check-record]
                            (let [fixed-dates (prepare-data [check-record] table-name)
                                  fixed-rec (first fixed-dates)]
-                             (mong-coll/insert db-handle table-name fixed-rec)))
+;;  {:the-url "www.sffaudio.com",
+;;                     :the-date "2019-06-19-01:54:03.800Z",
+;;                     :the-html "blah 1111",
+;;                     :the-accurate true,
+;;                     :the-time 1234}
+(println "____________  check-record" check-record)
+
+
+ (println "____________  fixed-dates" fixed-dates) ;;  [{:check-url www.sffaudio.com/?, :check-date 2019-10-01-21-12-59.141Z, :check-bytes 42253, :check-html .Skip to main content.Toggle navigation.SFFaudio.About.CLOUD TUTORING.Features.Author Pages.Essentials.External Podcasts.Audie Awards.Hugo Winners on Audio.Online Audio.The Saga of Seven Suns by Kevin, :check-accurate false, :check-time 800007, :_id 2019-10-01-21-12-59.141Z+0}]
+
+
+(println "____________  fixed-rec" fixed-rec) ;;  {:check-url www.sffaudio.com/?, :check-date 2019-10-01-21-12-59.141Z, :check-bytes 42253, :check-html .Skip to main content.Toggle navigation.SFFaudio.About.CLOUD TUTORING.Features.Author Pages.Essentials.External Podcasts.Audie Awards.Hugo Winners on Audio.Online Audio.The Saga of Seven Suns by Kevin, :check-accurate false, :check-time 800007, :_id 2019-10-01-21-12-59.141Z+0}
+
+
+ (mong-coll/insert db-handle table-name fixed-rec)))
     ;(comment "" ((:get-all my-db-obj) "2019-06-19-01-54-03"))
     ;(comment "" ((:get-all my-db-obj) "2019-05"))
         my-get-all (fn get-all [begins-with]
@@ -52,14 +66,16 @@
                                                 {:_id {$gte begins-with, $lt date-plus1}})
 
 ;_ (println "55555 next-date-time all-records " all-records)
-                           sorted-matches (sort-by :check-url all-records)]
+                       ;    sorted-matches (sort-by :check-url all-records)
+                           ]
 
-                       sorted-matches))
+;                       sorted-matches
+all-records
+))
 
         my-db-alive? (fn db-alive? []
                        (try
                          (let [empty-set (my-get-all "1939-10-21")])
- ; (println "after")
                          true
                          (catch Exception e
 (println "in exc" (.getMessage e) )

@@ -24,6 +24,7 @@
   (:require [tests-cron-service  :refer [cron-service-specs]])
   (:require [tests-dynamo-db  :refer [dynamo-db-specs]])
   (:require [tests-html-render  :refer [html-render-specs]])
+  (:require [tests-fake-db  :refer [fake-db-specs]])
   (:require [tests-mongo-db  :refer [mongo-db-specs]])
   (:require [tests-scrape-html  :refer [scrape-html-specs]])
   (:require [tests-singular-service  :refer [singular-service-specs]])
@@ -34,6 +35,10 @@
   (:require   [sms-test :refer :all])      ; (-test-sms HEROKU_CONFIG)
 
   (:require [crash-sms.choose-db :refer  :all])
+
+
+  (:require [crash-sms.fake-db :refer  :all])
+
 
   (:require [prepare-tests :refer :all]))
 
@@ -68,6 +73,7 @@
   (cron-service-specs)
   (dynamo-db-specs)
   (html-render-specs)
+  (fake-db-specs)
   (mongo-db-specs)
   (scrape-html-specs)
   (singular-service-specs)

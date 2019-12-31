@@ -13,7 +13,9 @@
   (:require [crash-sms.sms-event :refer [build-sms-send build-web-scrape]]))
 
 (comment "to start"
-         (-local-heroku-main USE_MONGER_DB HEROKU_CONFIG))
+         (-local-heroku-main USE_MONGER_DB HEROKU_CONFIG)
+ ;
+         )
 (defn -local-heroku-main
 
   ([db-type config-file] (-local-heroku-main db-type config-file IGNORE-ENV-VARS))

@@ -36,13 +36,20 @@
 
 (s/fdef h-r/get-two-months
   :args (s/cat :my-db-obj  coll?
-               :yyyy-mm   :year-month?/test-specs))
+               :yyyy-mm   :year-month?/test-specs
+                :testing-sms? boolean?  ))
 
 
 (s/fdef h-r/get-index
   :args (s/alt :unary (s/cat :my-db-obj  coll?   )
                :binary (s/cat :my-db-obj  coll?
-                      :yyyy-mm   :year-month?/test-specs   ) ))
+                      :yyyy-mm   :year-month?/test-specs   )
+
+               :ternary (s/cat :my-db-obj    coll?
+                               :yyyy-mm      :year-month?/test-specs
+                               :testing-sms? boolean?   )
+
+ ))
 
 
 (defn html-render-specs []

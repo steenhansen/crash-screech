@@ -18,6 +18,7 @@
 (def ^:const HTML-OK-COUNT 1)
 
 (def ^:const USE_MONGER_DB "monger-db")
+(def ^:const USE_FAKE_DB "fake-db")
 (def ^:const USE_AMAZONICA_DB "amazonica-db")
 
 (def ^:const LOCAL_CONFIG "./local-config.edn")

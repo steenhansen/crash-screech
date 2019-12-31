@@ -22,6 +22,9 @@
     :TESTING_SMS true
   },                                                    ;re-written by Heroku config var
 
+
+  :fake-db {}
+
   :monger-db {
     :MONGODB_URI "mongodb://localhost:27017/local"}   ;re-written by Heroku config var
 }

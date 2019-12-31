@@ -61,6 +61,11 @@
     (is (function? (:my-put-item my-db-funcs)))
     (is (function? (:my-put-items my-db-funcs)))))
 
+;   (clojure.test/test-vars [#'tests-choose-db/t-get-db-conn-fakeDb])
+(deftest t-get-db-conn-fakeDb
+    (console-test "unit-get-db-conn-mongoDb" "choose-db")
+    (unit-get-db-conn-type USE_FAKE_DB))
+
 (deftest unit-get-db-conn-mongoDb
     (console-test "unit-get-db-conn-mongoDb" "choose-db")
     (unit-get-db-conn-type USE_MONGER_DB))
@@ -68,6 +73,7 @@
 (deftest unit-get-db-conn-dynoDb
     (console-test "unit-get-db-conn-dynoDb" "choose-db")
       (unit-get-db-conn-type    USE_AMAZONICA_DB))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn  unit-build-empty-month-db [db-type]
   (let [ the-check-pages (make-check-pages 0)
@@ -86,6 +92,11 @@
    ((:put-item my-db-obj) test-one)
     (is (not ((:empty-month? my-db-obj) "2000-01")))))
 
+;   (clojure.test/test-vars [#'tests-choose-db/t-empty-month-fakeDb])
+(deftest t-empty-month-fakeDb
+    (console-test "t-empty-month-fakeDb" "choose-db")
+   (unit-build-empty-month-db     USE_FAKE_DB))
+
 (deftest unit-build-empty-month-mongoDb
     (console-test "unit-build-empty-month-mongoDb" "choose-db")
    (unit-build-empty-month-db     USE_MONGER_DB))
@@ -95,6 +106,7 @@
     (console-test "unit-build-empty-month-dynoDb" "choose-db")
       (unit-build-empty-month-db     USE_AMAZONICA_DB))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn  build-today-error-db [db-type]
   (let [the-check-pages (make-check-pages 0)
          [my-db-obj _ cron-url sms-data] (build-db T-TEST-COLLECTION
@@ -112,6 +124,11 @@
     ((:put-item my-db-obj) test-one)
     (is ((:today-error? my-db-obj) "2000-01-01"))))
 
+;   (clojure.test/test-vars [#'tests-choose-db/t-today-error-fakeDb])
+(deftest t-today-error-fakeDb
+ (console-test "FFFunit-build-today-error-mongoDb" "FFFFFFFFFFFFchoose-db")
+    (build-today-error-db  USE_FAKE_DB))
+
 (deftest unit-build-today-error-mongoDb
  (console-test "unit-build-today-error-mongoDb" "choose-db")
     (build-today-error-db  USE_MONGER_DB))
@@ -119,6 +136,8 @@
 (deftest unit-build-today-error-dynoDb
  (console-test "unit-build-today-error-dynoDb" "choose-db")
       (build-today-error-db     USE_AMAZONICA_DB))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn unit-build-db-type [db-type]
   (let [[my-db-obj web-port cron-url sms-data] (build-db T-TEST-COLLECTION
@@ -134,6 +153,13 @@
     (is (function? (:put-items my-db-obj)))
     (is (is-string-number web-port))
     (is-url-dir cron-url)))
+
+
+;   (clojure.test/test-vars [#'tests-choose-db/t-build-db-fakeDb])
+(deftest t-build-db-fakeDb
+    (console-test "unit-build-db-mongoDb" "choose-db")
+    (unit-build-db-type USE_FAKE_DB))
+
 
 (deftest unit-build-db-mongoDb
     (console-test "unit-build-db-mongoDb" "choose-db")

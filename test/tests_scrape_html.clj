@@ -73,13 +73,14 @@
  [text-diff-1 text-diff-2]
 )))
 
-
+; (clojure.test/test-vars [#'tests-scrape-html/test-1000])
 (deftest test-1000
- (let [[text-diff-1 text-diff-2] (sms-send-fn_error  USE_AMAZONICA_DB)]
+ ;(let [[text-diff-1 text-diff-2] (sms-send-fn_error  USE_AMAZONICA_DB)]
+  ;  (is (= text-diff-1 text-diff-2)))
+ (let [[text-diff-1 text-diff-2] (sms-send-fn_error USE_FAKE_DB)]
     (is (= text-diff-1 text-diff-2)))
-
- (let [[text-diff-1 text-diff-2] (sms-send-fn_error USE_MONGER_DB)]
-    (is (= text-diff-1 text-diff-2)))
+ ;(let [[text-diff-1 text-diff-2] (sms-send-fn_error USE_MONGER_DB)]
+  ;  (is (= text-diff-1 text-diff-2)))
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -98,12 +99,14 @@
       [text-diff-1 text-diff-2]
       )))
 
+; (clojure.test/test-vars [#'tests-scrape-html/test-1002])
 (deftest test-1002
- (let [[text-diff-1 text-diff-2] (sms-send-fn_ok  USE_AMAZONICA_DB)]
+ ;; (let [[text-diff-1 text-diff-2] (sms-send-fn_ok  USE_AMAZONICA_DB)]
+ ;;    (is (= text-diff-1 text-diff-2)))
+ (let [[text-diff-1 text-diff-2] (sms-send-fn_ok  USE_FAKE_DB)]
     (is (= text-diff-1 text-diff-2)))
-
- (let [[text-diff-1 text-diff-2] (sms-send-fn_ok USE_MONGER_DB)]
-    (is (= text-diff-1 text-diff-2)))
+ ;; (let [[text-diff-1 text-diff-2] (sms-send-fn_ok USE_MONGER_DB)]
+ ;;    (is (= text-diff-1 text-diff-2)))
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -120,9 +123,15 @@
         put-items (:put-items my-db-obj)
      ;   get-all (:get-all my-db-obj)
         NOV-2000-DATE "2000-11-11-11:11:11.011Z"
-        DEC-2000-DATE "2000-12-12-12:12:12.012Z"
-        JAN-2001-DATE "2001-01-01-01:01:01.001Z"
-        FEB-2001-DATE "2001-02-02-02:02:02.002Z"
+        DEC-2000-DATE-0 "2000-12-12-12:12:12.100Z"
+        DEC-2000-DATE-1 "2000-12-12-12:12:12.101Z"
+        JAN-2001-DATE-0 "2001-01-01-01:01:01.200Z"
+        JAN-2001-DATE-1 "2001-01-01-01:01:01.201Z"
+        JAN-2001-DATE-2 "2001-01-01-01:01:01.202Z"
+        FEB-2001-DATE-0 "2001-02-02-02:02:02.300Z"
+        FEB-2001-DATE-1 "2001-02-02-02:02:02.301Z"
+        FEB-2001-DATE-2 "2001-02-02-02:02:02.302Z"
+        FEB-2001-DATE-3 "2001-02-02-02:02:02.303Z"
 
         NOV-2000-MONTH "2000-11"    ; 0 and 1 record
         DEC-2000-MONTH "2000-12"    ; 1 and 2 records
@@ -132,35 +141,41 @@
         APR-2001-MONTH "2001-04"    ;0 and 0 records
         test-many [{:the-url WWW-SFFAUDIO-COM-SLASH :the-date NOV-2000-DATE  }
 
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date DEC-2000-DATE}
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date DEC-2000-DATE}
+                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date DEC-2000-DATE-0}
+                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date DEC-2000-DATE-1}
 
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date JAN-2001-DATE}
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date JAN-2001-DATE}
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date JAN-2001-DATE}
+                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date JAN-2001-DATE-0}
+                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date JAN-2001-DATE-1}
+                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date JAN-2001-DATE-2}
 
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE }
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE }
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE}
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE}]]
-    (purge-table)
-    (put-items test-many)
-    (let [[oct_a_0 nov_a_1] (get-two-months my-db-obj NOV-2000-MONTH)
-          [nov_b_1 dec_b_2] (get-two-months my-db-obj DEC-2000-MONTH)
-          [dec_c_2 jan_c_3] (get-two-months my-db-obj JAN-2001-MONTH)
-          [jan_d_3 feb_d_4] (get-two-months my-db-obj FEB-2001-MONTH)
-          [feb_e_4 mar_e_0] (get-two-months my-db-obj MAR-2001-MONTH)
-          [mar_f_0 apr_f_0] (get-two-months my-db-obj APR-2001-MONTH)
+                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE-0 }
+                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE-1 }
+                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE-2}
+                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE-3}]
+   _ (purge-table)
+   fake-db-records (put-items test-many)
+]
+ ;;   (println "555555555555555555555" fake-db-records)
+    (let [are-testing? true    ;; under-test?
+          [oct_a_0 nov_a_1] (get-two-months my-db-obj NOV-2000-MONTH are-testing?)
+          [nov_b_1 dec_b_2] (get-two-months my-db-obj DEC-2000-MONTH are-testing?)
+          [dec_c_2 jan_c_3] (get-two-months my-db-obj JAN-2001-MONTH are-testing?)
+          [jan_d_3 feb_d_4] (get-two-months my-db-obj FEB-2001-MONTH are-testing?)
+          [feb_e_4 mar_e_0] (get-two-months my-db-obj MAR-2001-MONTH are-testing?)
+          [mar_f_0 apr_f_0] (get-two-months my-db-obj APR-2001-MONTH are-testing?)
           actual-counts  [(count oct_a_0) (count nov_a_1) (count nov_b_1) (count dec_b_2) (count dec_c_2) (count jan_c_3)
                           (count jan_d_3) (count feb_d_4) (count feb_e_4) (count mar_e_0) (count mar_f_0) (count apr_f_0)]
           expected-counts [0                1       1       2       2       3
                           3                4       4       0       0       0]]
       [actual-counts expected-counts])))
 
+;   (clojure.test/test-vars [#'tests-scrape-html/test-2000])
 (deftest test-2000
-  (let [[actual-counts expected-counts] (init_1_2_3_4_months USE_AMAZONICA_DB)]
-    (is (= actual-counts expected-counts)))
-  (let [[actual-counts expected-counts] (init_1_2_3_4_months USE_MONGER_DB)]
+  ;; (let [[actual-counts expected-counts] (init_1_2_3_4_months USE_AMAZONICA_DB)]
+  ;;   (is (= actual-counts expected-counts)))
+;   (let [[actual-counts expected-counts] (init_1_2_3_4_months USE_MONGER_DB)]
+   ;  (is (= actual-counts expected-counts)))
+  (let [[actual-counts expected-counts] (init_1_2_3_4_months USE_FAKE_DB)]
     (is (= actual-counts expected-counts)))
 )
 

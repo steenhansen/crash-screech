@@ -5,6 +5,7 @@
   (:require [crash-sms.config-args :refer [make-config compact-hash]])
   (:require [crash-sms.dynamo-db  :refer [dynamo-build]])
   (:require [crash-sms.mongo-db :refer [mongolabs-build]])
+  (:require [crash-sms.fake-db :refer [fake-build]])
   (:require [crash-sms.years-months :refer [current-yyyy-mm current-yyyy-mm-dd]]))
 
 (comment
@@ -31,7 +32,8 @@
   (let [db-keyword (keyword db-type)]
     (try (case db-keyword
            :amazonica-db (dynamo-build the-config table-name pages-to-check)
-           :monger-db (mongolabs-build the-config table-name pages-to-check))
+           :monger-db (mongolabs-build the-config table-name pages-to-check)
+:fake-db (fake-build))
          (catch Exception e
            (println " get-db-conn - " db-keyword
                     " -caught exception: " (.getMessage e))))))

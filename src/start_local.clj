@@ -39,17 +39,17 @@
                      :the-accurate true,
                      :the-time 1234}
                     {:the-url "sffaudio.herokuapp.com_rsd_rss",
-                     :the-date "2019-06-19-01:54:03.800Z",
+                     :the-date "2019-06-19-01:54:03.801Z",
                      :the-html "bluh 2222",
                      :the-accurate true,
                      :the-time 12346}
                     {:the-url "www.sffaudio.com",
-                     :the-date "2019-05-19-01:54:03.800Z",
+                     :the-date "2019-05-19-01:54:03.802Z",
                      :the-html "blah 3333",
                      :the-accurate true,
                      :the-time 1234}
                     {:the-url "sffaudio.herokuapp.com_rsd_rss",
-                     :the-date "2019-05-19-01:54:03.800Z",
+                     :the-date "2019-05-19-01:54:03.803Z",
                      :the-html "bluhss 4444",
                      :the-accurate false,
                      :the-time 12346}]
@@ -57,12 +57,12 @@
          web-scraper (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
          express-server (build-express-serve web-scraper my-db-obj cron-url sms-data testing-sms? instant-time-fn)
          test-one {:the-url "www.sffaudio.com",
-                   :the-date "2019-06-19-01:54:03.800Z",
+                   :the-date "2019-06-19-01:54:03.804Z",
                    :the-html "blah 5555",
                    :the-accurate true,
                    :the-time 1234}]
-    ;((:put-items my-db-obj) test-many)
-    ;((:put-item my-db-obj) test-one)
+   ; ((:put-items my-db-obj) test-many)
+   ; ((:put-item my-db-obj) test-one)
      (println "1111")
      (web-init int-port express-server)
      (println "2222")

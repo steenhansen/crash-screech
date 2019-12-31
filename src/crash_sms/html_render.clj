@@ -5,7 +5,7 @@
   (:require [clojure.string :as clj-str])
   (:require [global-consts-vars  :refer :all])
   (:require [crash-sms.years-months  :refer [current-yyyy-mm current-month  trunc-yyyy-mm-dd
-                                                 prev-month prev-yyyy-mm date-to-yyyy-mm]])
+                                             prev-month prev-yyyy-mm date-to-yyyy-mm]])
 ;  (:require [java-time.local :as j-time])
   (:require [global-consts-vars :refer :all]))
 
@@ -32,24 +32,38 @@
 
 (declare fill-bytes)
 
+;; (defn get-two-months
+;;  [my-db-obj yyyy-mm testing-sms?]
+;; )
 
 (defn get-two-months
   "has db test"
-  [my-db-obj yyyy-mm]
+  [my-db-obj yyyy-mm testing-sms?]     ;;; under-test?
   (let [get-all (:get-all my-db-obj)
         this-y-m (current-yyyy-mm yyyy-mm)
         last-y-m (prev-yyyy-mm yyyy-mm)
         this-months (get-all this-y-m)
-        last-months (get-all last-y-m)
-        current-months (vec this-months)
-        previous-months (vec last-months)]
-    [previous-months current-months]))
+        last-months (get-all last-y-m)]
+    (if testing-sms?
+      (let [this-sorted (sort-by :check-url this-months)
+            last-sorted (sort-by :check-url last-months)
+            current-months (vec this-sorted)
+            previous-months (vec last-sorted)]
+;(println "I am stesting .kzzzzzzzzzzzzzzzzzzzzzzzzzzz")
+        [previous-months current-months])
+      (let [current-months (vec this-months)
+            previous-months (vec last-months)]
+;(println "NOOOOOOOOOOOOOO tewst")
+        [previous-months current-months]))))
 
 (defn get-index
   "has db test"
   ([my-db-obj] (get-index my-db-obj (date-to-yyyy-mm (java-time.temporal/instant))))
-  ([my-db-obj yyyy-mm]
-   (let [[previous-months current-months] (get-two-months my-db-obj yyyy-mm)
+  ([my-db-obj yyyy-mm] (get-index my-db-obj yyyy-mm false))
+  ([my-db-obj yyyy-mm testing-sms?]
+;(println "in get-indexxxxxxxxxxxxxxxxxx" testing-sms?)
+
+   (let [[previous-months current-months] (get-two-months my-db-obj yyyy-mm testing-sms?)       ;;; under-test?
          prev-name (prev-month yyyy-mm)
          cur-name (current-month yyyy-mm)
          table-name (:table-name my-db-obj)
@@ -58,13 +72,11 @@
                   [{:month-type prev-name, :month-data previous-months}
                    {:month-type cur-name, :month-data current-months}]}]
 
-
-
-(defn fill-html
-  [check-accurate check-html]
-  (if (and (= T-TEST-COLLECTION table-name) (not check-accurate))
-  (enlive-html/do-> (enlive-html/content FAKE-FAIL-CONTENT))
-    (enlive-html/do-> (enlive-html/content (if check-accurate "" check-html)))))
+     (defn fill-html
+       [check-accurate check-html]
+       (if (and (= T-TEST-COLLECTION table-name) (not check-accurate))
+         (enlive-html/do-> (enlive-html/content FAKE-FAIL-CONTENT))
+         (enlive-html/do-> (enlive-html/content (if check-accurate "" check-html)))))
 
      (defn fill-time
        [check-time]
@@ -83,15 +95,12 @@
      (defn fill-date  [check-date]
        (if  (= PRODUCTION-COLLECTION table-name)
          (enlive-html/do-> (enlive-html/content (day-hour-min check-date)))
-         (enlive-html/do-> (enlive-html/content ( trunc-yyyy-mm-dd  check-date)))
-
-
-))
+         (enlive-html/do-> (enlive-html/content (trunc-yyyy-mm-dd  check-date)))))
 
      (defn fill-bytes [check-bytes]
        (if  (= PRODUCTION-COLLECTION table-name)
          (enlive-html/do-> (enlive-html/content (str check-bytes)))
-       (enlive-html/do-> (enlive-html/content (str FAKE-SCRAPE-BYTES)))))
+         (enlive-html/do-> (enlive-html/content (str FAKE-SCRAPE-BYTES)))))
 
      (enlive-html/defsnippet row-selector
        BASE-HTML-TEMPLATE

@@ -62,6 +62,35 @@
 
 
 
+(deftest t-fake-put
+    (let [ db-type  USE_MONGER_DB
+           the-config (make-config db-type TEST-CONFIG-FILE IGNORE-ENV-VARS)
+          pages-to-check [{:check-page "www.sffaudio.com",
+                         :enlive-keys [:article :div.blog-item-wrap],
+                         :at-least 1}]
+                   a-mongo-db       (mongolabs-build the-config  T-TEST-COLLECTION pages-to-check)
+
+          put-item (:my-put-item a-mongo-db)
+          get-all (:my-get-all a-mongo-db)
+  test-rec  {:the-url "www.sffaudio.com",
+                    :the-date "2019-06-19-01:54:03.800Z",
+                    :the-html "blah 1111",
+                    :the-accurate true,
+                    :the-time 1234}
+  test-rec2  {:the-url "aww.sffaudio.com",
+                    :the-date "2019-06-19-01:54:03.802Z",
+                    :the-html "blah 1111",
+                    :the-accurate true,
+                    :the-time 1234}
+]
+     (put-item test-rec)
+     (put-item test-rec2)
+    (println "all mongo" (get-all "2019-06-19" ))
+))
+
+
+
+
 
 
 

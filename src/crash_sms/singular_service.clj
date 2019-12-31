@@ -1,7 +1,7 @@
 (ns crash-sms.singular-service
   (:gen-class))
 
-(defonce ^:dynamic *service-kill-list* (atom {}))
+(defonce ^:dynamic *service-kill-list* (atom {}))      ;;; windows-java-service-kill-list
 
 (defn add-service
   [spawning-name kill-service]
