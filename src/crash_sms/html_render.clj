@@ -49,11 +49,11 @@
             last-sorted (sort-by :check-url last-months)
             current-months (vec this-sorted)
             previous-months (vec last-sorted)]
-;(println "I am stesting .kzzzzzzzzzzzzzzzzzzzzzzzzzzz")
         [previous-months current-months])
-      (let [current-months (vec this-months)
-            previous-months (vec last-months)]
-;(println "NOOOOOOOOOOOOOO tewst")
+      (let [this-sorted (sort-by :check-date this-months)
+            last-sorted (sort-by :check-date last-months)
+            current-months (vec this-sorted)
+            previous-months (vec last-sorted)]
         [previous-months current-months]))))
 
 (defn get-index
@@ -61,9 +61,8 @@
   ([my-db-obj] (get-index my-db-obj (date-to-yyyy-mm (java-time.temporal/instant))))
   ([my-db-obj yyyy-mm] (get-index my-db-obj yyyy-mm false))
   ([my-db-obj yyyy-mm testing-sms?]
-;(println "in get-indexxxxxxxxxxxxxxxxxx" testing-sms?)
 
-   (let [[previous-months current-months] (get-two-months my-db-obj yyyy-mm testing-sms?)       ;;; under-test?
+   (let [[previous-months current-months] (get-two-months my-db-obj yyyy-mm testing-sms?)       ;;; under-test? sut
          prev-name (prev-month yyyy-mm)
          cur-name (current-month yyyy-mm)
          table-name (:table-name my-db-obj)

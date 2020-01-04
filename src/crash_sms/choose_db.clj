@@ -21,21 +21,21 @@
 
 (comment
   (let  [the-config (make-config USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
-         my-db-funcs (get-db-conn T-TEST-COLLECTION [] USE_MONGER_DB the-config)]
+         my-db-funcs (get-db-conn T-TEST-COLLECTION  USE_MONGER_DB the-config)]
     my-db-funcs)
   ; {:my-delete-table
   ;  #function[crash-sms.mongo-db/mongolabs-build/delete-table--126143],
   ;  :my-purge-table ...
   )
 (defn get-db-conn
-  [table-name pages-to-check db-type the-config]
+  [table-name pages-to-check db-type the-config]             ; collection-name
   (let [db-keyword (keyword db-type)]
     (try (case db-keyword
            :amazonica-db (dynamo-build the-config table-name pages-to-check)
            :monger-db (mongolabs-build the-config table-name pages-to-check)
 :fake-db (fake-build))
          (catch Exception e
-           (println " get-db-conn - " db-keyword
+           (print-line " get-db-conn - " db-keyword
                     " -caught exception: " (.getMessage e))))))
 
 (defn build-empty-month?
@@ -51,7 +51,6 @@
     ([yyyy-mm]
      (let [url-checks (get-all-fn yyyy-mm)
            months-checks (count url-checks)]
-;(println "bukld " months-checks)
        (if (zero? months-checks) true false)))))
 
 (defn build-today-error?
@@ -106,7 +105,7 @@
   )
 
 (defn build-db
-  [table-name pages-to-check db-type config-file environment-utilize]
+  [table-name pages-to-check db-type config-file environment-utilize]     ;;; collection-name
   (let [the-config (make-config db-type config-file environment-utilize)
         my-db-funcs (get-db-conn table-name pages-to-check db-type the-config)
         web-port (:PORT the-config)
@@ -134,13 +133,11 @@
                    :get-url (:my-get-url my-db-funcs),
                    :put-item (:my-put-item my-db-funcs),
                    :put-items (:my-put-items my-db-funcs),
-                   :empty-month? (build-empty-month? get-all),
-                   :today-error? (build-today-error? get-all)
-                   :table-name table-name}]
 
-;;(println "aaa" my-db-obj)
-;;(println "bbb" (:db-alive? my-db-obj))
-;;(println "ccc" ( (:db-alive? my-db-obj)))
+ :empty-month? (build-empty-month? get-all),
+                   :today-error? (build-today-error? get-all)
+:type-db db-type
+                   :table-name table-name}]
 
  (if (not ( (:db-alive? my-db-obj)))
       (throw  (Exception. (str " **** ERROR no database running : " db-type))))

@@ -53,7 +53,7 @@
 
 
 (defn html-render-specs []
-  (println "Speccing html-render")
+  (print-line "Speccing html-render")
       (spec-test/instrument)
 
       (spec-test/instrument 'day-hour-min))
@@ -68,10 +68,9 @@
 
 (deftest unit-get-index
     (console-test  "unit-get-index"  "html-render")
-    (let [db-type USE_MONGER_DB
-          [my-db-obj _ _ _] (build-db T-TEST-COLLECTION
+    (let [[my-db-obj _ _ _] (build-db T-TEST-COLLECTION
                                       []
-                                      db-type
+                                      USE_MONGER_DB
                                       TEST-CONFIG-FILE
                                       IGNORE-ENV-VARS)
           purge-table (:purge-table my-db-obj)
@@ -94,5 +93,17 @@
 
 
 (defn do-tests []
+  (reset! *run-all-tests* true)
+  (reset! *testing-namespace* "fast-all-tests-running")
  (html-render-specs)
-  (run-tests 'tests-html-render))
+  (run-tests 'tests-html-render)
+  (reset! *testing-namespace* "no-tests-running"))
+
+
+
+(defn fast-tests []
+  (reset! *run-all-tests* false)
+  (reset! *testing-namespace* "fast-all-tests-running")
+ (html-render-specs)
+  (run-tests 'tests-html-render)
+  (reset! *testing-namespace* "no-tests-running"))

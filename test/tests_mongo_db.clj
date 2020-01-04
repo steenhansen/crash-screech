@@ -31,63 +31,10 @@
 
 
 (defn mongo-db-specs []
-(println "Speccing mongo-db")
+(print-line "Speccing mongo-db")
       (spec-test/instrument)
       (spec-test/instrument 'next-date-time)
       (spec-test/instrument 'mongolabs-build))
-
-
-
-
-(deftest unit-mongolabs-build
-    (let [ db-type  USE_MONGER_DB
-           the-config (make-config db-type TEST-CONFIG-FILE IGNORE-ENV-VARS)
-          pages-to-check [{:check-page "www.sffaudio.com",
-                         :enlive-keys [:article :div.blog-item-wrap],
-                         :at-least 1}]
-                   a-mongo-db       (mongolabs-build the-config  T-TEST-COLLECTION pages-to-check)]
-      (console-test "unit-mongolabs-build" "mongo-db")
-
-     (is (function?(:my-delete-table a-mongo-db)))
-     (is (function?(:my-db-alive? a-mongo-db)))
-     (is (function?(:my-purge-table a-mongo-db)))
-     (is (function?(:my-get-all a-mongo-db)))
-     (is (function?(:my-get-url a-mongo-db)))
-     (is (function?(:my-put-item a-mongo-db)))
-     (is (function?(:my-put-items a-mongo-db)))
-(is (= (count a-mongo-db) 7))
-))
-
-
-
-
-
-(deftest t-fake-put
-    (let [ db-type  USE_MONGER_DB
-           the-config (make-config db-type TEST-CONFIG-FILE IGNORE-ENV-VARS)
-          pages-to-check [{:check-page "www.sffaudio.com",
-                         :enlive-keys [:article :div.blog-item-wrap],
-                         :at-least 1}]
-                   a-mongo-db       (mongolabs-build the-config  T-TEST-COLLECTION pages-to-check)
-
-          put-item (:my-put-item a-mongo-db)
-          get-all (:my-get-all a-mongo-db)
-  test-rec  {:the-url "www.sffaudio.com",
-                    :the-date "2019-06-19-01:54:03.800Z",
-                    :the-html "blah 1111",
-                    :the-accurate true,
-                    :the-time 1234}
-  test-rec2  {:the-url "aww.sffaudio.com",
-                    :the-date "2019-06-19-01:54:03.802Z",
-                    :the-html "blah 1111",
-                    :the-accurate true,
-                    :the-time 1234}
-]
-     (put-item test-rec)
-     (put-item test-rec2)
-    (println "all mongo" (get-all "2019-06-19" ))
-))
-
 
 
 
@@ -130,5 +77,18 @@
 
 
 (defn do-tests []
+  (reset! *run-all-tests* true)
+ (reset! *testing-namespace* "fast-all-tests-running")
  (mongo-db-specs)
-  (run-tests 'tests-mongo-db))
+  (run-tests 'tests-mongo-db)
+  (reset! *testing-namespace* "no-tests-running"))
+
+
+
+
+(defn fast-tests []
+  (reset! *run-all-tests* false)
+ (reset! *testing-namespace* "fast-all-tests-running")
+ (mongo-db-specs)
+  (run-tests 'tests-mongo-db)
+  (reset! *testing-namespace* "no-tests-running"))

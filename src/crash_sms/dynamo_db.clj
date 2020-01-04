@@ -8,8 +8,10 @@
   (:require [clojure.string :as clj-str])
   (:require [crash-sms.config-args :refer  [compact-hash]])
   (:require [crash-sms.check-data  :refer [prepare-data]])
-
   (:require [global-consts-vars  :refer :all]))
+
+
+;(alias 's 'clojure.spec.alpha)
 
 (defn dynamo-build
   [amazonica-config my-table-name pages-to-check]
@@ -33,33 +35,38 @@
                          (my-table-exist? "_any_dynamo_name")
                          true
                          (catch Exception e
-(println "amamamDb is not alive " (.getMessage e))        ;; Connection pool shut down
+                           (print-line "DynamoDb is not alive " (.getMessage e))        ;; Connection pool shut down
                            false)))
 
         my-make-table  (fn make-table []
-                         (aws-dyn/create-table
-                          connection-opts
-                          :table-name my-table-name
-                          :key-schema [{:attribute-name "check-url", :key-type "HASH"}
-                                       {:attribute-name "_id", :key-type "RANGE"}]
-                          :attribute-definitions
-                          [{:attribute-name "check-url", :attribute-type "S"}
-                           {:attribute-name "_id", :attribute-type "S"}]
-                          :provisioned-throughput {:read-capacity-units MAX-R-W-RECORDS,
-                                                   :write-capacity-units
-                                                   MAX-R-W-RECORDS}))
+                         (let [my-key-schema [{:attribute-name "check-url", :key-type "HASH"}
+                                              {:attribute-name "_id", :key-type "RANGE"}]
+                               my-attribute-defn  [{:attribute-name "check-url", :attribute-type "S"}
+                                                   {:attribute-name "_id", :attribute-type "S"}]
+                               my-provision-through  {:read-capacity-units MAX-R-W-RECORDS,
+                                                      :write-capacity-units
+                                                      MAX-R-W-RECORDS}]
+                           (aws-dyn/create-table
+                            connection-opts
+                            :table-name my-table-name
+                            :key-schema my-key-schema
+                            :attribute-definitions my-attribute-defn
+                            :provisioned-throughput my-provision-through))
+                         )
 
-        my-get-url     (fn get-url [begins-with page-to-check]
-;;(println "################3 my-get-url begins-with page-to-check " begins-with page-to-check)
+        my-get-url    (fn get-url [begins-with page-to-check]
+                         (assert (and (string? begins-with) (< 0 (count begins-with))))
+                         (assert (and (string? page-to-check) (< 0 (count page-to-check))))
                          (when-not (my-table-exist? my-table-name) (my-make-table))
-                         (let [page-matches (aws-dyn/query
+                         (let [my-key-conditions { :check-url {:attribute-value-list [page-to-check],
+                                                   :comparison-operator "EQ"},
+                                                   :_id {:attribute-value-list [begins-with],
+                                                         :comparison-operator "BEGINS_WITH"}}
+                               page-matches (aws-dyn/query
                                              connection-opts
                                              :table-name my-table-name
-                                             :key-conditions
-                                             {:check-url {:attribute-value-list [page-to-check],
-                                                          :comparison-operator "EQ"},
-                                              :_id {:attribute-value-list [begins-with],
-                                                    :comparison-operator "BEGINS_WITH"}})
+                                             :key-conditions my-key-conditions
+                                             )
                                plain-items (:items page-matches)]
                            plain-items))
 
@@ -74,12 +81,9 @@
                        (let [my-get-the-pages (fn get-the-pages
                                                 [items-vector check-page-obj]
                                                 (let [{check-page :check-page} check-page-obj
-                                                      slashed-page (clj-str/replace check-page #"_" "/")
-;_ (println "slashed " slashed-page)
-                                                      plain-items (my-get-url begins-with slashed-page)]
+                                                      plain-items (my-get-url begins-with check-page)]
                                                   (concat items-vector plain-items)))]
                          (let [all-matches (reduce my-get-the-pages [] pages-to-check)
-;_ (println "all  matched " all-matches)
                                sorted-matches (sort-by :check-url all-matches)]
                            sorted-matches)))
 
@@ -95,9 +99,12 @@
                         (when-not (my-table-exist? my-table-name) (my-make-table))
                         (let [fixed-dates (prepare-data check-records my-table-name)
                               has-puts (for [fixed-date fixed-dates]
-                                         {:put-request {:item fixed-date}})]
+                                         {:put-request {:item fixed-date}})
+
+                              my-request-items {my-table-name has-puts}]
                           (aws-dyn/batch-write-item connection-opts
                                                     :return-consumed-capacity "TOTAL"
                                                     :return-item-collection-metrics "SIZE"
-                                                    :request-items {my-table-name has-puts})))]
+                                                    :request-items my-request-items
+                                                    )))]
     (compact-hash my-delete-table my-db-alive? my-purge-table my-get-all my-get-url my-put-item my-put-items)))

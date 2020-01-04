@@ -18,10 +18,50 @@
 
   (:require [global-consts-vars  :refer :all])
 
+;  (:require [core-test  :refer :all])
+
   (:require [crash-sms.choose-db :refer :all])
   (:require [general-specs :refer :all])
 
 )
+
+
+
+
+(def TEST-CHECK-PAGES [{:check-page WWW-SFFAUDIO-COM
+                               :enlive-keys [:article :div.blog-item-wrap],
+                               :at-least 1}]
+)
+
+
+
+
+(def TEST-MANY-PAGES [{:the-url "www.sffaudio.com",
+                    :the-date "2016-07-08-01:54:03.001Z",
+                    :the-html "blah 1111",
+                    :the-accurate true,
+                    :the-time 1234}
+                   {:the-url "sffaudio.herokuapp.com_rsd_rss",
+                    :the-date "2016-07-08-01:54:03.002Z",
+                    :the-html "bluh 2222",
+                    :the-accurate true,
+                    :the-time 12346}
+                   {:the-url "www.sffaudio.com",
+                    :the-date "2016-07-09-01:54:03.003Z",
+                    :the-html "blah 3333",
+                    :the-accurate true,
+                    :the-time 1234}
+                   {:the-url "sffaudio.herokuapp.com_rsd_rss",
+                    :the-date "2016-07-09-02:54:03.004Z",
+                    :the-html "bluhss 4444",
+                    :the-accurate false,
+                    :the-time 12346}])
+
+
+
+
+
+
 
 
 
@@ -31,9 +71,9 @@
   ([test-name test-1]
      (console-test test-name test-1 "" ""))
   ([test-name test-1 test-2]
-     (println "..." test-name test-1 test-2 ""))
+     (console-test test-name test-1 test-2 ""))
   ([test-name test-1 test-2 test-3]
-     (println "..." test-name test-1 test-2 test-3))
+     (print-line "..." test-name test-1 test-2 test-3))
 )
 
 ;  (ddiff/pretty-print (ddiff/diff expected-get-index actual-get-index) )
@@ -63,13 +103,13 @@
 (defn reset-test-to-actual-data
   [test-file actual-data]
   (let  [test-path (str SCRAPED-TEST-DATA test-file)]
-    (println test-file test-path)
+    (print-line test-file test-path)
  ; (spit test-path actual-data)
     ))
 
 (defn print-block
   []
-  (println
+  (print-line
    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"))
 
 (defn sms-is-in-test [db-type]

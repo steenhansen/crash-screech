@@ -24,7 +24,7 @@
   (:require [prepare-tests :refer :all]))
 
 (defn scrape-html-specs []
-      (println "Speccing scrape-html")
+      (print-line "Speccing scrape-html")
       (spec-test/instrument)
       (spec-test/instrument 'count-scrapes))
 
@@ -60,8 +60,9 @@
   ; "1\n2\n3"
   (sms-send-fn_error USE_MONGER_DB))
 (defn sms-send-fn_error [db-type]
+  (console-test  "scrape-html sms-send-fn_error"  db-type)
   (let [fail-to-large 12345678
-        pages-to-check [{:check-page "www.sffaudio.com",
+        pages-to-check [{:check-page WWW-SFFAUDIO-COM   ;;"www.sffaudio.com",
                          :enlive-keys [:article :div.blog-item-wrap],
                          :at-least fail-to-large}]
         {:keys [my-db-obj sms-data sms-send-fn]} (sms-send-init pages-to-check db-type)
@@ -75,19 +76,21 @@
 
 ; (clojure.test/test-vars [#'tests-scrape-html/test-1000])
 (deftest test-1000
- ;(let [[text-diff-1 text-diff-2] (sms-send-fn_error  USE_AMAZONICA_DB)]
-  ;  (is (= text-diff-1 text-diff-2)))
- (let [[text-diff-1 text-diff-2] (sms-send-fn_error USE_FAKE_DB)]
+  (console-test  "scrape-html test-1000")
+ (let [[text-diff-1 text-diff-2] (sms-send-fn_error  USE_AMAZONICA_DB)]
     (is (= text-diff-1 text-diff-2)))
- ;(let [[text-diff-1 text-diff-2] (sms-send-fn_error USE_MONGER_DB)]
-  ;  (is (= text-diff-1 text-diff-2)))
+ (let [[text-diff-1 text-diff-2] (sms-send-fn_error USE_FAKE_DB)]      ; deftest f-
+    (is (= text-diff-1 text-diff-2)))
+ (let [[text-diff-1 text-diff-2] (sms-send-fn_error USE_MONGER_DB)]
+    (is (= text-diff-1 text-diff-2)))
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn sms-send-fn_ok [db-type]
+ (console-test  "scrape-html sms-send-fn_ok"  db-type)
   (let [pass-small 1
-        pages-to-check [{:check-page "www.sffaudio.com",
+        pages-to-check [{:check-page  WWW-SFFAUDIO-COM   ; "www.sffaudio.com",
                          :enlive-keys [:article :div.blog-item-wrap],
                          :at-least pass-small}]
         {:keys [my-db-obj sms-data sms-send-fn]}  (sms-send-init pages-to-check db-type)
@@ -101,18 +104,20 @@
 
 ; (clojure.test/test-vars [#'tests-scrape-html/test-1002])
 (deftest test-1002
- ;; (let [[text-diff-1 text-diff-2] (sms-send-fn_ok  USE_AMAZONICA_DB)]
- ;;    (is (= text-diff-1 text-diff-2)))
- (let [[text-diff-1 text-diff-2] (sms-send-fn_ok  USE_FAKE_DB)]
+  (console-test  "scrape-html test-1002")
+  (let [[text-diff-1 text-diff-2] (sms-send-fn_ok  USE_AMAZONICA_DB)]
+     (is (= text-diff-1 text-diff-2)))
+ (let [[text-diff-1 text-diff-2] (sms-send-fn_ok  USE_FAKE_DB)]        ;;;; f-
     (is (= text-diff-1 text-diff-2)))
- ;; (let [[text-diff-1 text-diff-2] (sms-send-fn_ok USE_MONGER_DB)]
- ;;    (is (= text-diff-1 text-diff-2)))
+  (let [[text-diff-1 text-diff-2] (sms-send-fn_ok USE_MONGER_DB)]
+     (is (= text-diff-1 text-diff-2)))
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 (defn init_1_2_3_4_months [db-type]
+  (console-test "scrape-html init_1_2_3_4_months" db-type)
   (let [the-check-pages (make-check-pages 0)
             [my-db-obj _ _ _] (build-db T-TEST-COLLECTION
                                     the-check-pages
@@ -139,23 +144,22 @@
         FEB-2001-MONTH "2001-02"    ;3 and 4 records
         MAR-2001-MONTH "2001-03"    ;4 and 0 records
         APR-2001-MONTH "2001-04"    ;0 and 0 records
-        test-many [{:the-url WWW-SFFAUDIO-COM-SLASH :the-date NOV-2000-DATE  }
+        test-many [{:the-url WWW-SFFAUDIO-COM :the-date NOV-2000-DATE  }
 
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date DEC-2000-DATE-0}
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date DEC-2000-DATE-1}
+                   {:the-url WWW-SFFAUDIO-COM :the-date DEC-2000-DATE-0}
+                   {:the-url WWW-SFFAUDIO-COM :the-date DEC-2000-DATE-1}
 
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date JAN-2001-DATE-0}
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date JAN-2001-DATE-1}
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date JAN-2001-DATE-2}
+                   {:the-url WWW-SFFAUDIO-COM :the-date JAN-2001-DATE-0}
+                   {:the-url WWW-SFFAUDIO-COM :the-date JAN-2001-DATE-1}
+                   {:the-url WWW-SFFAUDIO-COM :the-date JAN-2001-DATE-2}
 
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE-0 }
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE-1 }
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE-2}
-                   {:the-url WWW-SFFAUDIO-COM-SLASH :the-date FEB-2001-DATE-3}]
+                   {:the-url WWW-SFFAUDIO-COM :the-date FEB-2001-DATE-0 }
+                   {:the-url WWW-SFFAUDIO-COM :the-date FEB-2001-DATE-1 }
+                   {:the-url WWW-SFFAUDIO-COM :the-date FEB-2001-DATE-2}
+                   {:the-url WWW-SFFAUDIO-COM :the-date FEB-2001-DATE-3}]
    _ (purge-table)
    fake-db-records (put-items test-many)
 ]
- ;;   (println "555555555555555555555" fake-db-records)
     (let [are-testing? true    ;; under-test?
           [oct_a_0 nov_a_1] (get-two-months my-db-obj NOV-2000-MONTH are-testing?)
           [nov_b_1 dec_b_2] (get-two-months my-db-obj DEC-2000-MONTH are-testing?)
@@ -169,16 +173,36 @@
                           3                4       4       0       0       0]]
       [actual-counts expected-counts])))
 
-;   (clojure.test/test-vars [#'tests-scrape-html/test-2000])
-(deftest test-2000
-  ;; (let [[actual-counts expected-counts] (init_1_2_3_4_months USE_AMAZONICA_DB)]
-  ;;   (is (= actual-counts expected-counts)))
-;   (let [[actual-counts expected-counts] (init_1_2_3_4_months USE_MONGER_DB)]
-   ;  (is (= actual-counts expected-counts)))
-  (let [[actual-counts expected-counts] (init_1_2_3_4_months USE_FAKE_DB)]
-    (is (= actual-counts expected-counts)))
+;   (clojure.test/test-vars [#'tests-scrape-html/fast-month-count])
+(deftest fast-month-count
+(console-test  "tests-scrape-html fast-month-count")
+   (let [[actual-counts expected-counts] (init_1_2_3_4_months USE_FAKE_DB)]
+     (is (= actual-counts expected-counts)))
 )
 
+;   (clojure.test/test-vars [#'tests-scrape-html/real-month-count])
+(deftest real-month-count
+
+  (if (execute-tests)
+    (do
+  (console-test  "tests-scrape-html real-month-count")
+   (let [[actual-counts expected-counts] (init_1_2_3_4_months USE_AMAZONICA_DB)]
+     (is (= actual-counts expected-counts)))
+   (let [[actual-counts expected-counts] (init_1_2_3_4_months USE_MONGER_DB)]
+      (is (= actual-counts expected-counts)))
+)))
+
 (defn do-tests []
+(reset! *run-all-tests* true)
+ (reset! *testing-namespace* "fast-all-tests-running")
   (scrape-html-specs)
-  (run-tests 'tests-scrape-html))
+  (run-tests 'tests-scrape-html)
+(reset! *testing-namespace* "no-tests-running")
+)
+
+(defn fast-tests []
+   (reset! *run-all-tests* false)
+ (reset! *testing-namespace* "fast-all-tests-running")
+(scrape-html-specs)
+  (run-tests 'tests-scrape-html)
+(reset! *testing-namespace* "no-tests-running"))

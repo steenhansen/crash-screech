@@ -9,7 +9,7 @@
   (:require [prepare-tests :refer :all]))
 
 (defn singular-service-specs []
-      (println "Speccing singular-service")
+      (print-line "Speccing singular-service")
       (spec-test/instrument)
       (spec-test/instrument 'add-service)
       (spec-test/instrument 'remove-service)
@@ -32,5 +32,16 @@
   (let [test-spawn-name (kill-services)]))
 
 (defn do-tests []
+  (reset! *run-all-tests* true)
+  (reset! *testing-namespace* "fast-all-tests-running")
   (singular-service-specs)
-  (run-tests 'tests-singular-service))
+  (run-tests 'tests-singular-service)
+(reset! *testing-namespace* "no-tests-running"))
+
+
+(defn fast-tests []
+  (reset! *run-all-tests* false)
+  (reset! *testing-namespace* "fast-all-tests-running")
+  (singular-service-specs)
+  (run-tests 'tests-singular-service)
+(reset! *testing-namespace* "no-tests-running"))

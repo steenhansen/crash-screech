@@ -13,7 +13,7 @@
 )
 
 (defn years-months-specs []
-      (println "Speccing years-months")
+      (print-line "Speccing years-months")
       (spec-test/instrument)
       (spec-test/instrument 'adjusted-date)
       (spec-test/instrument 'current-month)
@@ -135,5 +135,17 @@
       (is (= expected-month-name actual-month-name))))
 
 (defn do-tests []
+  (reset! *run-all-tests* true)
+  (reset! *testing-namespace* "fast-all-tests-running")
   (years-months-specs)
-  (run-tests 'tests-years-months))
+  (years-months-specs)
+  (run-tests 'tests-years-months)
+  (reset! *testing-namespace* "no-tests-running"))
+
+
+(defn fast-tests []
+  (reset! *run-all-tests* false)
+  (reset! *testing-namespace* "fast-all-tests-running")
+  (years-months-specs)
+  (run-tests 'tests-years-months)
+  (reset! *testing-namespace* "no-tests-running"))

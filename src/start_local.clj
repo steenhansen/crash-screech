@@ -55,7 +55,8 @@
                      :the-time 12346}]
          testing-sms? true
          web-scraper (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
-         express-server (build-express-serve web-scraper my-db-obj cron-url sms-data testing-sms? instant-time-fn)
+         under-test? true
+         express-server (build-express-serve web-scraper my-db-obj cron-url sms-data under-test? instant-time-fn)
          test-one {:the-url "www.sffaudio.com",
                    :the-date "2019-06-19-01:54:03.804Z",
                    :the-html "blah 5555",
@@ -63,8 +64,6 @@
                    :the-time 1234}]
    ; ((:put-items my-db-obj) test-many)
    ; ((:put-item my-db-obj) test-one)
-     (println "1111")
      (web-init int-port express-server)
-     (println "2222")
      (cron-init scrape-pages-fn my-db-obj the-check-pages sms-data)
-     (println "33333"))))
+)))

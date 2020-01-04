@@ -9,9 +9,9 @@
   [config-file]
   (let [config-path (str (file-sys/absolute config-file))]
     (if-not (nil? (resolve 'DB-TEST-NAME))
-      (println "Trying to load" config-path))
+      (print-line "Trying to load" config-path))
     (try (edn-read/load-file config-file)
-         (catch Exception e (println "Failed to load" (.getMessage e))))))
+         (catch Exception e (print-line "Failed to load" (.getMessage e))))))
 
 (defn merge-environment
   [accum-environment env-object]
@@ -33,5 +33,3 @@
         ignore-environmentals (= environment-utilize IGNORE-ENV-VARS)
         has-environmentals (reduce merge-environment {} program-config)]
     (if ignore-environmentals program-config has-environmentals)))
-
-

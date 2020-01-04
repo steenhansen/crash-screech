@@ -42,7 +42,7 @@
 
 
 (defn cron-service-specs []
-  (println "Speccing cron-service")
+  (print-line "Speccing cron-service")
       (spec-test/instrument)
       (spec-test/instrument 'build-cron-func)
       (spec-test/instrument 'start-cron))
@@ -54,14 +54,12 @@
           pages-to-check [{:check-page "www.sffaudio.com",
                            :enlive-keys [:article :div.blog-item-wrap],
                            :at-least pass-small}]
-          db-type USE_MONGER_DB
-          environment-utilize USE_ENVIRONMENT
           the-check-pages (make-check-pages 0)
           [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
                                              the-check-pages
-                                             db-type
+                                             USE_MONGER_DB
                                              TEST-CONFIG-FILE
-                                             environment-utilize)
+                                             USE_ENVIRONMENT)
           a-cron-func (build-cron-func cron-job my-db-obj pages-to-check sms-data)]
       (is (function? a-cron-func))))
 
@@ -72,14 +70,12 @@
           pages-to-check [{:check-page "www.sffaudio.com",
                            :enlive-keys [:article :div.blog-item-wrap],
                            :at-least pass-small}]
-          db-type USE_MONGER_DB
-          environment-utilize USE_ENVIRONMENT
           the-check-pages (make-check-pages 0)
           [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
                                              the-check-pages
-                                             db-type
+                                             USE_MONGER_DB
                                              TEST-CONFIG-FILE
-                                             environment-utilize)
+                                             USE_ENVIRONMENT)
           a-cron-func (start-cron cron-job my-db-obj pages-to-check sms-data)
           cron-type (str (type a-cron-func))]
       (is (= cron-type "class overtone.at_at.RecurringJob"))))
@@ -91,19 +87,30 @@
           pages-to-check [{:check-page "www.sffaudio.com",
                            :enlive-keys [:article :div.blog-item-wrap],
                            :at-least pass-small}]
-          db-type USE_MONGER_DB
-          environment-utilize USE_ENVIRONMENT
           the-check-pages (make-check-pages 0)
           [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
                                              the-check-pages
-                                             db-type
+                                             USE_MONGER_DB
                                              TEST-CONFIG-FILE
-                                             environment-utilize)
+                                             USE_ENVIRONMENT)
           a-cron-func (cron-init cron-job my-db-obj pages-to-check sms-data)
           cron-type (str (type a-cron-func))]
       (is (= cron-type "class overtone.at_at.RecurringJob"))))
 
 
 (defn do-tests []
+  (reset! *run-all-tests* true)
+  (reset! *testing-namespace* "fast-all-tests-running")
 (cron-service-specs)
-  (run-tests 'tests-cron-service))
+  (run-tests 'tests-cron-service)
+  (reset! *testing-namespace* "no-tests-running")
+)
+
+
+
+(defn fast-tests []
+  (reset! *run-all-tests* false)
+  (reset! *testing-namespace* "fast-all-tests-running")
+(cron-service-specs)
+  (run-tests 'tests-cron-service)
+  (reset! *testing-namespace* "no-tests-running"))

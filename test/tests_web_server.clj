@@ -15,9 +15,9 @@
   (:require [prepare-tests :refer :all]))
 
 (defn web-server-specs []
-      (println "Speccing web-server")
-      (spec-test/instrument)
-      (spec-test/instrument 'build-express-serve))
+  (print-line "Speccing web-server")
+  (spec-test/instrument)
+  (spec-test/instrument 'build-express-serve))
 
 (defn html-correct [db-type]
   (console-test "web-server html-correct" db-type)
@@ -32,7 +32,8 @@
         testing-sms? true
         test-date (date-with-now-time-fn "2017-05-31")
         web-scraper (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? test-date)
-        express-server (build-express-serve web-scraper my-db-obj cron-url sms-data testing-sms? test-date)
+        under-test? true
+        express-server (build-express-serve web-scraper my-db-obj cron-url sms-data under-test? test-date)
         send-test-sms-url (:send-test-sms-url sms-data)
         web-page (express-server  {:uri cron-url})
         the-body (:body web-page)
@@ -42,18 +43,22 @@
     (let [[text-diff-1 text-diff-2] (is-html-eq conformed-actual conformed-expected)]
       [text-diff-1 text-diff-2])))
 
-;   (clojure.test/test-vars [#'tests-web-server/all-correct])
-(deftest all-correct
-  (console-test  "web-server all-correct")
+;   (clojure.test/test-vars [#'tests-web-server/fast-html-correct])
+(deftest fast-html-correct
+  (console-test  "test-web-server fast-html-correct")
   (let [[text-diff-1 text-diff-2] (html-correct  USE_FAKE_DB)]
-    (is (= text-diff-1 text-diff-2)))
+    (is (= text-diff-1 text-diff-2))))
 
-  ;; (let [[text-diff-1 text-diff-2] (html-correct  USE_MONGER_DB)]
-  ;;   (is (= text-diff-1 text-diff-2)))
+;   (clojure.test/test-vars [#'tests-web-server/real-html-correct])
+(deftest real-html-correct
+  (if (execute-tests)
+    (do
+      (console-test  "web-server real-html-correct")
+      (let [[text-diff-1 text-diff-2] (html-correct  USE_MONGER_DB)]
+        (is (= text-diff-1 text-diff-2)))
 
-  ;; (let [[text-diff-1 text-diff-2] (html-correct  USE_AMAZONICA_DB)]
-  ;;   (is (= text-diff-1 text-diff-2)))
-)
+      (let [[text-diff-1 text-diff-2] (html-correct  USE_AMAZONICA_DB)]
+        (is (= text-diff-1 text-diff-2))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -72,27 +77,39 @@
         testing-sms? true
         test-date (date-with-now-time-fn "2019-10-01")
         web-scraper (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? test-date)
-        express-server (build-express-serve web-scraper my-db-obj cron-url sms-data testing-sms? test-date)
+        under-test? true
+        express-server (build-express-serve web-scraper my-db-obj cron-url sms-data under-test? test-date)
         send-test-sms-url (:send-test-sms-url sms-data)
         web-page (express-server  {:uri cron-url})
         the-body (:body web-page)
+
+;_ (println "xxxxxxxxxxxxxxxxx" the-body "uuuuuuuuuuuuuuuuuuuuuuuuuu")
         file-expected (slurp  (str SCRAPED-TEST-DATA "tests_web_server_all_wrong.html"))
         conformed-actual (conform-whitespace the-body)
         conformed-expected (conform-whitespace file-expected)]
     (let [[text-diff-1 text-diff-2] (is-html-eq conformed-actual conformed-expected)]
-      (is (= text-diff-1 text-diff-2)))))
+      [text-diff-1 text-diff-2] ;;;(is (= text-diff-1 text-diff-2))
+      )))
 
-;   (clojure.test/test-vars [#'tests-web-server/all-wrong])
-(deftest all-wrong
-  (console-test  "web-server all-wrong")
-  (html-wrong USE_FAKE_DB)
- ; (html-wrong USE_MONGER_DB)
- ; (html-wrong USE_AMAZONICA_DB)
-)
+;   (clojure.test/test-vars [#'tests-web-server/fast-html-wrong])
+(deftest fast-html-wrong
+  (console-test  "test-web-server fast-html-wrong")
+  (let [[text-diff-1 text-diff-2] (html-wrong  USE_FAKE_DB)]
+    (is (= text-diff-1 text-diff-2))))
+
+;   (clojure.test/test-vars [#'tests-web-server/real-html-wrong])
+(deftest real-html-wrong
+  (if (execute-tests)
+    (do
+      (console-test  "web-server real-html-wrong")
+      (let [[text-diff-1 text-diff-2] (html-wrong  USE_MONGER_DB)]
+        (is (= text-diff-1 text-diff-2)))
+
+      (let [[text-diff-1 text-diff-2] (html-wrong  USE_AMAZONICA_DB)]
+        (is (= text-diff-1 text-diff-2))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; below actually reads the real web pages, making it slow
 (defn save-record [yyyy-mm-dd my-db-obj sms-data db-type]
   (console-test  "web-server save-record" db-type yyyy-mm-dd)
   (let [sff-audio [{:check-page WWW-SFFAUDIO-COM
@@ -104,7 +121,7 @@
     (scrape-web)))
 
 (defn make-pair [last-month-date this-month-date html-test-file db-type]
-  (let [testing-sms? true
+  (let [under-test? true
         sff-audio [{:check-page WWW-SFFAUDIO-COM
                     :enlive-keys SFFAUDIO-CHECK-KEYS
                     :at-least SFFAUDIO-AMOUNT}]
@@ -119,7 +136,7 @@
         _  (save-record this-month-date my-db-obj sms-data db-type)
         test-date (date-with-now-time-fn this-month-date)
         web-scraper (fn [] ())
-        express-server (build-express-serve web-scraper my-db-obj cron-url sms-data testing-sms? test-date)
+        express-server (build-express-serve web-scraper my-db-obj cron-url sms-data under-test? test-date)
         send-test-sms-url (:send-test-sms-url sms-data)
         web-page (express-server  {:uri cron-url})
         the-body (:body web-page)
@@ -161,17 +178,34 @@
     (is (= feb-act feb-exp))))
 
 
+;   (clojure.test/test-vars [#'tests-web-server/fast-one-year])
 
 
-;   (clojure.test/test-vars [#'tests-web-server/every-month])
-(deftest every-month
-  (console-test  "web-server every-month")
-  (one-year USE_FAKE_DB)
-;  (one-year USE_MONGER_DB)
- ; (one-year USE_AMAZONICA_DB)
-  )
+(deftest fast-one-year
+  (console-test  "test-web-server fast-one-year")
+  (one-year USE_FAKE_DB))
 
-; tests-web-server> (do-tests)
+;   (clojure.test/test-vars [#'tests-web-server/real-one-year])
+(deftest real-one-year
+  (if (execute-tests)
+    (do
+      (console-test  "web-server real-one-year")
+      (one-year USE_MONGER_DB)
+      (one-year USE_AMAZONICA_DB)))
+)
+
 (defn do-tests []
+  (reset! *run-all-tests* true)
+  (reset! *testing-namespace* "fast-all-tests-running")
   (web-server-specs)
-  (run-tests 'tests-web-server))
+  (run-tests 'tests-web-server)
+  (reset! *testing-namespace* "no-tests-running")
+)
+
+(defn fast-tests []
+  (reset! *run-all-tests* false)
+  (reset! *testing-namespace* "fast-all-tests-running")
+  (web-server-specs)
+  (run-tests 'tests-web-server)
+  (reset! *testing-namespace* "no-tests-running")
+)

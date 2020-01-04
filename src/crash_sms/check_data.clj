@@ -70,7 +70,6 @@
                                  check-html
                                  check-accurate
                                  check-time)]
-;(println "derive-data the-time, check-time" the-time check-time new-record)
     new-record))
 
 (comment
@@ -113,12 +112,12 @@
       dated-check)))
 
 (comment
-  (prepare-data [{:the-url "www.sffaudio.com",
+  (prepare-data [{:the-url "www.sffaudio.com/?",
                   :the-date "2019-06-19-01:54:03.800Z",
                   :the-html "blah 1111",
                   :the-accurate true,
                   :the-time 1234}
-                 {:the-url "sffaudio.herokuapp.com_rsd_rss",
+                 {:the-url "sffaudio.herokuapp.com/rsd/rss/?",
                   :the-date "2019-06-19-01:54:03.800Z",
                   :the-html "bluh 2222",
                   :the-accurate true,

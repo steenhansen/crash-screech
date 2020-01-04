@@ -21,11 +21,10 @@
   ([config-file testing-sms?] (-test-sms config-file testing-sms? IGNORE-ENV-VARS))
 
   ([config-file testing-sms? environment-utilize]
-   (let [db-type USE_MONGER_DB
-          the-check-pages (make-check-pages 0)
+   (let [the-check-pages (make-check-pages 0)
          [_ _ _ sms-data] (build-db T-TEST-COLLECTION
                                     the-check-pages
-                                    db-type
+                                    USE_MONGER_DB
                                     config-file
                                     environment-utilize)]
      (sms-to-phones sms-data testing-sms?))))

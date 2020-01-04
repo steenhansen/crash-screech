@@ -1,8 +1,10 @@
 
 
- the web page is sorted by type not date????
 
-mongo_db.clj
-my-get-all
-        sorted-matches (sort-by :check-url all-records)
-line 55 methinks it was a test.
+
+(s/fdef f-d/fake-build
+  :args (s/alt :nullary (s/cat)
+               :ternary (s/cat ::mongolabs-config :mongo-config?/test-specs
+               ::table-name string?
+               ::pages-to-check vector?)  ;; for tests to match mongo's signature
+ ))

@@ -13,7 +13,7 @@
   (:require [text-diff :refer [is-html-eq]]))
 
 (defn sms-event-specs []
-      (println "Speccing sms-event")
+      (print-line "Speccing sms-event")
       (spec-test/instrument)
       (spec-test/instrument 'make-api-call)
       (spec-test/instrument 'build-sms-send)
@@ -29,14 +29,12 @@
 ;   (clojure.test/test-vars [#'tests-sms-event/unit-make-api-call])
 (deftest unit-make-api-call
   (console-test "tests-sms-event unit-make-api-call" "sms-event")
-  (let [db-type USE_MONGER_DB
-        environment-utilize USE_ENVIRONMENT
-        the-check-pages (make-check-pages 0)
+  (let [the-check-pages (make-check-pages 0)
         [_ _ _ sms-data] (build-db T-TEST-COLLECTION
                                    the-check-pages
-                                   db-type
+                                   USE_MONGER_DB
                                    TEST-CONFIG-FILE
-                                   environment-utilize)
+                                   USE_ENVIRONMENT)
         testing-sms? true
         test-sms (make-api-call sms-data "my-test-mess")]
     (is (= TEST-SMS-MAP-SHORT  test-sms))))
@@ -51,14 +49,12 @@
 
 (deftest unit-build-sms-send
   (console-test "test-sms-event unit-build-sms-send")
-  (let [db-type USE_MONGER_DB
-        environment-utilize USE_ENVIRONMENT
-        the-check-pages (make-check-pages 0)
+  (let [the-check-pages (make-check-pages 0)
         [_ _ _ sms-data] (build-db T-TEST-COLLECTION
                                    the-check-pages
-                                   db-type
+                                   USE_MONGER_DB
                                    TEST-CONFIG-FILE
-                                   environment-utilize)
+                                   USE_ENVIRONMENT)
         testing-sms? true
         test-sms (sms-to-phones sms-data testing-sms?)
         [text-diff-1 text-diff-2] (is-html-eq TEST-SMS-MAP-LONG test-sms)]
@@ -67,14 +63,12 @@
 ;   (clojure.test/test-vars [#'tests-sms-server/unit-sms-to-phones])
 (deftest unit-sms-to-phones
   (console-test "test-sms-event unit-build-sms-send")
-  (let [db-type USE_MONGER_DB
-        environment-utilize USE_ENVIRONMENT
-        the-check-pages (make-check-pages 0)
+  (let [the-check-pages (make-check-pages 0)
         [_ _ _ sms-data] (build-db T-TEST-COLLECTION
                                    the-check-pages
-                                   db-type
+                                   USE_MONGER_DB
                                    TEST-CONFIG-FILE
-                                   environment-utilize)
+                                   USE_ENVIRONMENT)
         testing-sms? true
         test-sms (sms-to-phones sms-data testing-sms?)
         [text-diff-1 text-diff-2] (is-html-eq TEST-SMS-MAP-LONG test-sms)]
@@ -83,32 +77,38 @@
 ;   (clojure.test/test-vars [#'tests-sms-server/unit-sms-to-phones])
 (deftest unit-sms-to-phones
   (console-test "test-sms-event unit-sms-to-phones")
-  (let [db-type USE_MONGER_DB
-        environment-utilize USE_ENVIRONMENT
-        the-check-pages (make-check-pages 0)
+  (let [the-check-pages (make-check-pages 0)
         [_ _ _ sms-data] (build-db T-TEST-COLLECTION
                                    the-check-pages
-                                   db-type
+                                   USE_MONGER_DB
                                    TEST-CONFIG-FILE
-                                   environment-utilize)
+                                   USE_ENVIRONMENT)
         testing-sms? true
         test-sms (sms-to-phones sms-data testing-sms?)]
     (is (= TEST-SMS-MAP-LONG  test-sms))))
 
 (deftest unit-build-web-scrape
   (console-test "test-sms-event unit-build-web-scrape")
-  (let [db-type USE_MONGER_DB
-        environment-utilize USE_ENVIRONMENT
-        the-check-pages (make-check-pages 0)
+  (let [the-check-pages (make-check-pages 0)
         [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION
                                            the-check-pages
-                                           db-type
+                                           USE_MONGER_DB
                                            TEST-CONFIG-FILE
-                                           environment-utilize)
+                                           USE_ENVIRONMENT)
         testing-sms? true
         web-scraper (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? (adjusted-date "2019-07-04T04:18:46.173Z"))]
     (is (function? web-scraper))))
 
 (defn do-tests []
+  (reset! *run-all-tests* true)
+  (reset! *testing-namespace* "fast-all-tests-running")
   (sms-event-specs)
-  (run-tests 'tests-sms-event))
+  (run-tests 'tests-sms-event)
+  (reset! *testing-namespace* "no-tests-running"))
+
+(defn fast-tests []
+  (reset! *run-all-tests* false)
+  (reset! *testing-namespace* "fast-all-tests-running")
+  (sms-event-specs)
+  (run-tests 'tests-sms-event)
+  (reset! *testing-namespace* "no-tests-running"))

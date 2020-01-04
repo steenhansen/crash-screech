@@ -40,7 +40,9 @@
   (:require [crash-sms.fake-db :refer  :all])
 
 
-  (:require [prepare-tests :refer :all]))
+  (:require [prepare-tests :refer :all])
+)
+
 
 (defn check-testing []
   (let [the-check-pages (make-check-pages 0)
@@ -59,12 +61,12 @@
 )
 
 (defn console-divider []
-  (println "............................................")
-  (println "............................................")
-  (println "............................................")
-  (println "............................................")
-  (println "............................................")
-  (println "............................................"))
+  (print-line "............................................")
+  (print-line "............................................")
+  (print-line "............................................")
+  (print-line "............................................")
+  (print-line "............................................")
+  (print-line "............................................"))
 
 (defn check-specs []
   (check-data-specs)
@@ -81,12 +83,12 @@
   (web-server-specs)
   (years-months-specs))
 
-(defn do-tests []
+
+(defn start-tests []
   (kill-services)
   (check-testing)
   (console-divider)
   (check-specs)
-
   (run-tests
    'tests-check-data
    'tests-choose-db
@@ -97,10 +99,22 @@
    'tests-mongo-db
    'tests-scrape-html
    'tests-sms-event        ; sms-to-phones only returns a string now, need to return whole url call
-
    'tests-web-server
    'tests-years-months)
-
-
 ;
+)
+
+
+(defn do-tests []              ;;;; change to all-tests
+  (reset! *run-all-tests* true)
+  (reset! *testing-namespace* "fast-all-tests-running")
+  (start-tests)
+  (reset! *testing-namespace* "no-tests-running")
+)
+
+(defn fast-tests []
+  (reset! *run-all-tests* false)
+  (reset! *testing-namespace* "fast-all-tests-running")
+  (start-tests)
+ (reset! *testing-namespace* "no-tests-running")
 )

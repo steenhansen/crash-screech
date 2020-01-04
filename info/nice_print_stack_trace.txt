@@ -1,12 +1,11 @@
 
 
 
-  (try           
-     (println "Nice stack trace print example, via io.aviso/pretty")
+  (try
+     (print-line "Nice stack trace print example, via io.aviso/pretty")
      ("nice_stack_trace_print")
-      (catch Exception e (clojure.repl/pst e))   
+      (catch Exception e (clojure.repl/pst e))
     )
 
 
-  (pst) will also print a nice stack-trace of last exception in repl 
-
+  (pst) will also print a nice stack-trace of last exception in repl

@@ -39,7 +39,7 @@
   :args (s/cat :check-record :url-date-tuple?/test-specs))
 
 (defn check-data-specs []
-  (println "Speccing check-data")
+  (print-line "Speccing check-data")
   (spec-test/instrument)
   (spec-test/instrument 'count-string)
   (spec-test/instrument 'trunc-string)
@@ -160,5 +160,15 @@
       (is (= prepared-data T-EXPECTED-PREPARE-DATA))))
 
 (defn do-tests []
+ (reset! *run-all-tests* true)
+  (reset! *testing-namespace* "fast-all-tests-running")
   (check-data-specs)
-  (run-tests 'tests-check-data))
+  (run-tests 'tests-check-data)
+  (reset! *testing-namespace* "no-tests-running"))
+
+(defn fast-tests []
+ (reset! *run-all-tests* false)
+  (reset! *testing-namespace* "fast-all-tests-running")
+  (check-data-specs)
+  (run-tests 'tests-check-data)
+  (reset! *testing-namespace* "no-tests-running"))

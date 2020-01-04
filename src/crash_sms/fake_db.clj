@@ -11,8 +11,7 @@
 (def ^:dynamic  *fake-db-records* (atom {}))
 
 
-(defn fake-build
-  []
+(defn fake-build [& _]   ;; ignore all parameters, for testing purposes
   (let [my-delete-table (fn delete-table []
                           (reset! *fake-db-records* {}))
 
@@ -22,16 +21,12 @@
 
         my-put-item      (fn put-item [check-record]
                            (let [fixed-dates (prepare-data [check-record] "fake-db")   ;; table-name
-;_ (println "eeeeeeeeeeeeeeeeeeee")
-;_ (println "fixed-dates" fixed-dates)
-;_ (println "ffffffffffffffffffffff")
                                  fixed-rec (first fixed-dates)
                                  the-id (:_id fixed-rec)
                                  key-id (keyword the-id)
                                  db-records @*fake-db-records*
                                  new-db-recs (assoc db-records key-id fixed-rec)
                                  map-sorted (into (sorted-map) (sort-by :_id new-db-recs))
-                             ;    _ (println "map-sorted" map-sorted)
                                  ]
                              (reset! *fake-db-records* map-sorted)))
 
@@ -57,13 +52,13 @@
                        true)
 
         my-get-url   (fn get-url [begins-with page-to-check]
-                             (println "get-url page-to-check" page-to-check)
+                        (assert (and (string? begins-with) (< 0 (count begins-with))))
+                         (assert (and (string? page-to-check) (< 0 (count page-to-check))))
+
                        (let [date-urls (my-get-all begins-with)
-                             _ (println "get-url date-urls" date-urls)
 
                              filter-by-url (fn [a-record]
                                              (let [check-url (:check-url a-record)]
-                                               (println "in get url 66666666666666666" check-url page-to-check)
                                                (clojure.string/starts-with? check-url page-to-check)
 
 ))

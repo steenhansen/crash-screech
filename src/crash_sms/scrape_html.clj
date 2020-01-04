@@ -68,15 +68,20 @@
   [check-page read-from-web]
   (if read-from-web
     (try
-      (let [under-to-slashes (clj-str/replace check-page #"_" "/")
+      (let [
+;_ (println "3333333333333333333333333333 check-page" check-page)
             time-stamp (instant-time-fn)
-            no-semi-time (clj-str/replace time-stamp #":" "-")
+            no-semi-time (clj-str/replace time-stamp #":" "-")         ;;; don't think :. used
             no-dot-time (clj-str/replace no-semi-time #"\." "-")
-            no-cache-url (str "https://" under-to-slashes no-dot-time)]
-       ; (println "read-html no-cache-url" no-cache-url)
+            no-cache-url (str "https://" check-page no-dot-time)]
         (:body (http-client/get no-cache-url)))
       (catch Exception e (str "404 found for " check-page)))
-    (slurp (str SCRAPED-TEST-DATA check-page))))
+
+    (let [no-slash-fn  (clj-str/replace check-page #"\/" "~")
+          no-quest-fn  (clj-str/replace no-slash-fn #"\?" "+")
+          safe-filename  (clj-str/replace no-quest-fn #"\=" "_")] ;; valid-filename-chars   -+_
+   ;   (println "3333333333333333333 safe-filename" safe-filename)       ;; /~   ?+   =_
+      (slurp (str SCRAPED-TEST-DATA safe-filename)))))
 
 (defn send-first-day-sms?
   [my-db-obj]
@@ -126,7 +131,6 @@
         error-sms       (scrape-pages-fn my-db-obj pages-FAIL-check instant-time-fn sms-send-fn read-from-web?)]
     [start-month-sms no-error-sms error-sms])
 
-
   (let [pages-OK-check [{:check-page  WWW-SFF-SEARCH   :enlive-keys SFF-SEARCH-CHECK-KEYS :at-least HTML-OK-COUNT}]
         pages-FAIL-check [{:check-page WWW-SFF-SEARCH :enlive-keys SFF-SEARCH-CHECK-KEYS :at-least HTML-FAIL-COUNT}]
         [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
@@ -140,9 +144,8 @@
         error-sms       (scrape-pages-fn my-db-obj pages-FAIL-check instant-time-fn sms-send-fn read-from-web?)]
     [start-month-sms no-error-sms error-sms])
 
-
-  (let [  the-check-pages (make-check-pages 0)
-[my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION the-check-pages USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
+  (let [the-check-pages (make-check-pages 0)
+        [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION the-check-pages USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
         purge-table (:purge-table my-db-obj)
         testing-sms? true
         sms-send-fn (build-sms-send sms-data testing-sms?)
@@ -153,8 +156,6 @@
   ; []
 
 
-
-
   (let [pages-OK-check [{:check-page "www.sffaudio.com/not-exist-404"   :enlive-keys SFFAUDIO-CHECK-KEYS :at-least HTML-OK-COUNT}]
         [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
         purge-table (:purge-table my-db-obj)
@@ -162,12 +163,9 @@
         sms-send-fn (build-sms-send sms-data testing-sms?)
         read-from-web? true
         _ (purge-table)
-        start-month-sms (scrape-pages-fn my-db-obj pages-OK-check   instant-time-fn sms-send-fn read-from-web?)
-		]
+        start-month-sms (scrape-pages-fn my-db-obj pages-OK-check   instant-time-fn sms-send-fn read-from-web?)]
     [start-month-sms])
-    ["Found and error"]
-
-  )
+  ["Found and error"])
 
 (defn scrape-pages-fn
   [my-db-obj pages-to-check time-fn sms-send-fn read-from-web]

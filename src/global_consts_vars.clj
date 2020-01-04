@@ -7,6 +7,9 @@
 (ns global-consts-vars
   (:gen-class))
 
+
+;(def ^:dynamic  *run-all-tests*  (atom false))
+
 (def ^:const FAKE-SCRAPE-BYTES 1000009)
 (def ^:const FAKE-SCRAPE-SPEED 800007)
 (def ^:const FAKE-FAIL-CONTENT "failing html content")
@@ -32,6 +35,10 @@
 (def ^:const DATE-MAX-LENGTH 19)
 (def ^:const ERROR-KEEP-LENGTH 200)
 
+(def ^:const NUM-DB-FUNCS 7)
+
+
+
 (def ^:const USE_ENVIRONMENT "use-environment")
 (def ^:const IGNORE-ENV-VARS "ignore-environment"); don't look at Windows environment variables, just in case
 (def ^:const CRON-MILL-SECS 1000); 1000 =sec      10000 =10sec         60000 =min   600000 = 10 min
@@ -48,23 +55,30 @@
 (def ^:const SMS-NEW-MONTH "Start of a new month test!")
 (def ^:const SMS-TEST-CALL "Test sms call")
 
-(def ^:const WWW-SFF-SEARCH "sffaudio-search.herokuapp.com_?author=")
+(def ^:const WWW-SFF-SEARCH "sffaudio-search.herokuapp.com/?author=")
+;                            sffaudio-search.herokuapp.com~+author_
+
 (def ^:const SFF-SEARCH-CHECK-KEYS  [:div])
 (def ^:const SFF-SEARCH-AMOUNT 6400)
 
-(def ^:const WWW-SFFAUDIO-COM "www.sffaudio.com_?")
-(def ^:const WWW-SFFAUDIO-COM-SLASH "www.sffaudio.com/?")
+(def ^:const WWW-SEARCH-WAKE-UP "sffaudio-search.herokuapp.com/wake-up?")
+(def ^:const SEARCH-WAKE-UP-CHECK-KEYS  [:h6])
+(def ^:const SEARCH-WAKE-UP-AMOUNT 1)
+
+
+
+(def ^:const WWW-SFFAUDIO-COM "www.sffaudio.com/?")
 
 (def ^:const SFFAUDIO-CHECK-KEYS  [:article :div.blog-item-wrap])
 (def ^:const SFFAUDIO-AMOUNT  6)
-(def ^:const WWW-SFF-RSD "sffaudio.herokuapp.com_rsd_rss_?")
+(def ^:const WWW-SFF-RSD "sffaudio.herokuapp.com/rsd/rss/?")
 (def ^:const SFF-RSD-CHECK-KEYS  [:item])
 (def ^:const SFF-RSD-AMOUNT  100)
 
-(def ^:const WWW-SFF-PODCAST "sffaudio.herokuapp.com_podcast_rss_?")
+(def ^:const WWW-SFF-PODCAST "sffaudio.herokuapp.com/podcast/rss/?")
 (def ^:const SFF-PODCAST-CHECK-KEYS  [:item])
 (def ^:const SFF-PODCAST-AMOUNT 500)
-(def ^:const WWW-SFF-PDF "sffaudio.herokuapp.com_pdf_rss_?")
+(def ^:const WWW-SFF-PDF "sffaudio.herokuapp.com/pdf/rss/?")
 (def ^:const SFF-PDF-CHECK-KEYS  [:item])
 (def ^:const SFF-PDF-AMOUNT 6000)
 
@@ -72,18 +86,43 @@
 (def ^:const SFF-MEDIA-CHECK-KEYS  [:input])
 (def ^:const SFF-MEDIA-AMOUNT  5)
 
-(def ^:const WWW-CANADIAN-QUOTATIONS "www.canadianquotations.ca_?")
+(def ^:const WWW-CANADIAN-QUOTATIONS "www.canadianquotations.ca/?")
 (def ^:const CANADIAN-QUOTATIONS-CHECK-KEYS  [:article.post])
 (def ^:const CANADIAN-QUOTATIONS-AMOUNT  21)
 
-(def ^:const WWW-JERKER-SEARCHER "www.jerkersearcher.com_?")
+(def ^:const WWW-JERKER-SEARCHER "www.jerkersearcher.com/?")
 (def ^:const JERKER-SEARCHER-CHECK-KEYS  [:article.post :h2.entry-title])
 (def ^:const JERKER-SEARCHER-AMOUNT 10)       ;   testing failure on real site 10)
+
+
+(def ^:dynamic  *run-all-tests*  (atom false))
+
+(def ^:dynamic  *testing-namespace*  (atom "no-tests-running"))
+
+(defn execute-tests []
+  (if (= @*testing-namespace* "no-tests-running")
+      true
+    @*run-all-tests*))
+
+
+(defn print-line [& args]
+  (apply println args))
 
 (defn make-check-pages [fail-extra]
   (let [SFF-SEARCH {:check-page WWW-SFF-SEARCH
                     :enlive-keys SFF-SEARCH-CHECK-KEYS
                     :at-least (+ fail-extra SFF-SEARCH-AMOUNT)}
+
+
+SFF-SEARCH-WAKE-UP {:check-page WWW-SEARCH-WAKE-UP
+                    :enlive-keys SEARCH-WAKE-UP-CHECK-KEYS
+                    :at-least (+ fail-extra SEARCH-WAKE-UP-AMOUNT)}
+
+
+
+
+
+
         SFF-AUDIO {:check-page WWW-SFFAUDIO-COM
                    :enlive-keys SFFAUDIO-CHECK-KEYS
                    :at-least (+ fail-extra SFFAUDIO-AMOUNT)}
@@ -110,6 +149,7 @@
                          SFF-PODCAST
                          SFF-PDF
                          SFF-SEARCH
+                         SFF-SEARCH-WAKE-UP
                          CANADIAN-QUOTATIONS
                          JERKER-SEARCHER
                          SFF-MEDIA]]

@@ -10,5 +10,3 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
-project.clj.bak
-hs_err_pid14204.log

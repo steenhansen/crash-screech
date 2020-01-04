@@ -34,7 +34,7 @@
 
 
 (defn config-args-specs []
-  (println "Speccing config-args")
+  (print-line "Speccing config-args")
       (spec-test/instrument)
       (spec-test/instrument 'read-config-file)
       (spec-test/instrument 'merge-environment)
@@ -65,10 +65,11 @@
                  :CRON_URL_DIR "/url-for-cron-execution"
                  :TESTING_SMS true,
                  :PORT "8080"},
+  :fake-db {}
    :monger-db {:MONGODB_URI "mongodb://localhost:27017/local"}})
 
-
-(deftest unit-read-config-file
+;  (clojure.test/test-vars [#'tests-config-args/t-read-config-file])
+(deftest t-read-config-file
     (let [config-file LOCAL_CONFIG
           config-map (read-config-file config-file)]
       (console-test "unit-read-config-file" "config-args")
@@ -82,10 +83,7 @@
       (is (= new-env {:not_exist_key "a_value"}))))
 
 (deftest unit-make-config
-    (let [db-type USE_MONGER_DB
-          config-file LOCAL_CONFIG
-          environment-utilize  IGNORE-ENV-VARS
-          config-map (make-config db-type config-file environment-utilize)]
+    (let [config-map (make-config USE_MONGER_DB LOCAL_CONFIG IGNORE-ENV-VARS)]
       (console-test "unit-make-config" "config-args")
       (is (= config-map TEST-MAKE-CONFIG))))
 
@@ -93,5 +91,17 @@
 
 
 (defn do-tests []
+  (reset! *run-all-tests* true)
+  (reset! *testing-namespace* "fast-all-tests-running")
 (config-args-specs)
-  (run-tests 'tests-config-args))
+  (run-tests 'tests-config-args)
+  (reset! *testing-namespace* "no-tests-running"))
+
+
+
+(defn fast-tests []
+  (reset! *run-all-tests* false)
+  (reset! *testing-namespace* "fast-all-tests-running")
+(config-args-specs)
+  (run-tests 'tests-config-args)
+  (reset! *testing-namespace* "no-tests-running"))
