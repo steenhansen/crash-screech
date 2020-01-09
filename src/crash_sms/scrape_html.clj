@@ -13,10 +13,6 @@
   (let [number-scrapes (count-string some-html #"a_countable_scrape")]
     number-scrapes))
 
-(defn get-the-name
-  [accum item]
-  (let [[head-name head-value] item]
-    (if (= head-name "Content-Length") head-value accum)))
 
 (defn matching-css-sections
   [pages-html css-match]
@@ -54,33 +50,23 @@
         no-multi-spaces (clj-str/replace no-start-tags #"\s\s+" ".")]
     no-multi-spaces))
 
-;(defn real-slash-url [check-page] (clj-str/replace check-page #"_" "/"))
-
 (comment
-
   (read-html  WWW-SFFAUDIO-COM true)
-
-
 ;
-  )
-
+)
 (defn read-html
-  [check-page read-from-web]
-  (if read-from-web
+  [check-page read-from-web?]
+  (if read-from-web?
     (try
-      (let [
-;_ (println "3333333333333333333333333333 check-page" check-page)
-            time-stamp (instant-time-fn)
-            no-semi-time (clj-str/replace time-stamp #":" "-")         ;;; don't think :. used
+      (let [time-stamp (instant-time-fn)
+            no-semi-time (clj-str/replace time-stamp #":" "-")
             no-dot-time (clj-str/replace no-semi-time #"\." "-")
             no-cache-url (str "https://" check-page no-dot-time)]
         (:body (http-client/get no-cache-url)))
       (catch Exception e (str "404 found for " check-page)))
-
     (let [no-slash-fn  (clj-str/replace check-page #"\/" "~")
           no-quest-fn  (clj-str/replace no-slash-fn #"\?" "+")
           safe-filename  (clj-str/replace no-quest-fn #"\=" "_")] ;; valid-filename-chars   -+_
-   ;   (println "3333333333333333333 safe-filename" safe-filename)       ;; /~   ?+   =_
       (slurp (str SCRAPED-TEST-DATA safe-filename)))))
 
 (defn send-first-day-sms?
@@ -153,7 +139,6 @@
         _ (purge-table)
         all-sms (scrape-pages-fn my-db-obj the-check-pages instant-time-fn sms-send-fn read-from-web?)]
     [all-sms])
-  ; []
 
 
   (let [pages-OK-check [{:check-page "www.sffaudio.com/not-exist-404"   :enlive-keys SFFAUDIO-CHECK-KEYS :at-least HTML-OK-COUNT}]
@@ -168,12 +153,12 @@
   ["Found and error"])
 
 (defn scrape-pages-fn
-  [my-db-obj pages-to-check time-fn sms-send-fn read-from-web]
+  [my-db-obj pages-to-check time-fn sms-send-fn read-from-web?]
   (let [{:keys [_today-error? send-hello-sms? prev-errors-today? put-item]} (get-db-objs my-db-obj)]
     (doseq [check-page-obj pages-to-check
             :let [{:keys [check-page enlive-keys at-least]} check-page-obj
                   start-timer (System/currentTimeMillis)
-                  web-html (read-html check-page read-from-web)
+                  web-html (read-html check-page read-from-web?)
                   the-time (figure-interval start-timer)
                   start-process (System/currentTimeMillis)
                   {:keys [actual-matches the-accurate]} (enough-sections? web-html enlive-keys at-least)
@@ -186,6 +171,8 @@
                                              the-html
                                              the-accurate
                                              the-time)]]
-      (put-item check-record))
+      (put-item check-record)
+      (Thread/sleep LOCAL-DATA-MOCKED-DELAY)          ; when doing a mocked test of data in file system, timestamps can be the same
+      )
     (let [sms-mess-result (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn)]
       sms-mess-result)))   ;; testing looks at array returned

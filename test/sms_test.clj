@@ -8,7 +8,7 @@
 (ns sms-test
 
   (:require [global-consts-vars  :refer :all])
-  (:require [crash-sms.choose-db :refer [build-db]])
+  (:require [crash-sms.data-store :refer [build-db]])
   (:require [crash-sms.sms-event :refer [sms-to-phones]]))
 
 (comment "to send sms message to phone"

@@ -2,67 +2,57 @@
 
 (ns tests-dynamo-db
   (:require [clojure.test :refer :all])
-  (:require [clojure.spec.alpha :as spec-alpha]
-            [clojure.spec.gen.alpha :as spec-gen]
-            [clojure.spec.test.alpha :as spec-test])
-
-  (:require [crash-sms.choose-db  :refer :all])
+  (:require [clojure.spec.alpha :as s]
+            [clojure.spec.test.alpha :as t])
+  (:require [crash-sms.data-store  :refer :all])
   (:require [global-consts-vars  :refer :all])
-
   (:require [crash-sms.config-args :refer [make-config compact-hash]])
   (:require [crash-sms.dynamo-db :refer :all])
-
   (:require [java-time :refer [local-date?]])
-
-
   (:require [prepare-tests :refer :all])
 )
-(alias 's 'clojure.spec.alpha)
-(alias 'd-d ' crash-sms.dynamo-db)
 
+(s/check-asserts true)
 
-(s/fdef d-d/dynamo-build
+(s/fdef dynamo-build
   :args (s/cat ::amazonica-config :dynamo-config?/test-specs
                ::my-table-name string?
                ::pages-to-check vector?))
 
 (defn dynamo-db-specs []
     (print-line "Speccing dynamo-db")
-      (spec-test/instrument)
-      (spec-test/instrument 'dynamo-build))
+      (t/instrument)
+      (t/instrument 'dynamo-build))
 
 
-(s/fdef c-db/build-empty-month?
+(s/fdef build-empty-month?
   :args (s/cat :get-all-fn function?))
 
-(s/fdef c-db/build-today-error?
+(s/fdef build-today-error?
   :args (s/cat :get-all-fn function?))
 
-(s/fdef c-db/build-db
+(s/fdef build-db
   :args (s/cat :table-name string?
                :pages-to-check vector?
                :db-type string?
                :config-file string?
                :environment-utilize string?))
 
-(defn choose-db-specs []
-  (print-line "Speccing choose-db")
-      (spec-test/instrument)
-      (spec-test/instrument 'dynamo-build))
+(defn data-store-specs []
+  (print-line "Speccing data-store")
+      (t/instrument)
+      (t/instrument 'dynamo-build))
 
-(defn do-tests []
-  (reset! *run-all-tests* true)
-  (reset! *testing-namespace* "fast-all-tests-running")
+(defn all-tests []
+  (reset! *T-REAL-DB-ASSERTIONS* true)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
 (dynamo-db-specs)
   (run-tests 'tests-dynamo-db)
-  (reset! *testing-namespace* "no-tests-running"))
-
-
-
+  (reset! *T-ASSERTIONS-VIA-REPL* true))
 
 (defn fast-tests []
-  (reset! *run-all-tests* false)
-  (reset! *testing-namespace* "fast-all-tests-running")
+  (reset! *T-REAL-DB-ASSERTIONS* false)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
 (dynamo-db-specs)
   (run-tests 'tests-dynamo-db)
-  (reset! *testing-namespace* "no-tests-running"))
+  (reset! *T-ASSERTIONS-VIA-REPL* true))

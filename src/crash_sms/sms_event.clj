@@ -42,27 +42,14 @@
   (let [sms-send-fn (build-sms-send sms-data testing-sms?)]
     (sms-send-fn SMS-TEST-CALL)))
 
-(defn build-web-scrape_old   ;;; q*bert
-  [scrape-pages-fn my-db-obj pages-to-check sms-data testing-sms? date-time-fn]
-  (let [sms-send-fn (build-sms-send sms-data testing-sms?)
-        read-from-web true]
-    (fn web-scraper
-      []
-      (scrape-pages-fn my-db-obj
-                       pages-to-check
-                       date-time-fn
-                       sms-send-fn
-                       read-from-web))))
-
-(defn build-web-scrape   ;;; q*bert
+(defn build-web-scrape
   [scrape-pages-fn my-db-obj pages-to-check sms-data under-test? date-time-fn]
   (let [sms-send-fn (build-sms-send sms-data under-test?)
-        read-from-web (not under-test?)]
-;(println "reed-from web" read-from-web)
+        read-from-web? (not under-test?)]
     (fn web-scraper
       []
       (scrape-pages-fn my-db-obj
                        pages-to-check
                        date-time-fn
                        sms-send-fn
-                       read-from-web))))
+                       read-from-web?))))

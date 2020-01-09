@@ -20,7 +20,7 @@
 
 ;  (:require [core-test  :refer :all])
 
-  (:require [crash-sms.choose-db :refer :all])
+  (:require [crash-sms.data-store :refer :all])
   (:require [general-specs :refer :all])
 
 )
@@ -36,7 +36,7 @@
 
 
 
-(def TEST-MANY-PAGES [{:the-url "www.sffaudio.com",
+(def TEST-MANY-PAGES [{:the-url WWW-SFFAUDIO-COM
                     :the-date "2016-07-08-01:54:03.001Z",
                     :the-html "blah 1111",
                     :the-accurate true,
@@ -46,7 +46,7 @@
                     :the-html "bluh 2222",
                     :the-accurate true,
                     :the-time 12346}
-                   {:the-url "www.sffaudio.com",
+                   {:the-url WWW-SFFAUDIO-COM
                     :the-date "2016-07-09-01:54:03.003Z",
                     :the-html "blah 3333",
                     :the-accurate true,

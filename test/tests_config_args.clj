@@ -4,9 +4,9 @@
 
 (ns tests-config-args
   (:require [clojure.test :refer :all])
-  (:require [clojure.spec.alpha :as spec-alpha]
-            [clojure.spec.gen.alpha :as spec-gen]
-            [clojure.spec.test.alpha :as spec-test])
+  (:require [clojure.spec.alpha :as s]
+
+            [clojure.spec.test.alpha :as t])
 
   (:require [global-consts-vars  :refer :all])
 
@@ -17,17 +17,16 @@
   (:require [prepare-tests :refer :all]))
 
 
-(alias 's 'clojure.spec.alpha)
-(alias 'c-a 'crash-sms.config-args)
 
-(s/fdef c-a/read-config-file
+
+(s/fdef read-config-file
   :args (s/cat :config-file :edn-filename?/test-specs))
 
-(s/fdef c-a/merge-environment
+(s/fdef merge-environment
   :args (s/cat :accum-environment :map-entry-or-emtpy?/test-specs
                :env-object vector?))
 
-(s/fdef c-a/make-config
+(s/fdef make-config
   :args (s/cat :db-type string?
                :config-file :edn-filename?/test-specs
                :environment-utilize string? ))
@@ -35,10 +34,10 @@
 
 (defn config-args-specs []
   (print-line "Speccing config-args")
-      (spec-test/instrument)
-      (spec-test/instrument 'read-config-file)
-      (spec-test/instrument 'merge-environment)
-      (spec-test/instrument 'make-config))
+      (t/instrument)
+      (t/instrument 'read-config-file)
+      (t/instrument 'merge-environment)
+      (t/instrument 'make-config))
 
 (def ^:const TEST-MAKE-CONFIG
   {:SEND_TEST_SMS_URL "/zxc"
@@ -69,39 +68,36 @@
    :monger-db {:MONGODB_URI "mongodb://localhost:27017/local"}})
 
 ;  (clojure.test/test-vars [#'tests-config-args/t-read-config-file])
-(deftest t-read-config-file
+(deftest test-read-config-file
+    (console-test "test-read-config-file" "config-args")
     (let [config-file LOCAL_CONFIG
           config-map (read-config-file config-file)]
-      (console-test "unit-read-config-file" "config-args")
       (is (= config-map TEST-READ-CONFIG))))
 
-(deftest unit-merge-environment
+(deftest test-merge-environment
+      (console-test "test-merge-environment" "config-args")
     (let [a-map-entry (first {:not_exist_key "a_value"})
           start-accum {}
           new-env (merge-environment start-accum a-map-entry)]
-      (console-test "unit-merge-environment" "config-args")
       (is (= new-env {:not_exist_key "a_value"}))))
 
-(deftest unit-make-config
+(deftest test-make-config
+      (console-test "test-make-config" "config-args")
     (let [config-map (make-config USE_MONGER_DB LOCAL_CONFIG IGNORE-ENV-VARS)]
-      (console-test "unit-make-config" "config-args")
       (is (= config-map TEST-MAKE-CONFIG))))
 
-
-
-
-(defn do-tests []
-  (reset! *run-all-tests* true)
-  (reset! *testing-namespace* "fast-all-tests-running")
+(defn all-tests []
+  (reset! *T-REAL-DB-ASSERTIONS* true)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
 (config-args-specs)
   (run-tests 'tests-config-args)
-  (reset! *testing-namespace* "no-tests-running"))
+  (reset! *T-ASSERTIONS-VIA-REPL* true))
 
 
 
 (defn fast-tests []
-  (reset! *run-all-tests* false)
-  (reset! *testing-namespace* "fast-all-tests-running")
+  (reset! *T-REAL-DB-ASSERTIONS* false)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
 (config-args-specs)
   (run-tests 'tests-config-args)
-  (reset! *testing-namespace* "no-tests-running"))
+  (reset! *T-ASSERTIONS-VIA-REPL* true))

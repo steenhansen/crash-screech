@@ -1,10 +1,13 @@
 
+
+; core> (-local-main USE_MONGER_DB LOCAL_CONFIG)
+; core> (kill-services)
+
 (ns start-local
   (:gen-class)
   (:require [global-consts-vars  :refer :all])
 
-  (:require [crash-sms.choose-db :refer [build-db]])
-  (:require [crash-sms.cron-service :refer [cron-init]])
+  (:require [crash-sms.data-store :refer [build-db]])
   (:require [crash-sms.web-server :refer [build-express-serve web-init]])
   (:require [crash-sms.scrape-html :refer [scrape-pages-fn]])
   (:require [crash-sms.singular-service :refer  [kill-services]])
@@ -33,7 +36,7 @@
                                                           config-file
                                                           environment-utilize)
          int-port (Integer/parseInt web-port)
-         test-many [{:the-url "www.sffaudio.com",
+         test-many [{:the-url WWW-SFFAUDIO-COM
                      :the-date "2019-06-19-01:54:03.800Z",
                      :the-html "blah 1111",
                      :the-accurate true,
@@ -43,7 +46,7 @@
                      :the-html "bluh 2222",
                      :the-accurate true,
                      :the-time 12346}
-                    {:the-url "www.sffaudio.com",
+                    {:the-url WWW-SFFAUDIO-COM
                      :the-date "2019-05-19-01:54:03.802Z",
                      :the-html "blah 3333",
                      :the-accurate true,
@@ -54,16 +57,17 @@
                      :the-accurate false,
                      :the-time 12346}]
          testing-sms? true
-         web-scraper (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
+         web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
          under-test? true
-         express-server (build-express-serve web-scraper my-db-obj cron-url sms-data under-test? instant-time-fn)
-         test-one {:the-url "www.sffaudio.com",
+         express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data under-test? instant-time-fn)
+         test-one {:the-url WWW-SFFAUDIO-COM
                    :the-date "2019-06-19-01:54:03.804Z",
                    :the-html "blah 5555",
                    :the-accurate true,
                    :the-time 1234}]
    ; ((:put-items my-db-obj) test-many)
    ; ((:put-item my-db-obj) test-one)
-     (web-init int-port express-server)
-     (cron-init scrape-pages-fn my-db-obj the-check-pages sms-data)
+     (web-init int-port express-server-fn)
+
+
 )))

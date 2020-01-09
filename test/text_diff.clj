@@ -166,7 +166,6 @@
   ;"45"
 )
 (defn get-middle [str-text start-length end-pos]
- ; (println str-text "xx" start-length "yy" end-pos)
   (if (or (= end-pos 0) (> start-length end-pos))
     ""
     (subs str-text start-length end-pos)))

@@ -12,29 +12,28 @@
   )
 
 (defn show-data
-  ([my-db-obj test-date]
-   (show-data my-db-obj test-date false))
-  ([my-db-obj test-date under-test?]         ;; under-test
-   (let [the-date-time (test-date)
+  ([my-db-obj the-date-func]
+   (show-data my-db-obj the-date-func false))
+  ([my-db-obj the-date-func under-test?]
+   (let [the-date-time (the-date-func)
          yyyy-mm (current-yyyy-mm the-date-time)]
      (ring-response/content-type (ring-response/response (get-index my-db-obj yyyy-mm under-test?))
                                  "text/html"))))
 
 (defn show-data-cron
-  [my-db-obj the-uri cron-url web-scraper test-date  under-test?]
-  (if (= the-uri cron-url) (web-scraper))
-  (show-data my-db-obj test-date under-test?))   ;;; under-test
+  [my-db-obj the-uri cron-url web-scraper-fn the-date-func under-test?]
+  (if (= the-uri cron-url) (web-scraper-fn))
+  (show-data my-db-obj the-date-func under-test?))
 
 (defn build-express-serve
-  "has db test"
-  [web-scraper my-db-obj cron-url sms-data under-test? test-date]    ;;; under-test???
+  [web-scraper-fn my-db-obj cron-url sms-data under-test? the-date-func]
   (fn express-server
     [request]
     (let [the-uri (:uri request)
           send-test-sms-url (:send-test-sms-url sms-data)]
       (condp = the-uri
-        "/" (show-data my-db-obj test-date)
-        cron-url (show-data-cron my-db-obj the-uri cron-url web-scraper test-date under-test?)
+        "/" (show-data my-db-obj the-date-func)
+        cron-url (show-data-cron my-db-obj the-uri cron-url web-scraper-fn the-date-func under-test?)
         send-test-sms-url (sms-to-phones sms-data under-test?)
         "/base-styles.css" (ring-response/resource-response "base-styles.css" {:root ""})
         (ring-response/not-found "404")))))
@@ -43,15 +42,14 @@
 ;     https://github.com/panta82/clojure-webdev/blob/master/src/webdev/core.clj
 (def jetty-reloader #'ring-reload/reloader)
 
-(defn web-reload
-  []
+(defn web-reload  []
   (let [reload-jetty! (jetty-reloader ["src"] true)] (reload-jetty!)))
 
 (defn web-init
-  [server-port express-server]
+  [server-port express-server-fn]
   (remove-service "web-init")
   (web-reload)
-  (let [web-server (ring-jetty/run-jetty express-server
+  (let [web-server (ring-jetty/run-jetty express-server-fn
                                          {:port server-port, :join? false})
         my-kill-web (fn kill-web
                       []

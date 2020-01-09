@@ -8,7 +8,8 @@
   (:gen-class))
 
 
-;(def ^:dynamic  *run-all-tests*  (atom false))
+;(def ^:dynamic  *T-REAL-DB-ASSERTIONS*  (atom false))
+
 
 (def ^:const FAKE-SCRAPE-BYTES 1000009)
 (def ^:const FAKE-SCRAPE-SPEED 800007)
@@ -27,7 +28,6 @@
 (def ^:const LOCAL_CONFIG "./local-config.edn")
 (def ^:const HEROKU_CONFIG "../heroku-config.edn")
 
-(def ^:const START_CRON "start-cron")
 
 (def ^:const SCRAPED-TEST-DATA "./test/test-data/")
 
@@ -36,8 +36,7 @@
 (def ^:const ERROR-KEEP-LENGTH 200)
 
 (def ^:const NUM-DB-FUNCS 7)
-
-
+(def ^:const NUM-DATA-STORE-PROPERTIES 11)
 
 (def ^:const USE_ENVIRONMENT "use-environment")
 (def ^:const IGNORE-ENV-VARS "ignore-environment"); don't look at Windows environment variables, just in case
@@ -65,7 +64,7 @@
 (def ^:const SEARCH-WAKE-UP-CHECK-KEYS  [:h6])
 (def ^:const SEARCH-WAKE-UP-AMOUNT 1)
 
-
+(def ^:const LOCAL-DATA-MOCKED-DELAY 3)
 
 (def ^:const WWW-SFFAUDIO-COM "www.sffaudio.com/?")
 
@@ -95,14 +94,14 @@
 (def ^:const JERKER-SEARCHER-AMOUNT 10)       ;   testing failure on real site 10)
 
 
-(def ^:dynamic  *run-all-tests*  (atom false))
+(def ^:dynamic  *T-REAL-DB-ASSERTIONS*  (atom false))
 
-(def ^:dynamic  *testing-namespace*  (atom "no-tests-running"))
+(def ^:dynamic  *T-ASSERTIONS-VIA-REPL*  (atom true))
 
-(defn execute-tests []
-  (if (= @*testing-namespace* "no-tests-running")
-      true
-    @*run-all-tests*))
+(defn slow-db-tests-allowed []
+  (if (= @*T-ASSERTIONS-VIA-REPL* true)  ; all tests run when in REPL, mock or real db
+    true
+    @*T-REAL-DB-ASSERTIONS*))      ; not in REPL, allow real db tests?
 
 
 (defn print-line [& args]
@@ -113,15 +112,9 @@
                     :enlive-keys SFF-SEARCH-CHECK-KEYS
                     :at-least (+ fail-extra SFF-SEARCH-AMOUNT)}
 
-
-SFF-SEARCH-WAKE-UP {:check-page WWW-SEARCH-WAKE-UP
-                    :enlive-keys SEARCH-WAKE-UP-CHECK-KEYS
-                    :at-least (+ fail-extra SEARCH-WAKE-UP-AMOUNT)}
-
-
-
-
-
+        SFF-SEARCH-WAKE-UP {:check-page WWW-SEARCH-WAKE-UP
+                            :enlive-keys SEARCH-WAKE-UP-CHECK-KEYS
+                            :at-least (+ fail-extra SEARCH-WAKE-UP-AMOUNT)}
 
         SFF-AUDIO {:check-page WWW-SFFAUDIO-COM
                    :enlive-keys SFFAUDIO-CHECK-KEYS

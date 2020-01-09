@@ -1,8 +1,8 @@
 
 (ns general-specs
-)
+ (:require [clojure.spec.alpha :as s]))
 
-(alias 's 'clojure.spec.alpha)
+
 
 (def ^:const T-TIME-STAMP #"^((1|2)\d\d\d)-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T\d\d:\d\d:\d\d\.\d\d\dZ$")
 

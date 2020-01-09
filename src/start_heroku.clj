@@ -5,17 +5,12 @@
 (ns start-heroku
   (:gen-class)
   (:require [global-consts-vars  :refer :all])
-
-  (:require [crash-sms.choose-db :refer [build-db]])
-  (:require [crash-sms.cron-service :refer [cron-init]])
+  (:require [crash-sms.data-store :refer [build-db]])
   (:require [crash-sms.web-server :refer [build-express-serve web-init]])
   (:require [crash-sms.years-months :refer [instant-time-fn]])
   (:require [crash-sms.scrape-html :refer [scrape-pages-fn]])
   (:require [crash-sms.singular-service :refer [kill-services]])
   (:require [crash-sms.sms-event :refer [build-sms-send build-web-scrape]]))
-
-
-; main called by Heroku, has no cron-init() job, relies on web-scraper()
 
 
 (comment "to start"
@@ -33,7 +28,7 @@
                                                                               environment-utilize)
          int-port (Integer/parseInt web-port)
          testing-sms? false
-         web-scraper (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
+         web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
          under-test? false
-         express-server (build-express-serve web-scraper my-db-obj cron-url sms-data under-test? instant-time-fn)]
-     (web-init int-port express-server))))
+         express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data under-test? instant-time-fn)]
+     (web-init int-port express-server-fn))))

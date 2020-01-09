@@ -2,9 +2,11 @@
 
 (ns tests-years-months
   (:require [clojure.test :refer :all])
-  (:require [clojure.spec.alpha :as spec-alpha]
-            [clojure.spec.gen.alpha :as spec-gen]
-            [clojure.spec.test.alpha :as spec-test])
+  (:require [clojure.spec.alpha :as s]
+
+            [clojure.spec.test.alpha :as t])
+ ; (:require [java.util.Date  :refer :all])
+
   (:require [global-consts-vars  :refer :all])
   (:require [crash-sms.years-months :refer :all])
   (:require [java-time :refer [local-date?]])
@@ -12,32 +14,80 @@
   (:require [general-specs :refer :all])
 )
 
+
+(import java.util.Date)
+
+(s/fdef trunc-yyyy-mm
+  :args (s/cat :ymd-extra string?))
+
+(s/fdef trunc-yyyy-mm-dd
+  :args (s/cat :ymd-extra string?))
+
+(s/fdef date-to-yyyy-mm
+  :args (s/cat :ymd-date (inst?(Date.))))
+
+(s/fdef date-to-yyyy-mm-dd
+  :args (s/cat :ymd-date (inst?(Date.))))
+
+
+(s/fdef month-name
+  :args (s/alt :unary (s/cat  ::month-offset integer?)
+               :binary (s/cat ::month-offset integer? :yyyy-mm string?)))
+
+(s/fdef prev-month
+  :args (s/alt :nillary (s/cat)
+               :unary (s/cat :yyyy-mm string?)))
+
+(s/fdef current-month
+  :args (s/alt :nillary (s/cat)
+               :unary (s/cat :yyyy-mm string?)))
+
+(s/fdef yyyy-mm-to-ints
+  :args (s/cat :yyyy-mm string?))
+
+(s/fdef current-yyyy-mm
+  :args (s/alt :nillary (s/cat)
+               :unary (s/cat :yyyy-mm string?)))
+
+(s/fdef prev-yyyy-mm
+  :args (s/alt :nillary (s/cat)
+               :unary (s/cat :yyyy-mm string?)))
+
+(s/fdef instant-time-fn
+  :args (s/cat))
+
+(s/fdef adjusted-date
+  :args (s/cat  :date-str string?))
+
+(s/fdef date-with-now-time-fn
+  :args (s/cat  :the-date string?))
+
 (defn years-months-specs []
       (print-line "Speccing years-months")
-      (spec-test/instrument)
-      (spec-test/instrument 'adjusted-date)
-      (spec-test/instrument 'current-month)
-      (spec-test/instrument 'current-yyyy-mm-dd)
-      (spec-test/instrument 'current-yyyy-mm)
-      (spec-test/instrument 'date-to-yyyy-mm)
-      (spec-test/instrument 'instant-time-fn)
-      (spec-test/instrument 'month-name)
-      (spec-test/instrument 'prev-month)
-      (spec-test/instrument 'prev-yyyy-mm)
-      (spec-test/instrument 'trunc-yyyy-mm-dd)
-      (spec-test/instrument 'trunc-yyyy-mm)
-      (spec-test/instrument 'yyyy-mm-to-ints))
+      (t/instrument)
+      (t/instrument 'adjusted-date)
+      (t/instrument 'current-month)
+      (t/instrument 'current-yyyy-mm-dd)
+      (t/instrument 'current-yyyy-mm)
+      (t/instrument 'date-to-yyyy-mm)
+      (t/instrument 'instant-time-fn)
+      (t/instrument 'month-name)
+      (t/instrument 'prev-month)
+      (t/instrument 'prev-yyyy-mm)
+      (t/instrument 'trunc-yyyy-mm-dd)
+      (t/instrument 'trunc-yyyy-mm)
+      (t/instrument 'yyyy-mm-to-ints))
 
-;   (clojure.test/test-vars [#'tests-years-months/semi-to-dash])
-(deftest semi-to-dash
-    (console-test "years-months semi-to-dash")
+;   (clojure.test/test-vars [#'tests-years-months/test-semi-to-dash])
+(deftest test-semi-to-dash
+    (console-test "years-months test-semi-to-dash")
     (let [expected-yyyy-mm "2019-07-04-04-18-46.173Z"
           actual-yyyy-mm (adjusted-date "2019-07-04T04:18:46.173Z")]
       (is (= expected-yyyy-mm actual-yyyy-mm))))
 
-;  (clojure.test/test-vars [#'tests-years-months/the-month-name])
-(deftest the-month-name
-    (console-test  "years-months current-month")
+;  (clojure.test/test-vars [#'tests-years-months/test-the-month-name])
+(deftest test-the-month-name
+    (console-test  "years-months test-the-month-name")
     (let [expected-month-name "January"
           actual-month-name (current-month "2012-01")]
       (is (= expected-month-name actual-month-name))))
@@ -78,23 +128,23 @@
     (let [actual-instant-time-fn (instant-time-fn)]
       (is (re-matches T-TIME-STAMP actual-instant-time-fn))))
 
-;  (clojure.test/test-vars [#'tests-years-months/month-name_0])
-(deftest month-name_0
-    (console-test "years-months month-name_0")
+;  (clojure.test/test-vars [#'tests-years-months/test-month-name_0])
+(deftest test-month-name_0
+    (console-test "years-months test-month-name_0")
     (let [expected-month-name "December"
           actual-month-name (month-name 0 "2012-12")]
       (is (= expected-month-name actual-month-name))))
 
-;  (clojure.test/test-vars [#'tests-years-months/month-name_1])
-(deftest month-name_1
-    (console-test "years-months month-name_1")
+;  (clojure.test/test-vars [#'tests-years-months/test-month-name_1])
+(deftest test-month-name_1
+    (console-test "years-months test-month-name_1")
     (let [expected-month-name "January"
           actual-month-name (month-name 1 "2012-12")]
       (is (= expected-month-name actual-month-name))))
 
-;  (clojure.test/test-vars [#'tests-years-months/month-name_2])
-(deftest month-name_2
-    (console-test "years-months month-name_2")
+;  (clojure.test/test-vars [#'tests-years-months/test-month-name_2])
+(deftest test-month-name_2
+    (console-test "years-months test-month-name_2")
     (let [expected-month-name "December"
           actual-month-name (month-name -1 "2012-01")]
       (is (= expected-month-name actual-month-name))))
@@ -134,18 +184,17 @@
           actual-month-name (yyyy-mm-to-ints "2234-12")]
       (is (= expected-month-name actual-month-name))))
 
-(defn do-tests []
-  (reset! *run-all-tests* true)
-  (reset! *testing-namespace* "fast-all-tests-running")
-  (years-months-specs)
+(defn all-tests []
+  (reset! *T-REAL-DB-ASSERTIONS* true)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
   (years-months-specs)
   (run-tests 'tests-years-months)
-  (reset! *testing-namespace* "no-tests-running"))
+  (reset! *T-ASSERTIONS-VIA-REPL* true))
 
 
 (defn fast-tests []
-  (reset! *run-all-tests* false)
-  (reset! *testing-namespace* "fast-all-tests-running")
+  (reset! *T-REAL-DB-ASSERTIONS* false)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
   (years-months-specs)
   (run-tests 'tests-years-months)
-  (reset! *testing-namespace* "no-tests-running"))
+  (reset! *T-ASSERTIONS-VIA-REPL* true))

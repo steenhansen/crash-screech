@@ -29,14 +29,12 @@
   ; (-local-main USE_MONGER_DB LOCAL_CONFIG)
   ; (-local-main USE_AMAZONICA_DB LOCAL_CONFIG)
   (:require [start-local :refer [-local-main]])
-                                 ;(:require [start-local :refer :all])
 
   (:require [global-consts-vars  :refer :all])
 
   (:require [crash-sms.check-data :refer :all])
-  (:require [crash-sms.choose-db :refer :all])
+  (:require [crash-sms.data-store :refer :all])
   (:require [crash-sms.config-args :refer :all])
-  (:require [crash-sms.cron-service :refer :all])
   (:require [crash-sms.dynamo-db :refer :all])
 
  (:require [crash-sms.html-render :refer :all])

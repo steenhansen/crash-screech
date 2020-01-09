@@ -7,5 +7,4 @@
 3 "--" cider-repl-set-ns
 4 "aa" load core.clj buffer
 
-5 all-main>(-do-tests)
-
+5 all-main>(all-tests)

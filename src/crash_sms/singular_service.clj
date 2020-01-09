@@ -25,8 +25,7 @@
   spawning-name)
 
 (comment "to stop all services" (kill-services))
-(defn kill-services
-  []
+(defn kill-services []
   (let [kill-list @*windows-java-service-kill-list*]
     (if (nil? (resolve 'T-TEST-COLLECTION))
       (print-line "Killing all services:"))

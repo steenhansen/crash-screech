@@ -4,14 +4,12 @@
 ; https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
 
 (ns crash-sms.dynamo-db
+  (:require [clojure.spec.alpha :as s])
   (:require [amazonica.aws.dynamodbv2 :as aws-dyn])
   (:require [clojure.string :as clj-str])
   (:require [crash-sms.config-args :refer  [compact-hash]])
   (:require [crash-sms.check-data  :refer [prepare-data]])
   (:require [global-consts-vars  :refer :all]))
-
-
-;(alias 's 'clojure.spec.alpha)
 
 (defn dynamo-build
   [amazonica-config my-table-name pages-to-check]
@@ -36,6 +34,8 @@
                          true
                          (catch Exception e
                            (print-line "DynamoDb is not alive " (.getMessage e))        ;; Connection pool shut down
+                           (print-line "On command line run: ")
+                           (print-line "                      java \"-Djava.library.path=./DynamoDBLocal_lib\" -jar DynamoDBLocal.jar -sharedDb ")
                            false)))
 
         my-make-table  (fn make-table []
@@ -51,24 +51,24 @@
                             :table-name my-table-name
                             :key-schema my-key-schema
                             :attribute-definitions my-attribute-defn
-                            :provisioned-throughput my-provision-through))
-                         )
+                            :provisioned-throughput my-provision-through)))
 
         my-get-url    (fn get-url [begins-with page-to-check]
-                         (assert (and (string? begins-with) (< 0 (count begins-with))))
-                         (assert (and (string? page-to-check) (< 0 (count page-to-check))))
-                         (when-not (my-table-exist? my-table-name) (my-make-table))
-                         (let [my-key-conditions { :check-url {:attribute-value-list [page-to-check],
-                                                   :comparison-operator "EQ"},
-                                                   :_id {:attribute-value-list [begins-with],
-                                                         :comparison-operator "BEGINS_WITH"}}
-                               page-matches (aws-dyn/query
-                                             connection-opts
-                                             :table-name my-table-name
-                                             :key-conditions my-key-conditions
-                                             )
-                               plain-items (:items page-matches)]
-                           plain-items))
+                        (s/assert string? begins-with)
+                        (s/assert not-empty begins-with)
+                        (s/assert string? page-to-check)
+                        (s/assert not-empty page-to-check)
+                        (when-not (my-table-exist? my-table-name) (my-make-table))
+                        (let [my-key-conditions {:check-url {:attribute-value-list [page-to-check],
+                                                             :comparison-operator "EQ"},
+                                                 :_id {:attribute-value-list [begins-with],
+                                                       :comparison-operator "BEGINS_WITH"}}
+                              page-matches (aws-dyn/query
+                                            connection-opts
+                                            :table-name my-table-name
+                                            :key-conditions my-key-conditions)
+                              plain-items (:items page-matches)]
+                          plain-items))
 
         my-delete-table   (fn delete-table []
                             (aws-dyn/delete-table connection-opts :table-name my-table-name))
@@ -78,6 +78,8 @@
                             (my-make-table))
 
         my-get-all   (fn get-all [begins-with]
+                       (s/assert string? begins-with)
+                       (s/assert not-empty begins-with)
                        (let [my-get-the-pages (fn get-the-pages
                                                 [items-vector check-page-obj]
                                                 (let [{check-page :check-page} check-page-obj
@@ -88,6 +90,8 @@
                            sorted-matches)))
 
         my-put-item  (fn put-item [check-record]
+                       (s/assert map? check-record)
+
                        (when-not (my-table-exist? my-table-name) (my-make-table))
                        (let [fixed-dates (prepare-data [check-record] my-table-name)
                              fixed-item (first fixed-dates)]
@@ -96,6 +100,8 @@
                                            :item fixed-item)))
 
         my-put-items  (fn put-items [check-records]
+                        (s/assert vector? check-records)
+                        (s/assert not-empty check-records)
                         (when-not (my-table-exist? my-table-name) (my-make-table))
                         (let [fixed-dates (prepare-data check-records my-table-name)
                               has-puts (for [fixed-date fixed-dates]
@@ -105,6 +111,6 @@
                           (aws-dyn/batch-write-item connection-opts
                                                     :return-consumed-capacity "TOTAL"
                                                     :return-item-collection-metrics "SIZE"
-                                                    :request-items my-request-items
-                                                    )))]
+                                                    :request-items my-request-items)))]
+
     (compact-hash my-delete-table my-db-alive? my-purge-table my-get-all my-get-url my-put-item my-put-items)))

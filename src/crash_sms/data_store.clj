@@ -1,4 +1,4 @@
-(ns crash-sms.choose-db
+(ns crash-sms.data-store
   (:require [clojure.string :as clj-str])
   (:require [clojure.pprint :as prt-prn])
   (:require [global-consts-vars  :refer :all])
@@ -83,10 +83,10 @@
                                                          IGNORE-ENV-VARS)]
     [my-db-obj web-port cron-url sms-data])
   ; [{:get-url  #function[crash-sms.mongo-db/mongolabs-build/get-url--126151],
-  ;   :empty-month? #function[crash-sms.choose-db/build-empty-month?/empty-month?--126161],
+  ;   :empty-month? #function[crash-sms.data-store/build-empty-month?/empty-month?--126161],
   ;   :put-items #function[crash-sms.mongo-db/mongolabs-build/put-items--126141],
 ;  :db-alive?
-  ;   :today-error?  #function[crash-sms.choose-db/build-today-error?/today-error?--126166],
+  ;   :today-error?  #function[crash-sms.data-store/build-today-error?/today-error?--126166],
   ;   :put-item  #function[crash-sms.mongo-db/mongolabs-build/put-item--126147],
   ;   :delete-table  #function[crash-sms.mongo-db/mongolabs-build/delete-table--126143],
   ;   :get-all  #function[crash-sms.mongo-db/mongolabs-build/get-all--126149],

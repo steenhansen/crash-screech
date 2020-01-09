@@ -1,45 +1,36 @@
 
 (ns tests-fake-db
   (:require [clojure.test :refer :all])
-  (:require [clojure.spec.alpha :as spec-alpha]
-            [clojure.spec.gen.alpha :as spec-gen]
-            [clojure.spec.test.alpha :as spec-test])
+  (:require [clojure.spec.alpha :as s]
+            [clojure.spec.test.alpha :as t])
   (:require [global-consts-vars  :refer :all])
   (:require [crash-sms.config-args :refer [make-config compact-hash]])
   (:require [crash-sms.fake-db :refer :all])
   (:require [java-time :refer [local-date?]])
   (:require [prepare-tests :refer :all]))
 
-(alias 's 'clojure.spec.alpha)
-(alias 'f-d 'crash-sms.fake-db)
+(s/check-asserts true)
 
-
-
-
-; bring back old
-(s/fdef f-d/fake-build
+(s/fdef fake-build
   :args (s/alt :nullary (s/cat)
                :ternary (s/cat ::mongolabs-config :mongo-config?/test-specs
                ::table-name string?
                ::pages-to-check vector?)  ;; for tests to match mongo's signature
-
  ))
-
-
 
 (defn fake-db-specs []
   (print-line "Speccing fake-db")
-  (spec-test/instrument)
-  (spec-test/instrument 'fake-build))
+  (t/instrument)
+  (t/instrument 'fake-build))
 
 ;     (clojure.test/test-vars [#'tests-fake-db/t-fake-get-url])
-(deftest t-fake-get-url
-  (console-test "t-fake-put-items")
+(deftest test-fake-get-url
+  (console-test "test-fake-put-items" "fake-db")
   (let [a-fake-db (fake-build)
         purge-table (:my-purge-table a-fake-db)
         put-items (:my-put-items a-fake-db)
         get-url (:my-get-url a-fake-db)
-        test-many [{:the-url "www.sffaudio.com",
+        test-many [{:the-url WWW-SFFAUDIO-COM
                     :the-date "2016-07-08-01:54:03.001Z",
                     :the-html "blah 1111",
                     :the-accurate true,
@@ -49,7 +40,7 @@
                     :the-html "bluh 2222",
                     :the-accurate true,
                     :the-time 12346}
-                   {:the-url "www.sffaudio.com",
+                   {:the-url WWW-SFFAUDIO-COM
                     :the-date "2016-07-09-01:54:03.003Z",
                     :the-html "blah 3333",
                     :the-accurate true,
@@ -66,10 +57,10 @@
         all-2016-07 (get-url "2016-07" "")
         all-2016-07-08 (get-url "2016-07-08" "")
         all-2016-07-09-02 (get-url "2016-07-09-02" "")
-        sff (get-url "" "www.sffaudio.com")
-        sff-2016 (get-url "2016" "www.sffaudio.com")
-        sff-2016-07 (get-url "2016-07" "www.sffaudio.com")
-        sff-2016-07-08 (get-url "2016-07-08" "www.sffaudio.com")
+        sff (get-url "" WWW-SFFAUDIO-COM)
+        sff-2016 (get-url "2016" WWW-SFFAUDIO-COM)
+        sff-2016-07 (get-url "2016-07" WWW-SFFAUDIO-COM)
+        sff-2016-07-08 (get-url "2016-07-08" WWW-SFFAUDIO-COM)
 
 ]
     (is (= (count all-db) 4))
@@ -84,16 +75,16 @@
 ;
     ))
 
-(defn do-tests []
-  (reset! *run-all-tests* true)
-  (reset! *testing-namespace* "fast-all-tests-running")
+(defn all-tests []
+  (reset! *T-REAL-DB-ASSERTIONS* true)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
   (fake-db-specs)
   (run-tests 'tests-fake-db)
-  (reset! *testing-namespace* "no-tests-running"))
+  (reset! *T-ASSERTIONS-VIA-REPL* true))
 
 (defn fast-tests []
-  (reset! *run-all-tests* false)
-  (reset! *testing-namespace* "fast-all-tests-running")
+  (reset! *T-REAL-DB-ASSERTIONS* false)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
   (fake-db-specs)
   (run-tests 'tests-fake-db)
-  (reset! *testing-namespace* "no-tests-running"))
+  (reset! *T-ASSERTIONS-VIA-REPL* true))

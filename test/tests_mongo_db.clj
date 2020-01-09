@@ -1,94 +1,75 @@
 
 (ns tests-mongo-db
   (:require [clojure.test :refer :all])
-  (:require [clojure.spec.alpha :as spec-alpha]
-            [clojure.spec.gen.alpha :as spec-gen]
-            [clojure.spec.test.alpha :as spec-test])
-
+  (:require [clojure.spec.alpha :as s]
+            [clojure.spec.test.alpha :as t])
   (:require [global-consts-vars  :refer :all])
-
   (:require [crash-sms.config-args :refer [make-config compact-hash]])
   (:require [crash-sms.mongo-db :refer :all])
-
   (:require [java-time :refer [local-date?]])
-
   (:require [prepare-tests :refer :all]))
 
-(alias 's 'clojure.spec.alpha)
-(alias 'm-d 'crash-sms.mongo-db)
+(s/check-asserts true)
 
-
-
-
-(s/fdef m-d/next-date-time
+(s/fdef next-date-time
   :args (s/cat :yyyy-mm-d   :yyyy?-mm?-dd?-hh?-mm?-ss/test-specs))
 
-(s/fdef m-d/mongolabs-build
+(s/fdef mongolabs-build
   :args (s/cat ::mongolabs-config :mongo-config?/test-specs
                ::table-name string?
                ::pages-to-check vector?))
 
-
-
 (defn mongo-db-specs []
 (print-line "Speccing mongo-db")
-      (spec-test/instrument)
-      (spec-test/instrument 'next-date-time)
-      (spec-test/instrument 'mongolabs-build))
+      (t/instrument)
+      (t/instrument 'next-date-time)
+      (t/instrument 'mongolabs-build))
 
-
-
-
-
-
-
-
-
-(deftest unit-next-date-time-a
+(deftest test-next-date-time-a
+      (console-test "test-next-date-time" "mongo-db")
     (let [future-date (next-date-time "2000-01")]
-      (console-test "unit-next-date-time" "mongo-db")
       (is (= future-date "2000-02"))))
 
-(deftest unit-next-date-time-b
+(deftest test-next-date-time-b
+      (console-test "test-next-date-time" "mongo-db")
     (let [future-date (next-date-time "2001-02-03")]
-      (console-test "unit-next-date-time" "mongo-db")
       (is (= future-date "2001-02-04"))))
 
-(deftest unit-next-date-time-c
+(deftest test-next-date-time-c
+      (console-test "test-next-date-time" "mongo-db")
     (let [future-date (next-date-time "2002-12")]
-      (console-test "unit-next-date-time" "mongo-db")
       (is (= future-date "2002-13"))))
 
-(deftest unit-next-date-time-d
+(deftest test-next-date-time-d
+      (console-test "test-next-date-time" "mongo-db")
     (let [future-date (next-date-time "2003-12-01")]
-      (console-test "unit-next-date-time" "mongo-db")
       (is (= future-date "2003-12-02"))))
 
-(deftest unit-next-date-time-e
+(deftest test-next-date-time-e
+      (console-test "test-next-date-time" "mongo-db")
     (let [future-date (next-date-time "2000")]
-      (console-test "unit-next-date-time" "mongo-db")
       (is (= future-date "2001"))))
 
-(deftest unit-next-date-time-f
+(deftest testt-next-date-time-f
+      (console-test "test-next-date-time" "mongo-db")
     (let [future-date (next-date-time "2004-04-04-04")]
-      (console-test "unit-next-date-time" "mongo-db")
       (is (= future-date "2004-04-04-05"))))
 
 
 
-(defn do-tests []
-  (reset! *run-all-tests* true)
- (reset! *testing-namespace* "fast-all-tests-running")
+(defn all-tests []
+  (reset! *T-REAL-DB-ASSERTIONS* true)
+ (reset! *T-ASSERTIONS-VIA-REPL* false)
  (mongo-db-specs)
   (run-tests 'tests-mongo-db)
-  (reset! *testing-namespace* "no-tests-running"))
+  (reset! *T-ASSERTIONS-VIA-REPL* true))
 
 
 
 
 (defn fast-tests []
-  (reset! *run-all-tests* false)
- (reset! *testing-namespace* "fast-all-tests-running")
+  (reset! *T-REAL-DB-ASSERTIONS* false)
+ (reset! *T-ASSERTIONS-VIA-REPL* false)
  (mongo-db-specs)
   (run-tests 'tests-mongo-db)
-  (reset! *testing-namespace* "no-tests-running"))
+  (reset! *T-ASSERTIONS-VIA-REPL* true))

@@ -4,7 +4,7 @@
 ; C. in core_test.clj hit [F4] for cider-ns-reload-all
 ; B. in core_test.clj hit [F3] for cider-repl-set-ns
 
-; core-test> (do-tests)
+; core-test> (all-tests)
 
 ; core-test> (test-sms HEROKU_CONFIG)
 
@@ -12,16 +12,14 @@
 
 (ns core-test
   (:require [clojure.test :refer :all])
-  (:require [clojure.spec.alpha :as spec-alpha]
-            [clojure.spec.gen.alpha :as spec-gen]
-            [clojure.spec.test.alpha :as spec-test])
+  (:require [clojure.spec.alpha :as s]
+            [clojure.spec.test.alpha :as t])
   (:require [global-consts-vars  :refer :all])
   (:require [crash-sms.singular-service :refer  [kill-services]])
   (:require [java-time :refer [local-date?]])
   (:require [tests-check-data  :refer [check-data-specs]])
-  (:require [tests-choose-db  :refer [choose-db-specs]])
+  (:require [tests-data-store  :refer [data-store-specs]])
   (:require [tests-config-args  :refer [config-args-specs]])
-  (:require [tests-cron-service  :refer [cron-service-specs]])
   (:require [tests-dynamo-db  :refer [dynamo-db-specs]])
   (:require [tests-html-render  :refer [html-render-specs]])
   (:require [tests-fake-db  :refer [fake-db-specs]])
@@ -32,14 +30,9 @@
   (:require [tests-years-months  :refer [years-months-specs]])
   (:require [tests-web-server  :refer [web-server-specs]])
   (:require [text-diff :refer [is-html-eq]])
-  (:require   [sms-test :refer :all])      ; (-test-sms HEROKU_CONFIG)
-
-  (:require [crash-sms.choose-db :refer  :all])
-
-
+  (:require   [sms-test :refer :all])
+  (:require [crash-sms.data-store :refer  :all])
   (:require [crash-sms.fake-db :refer  :all])
-
-
   (:require [prepare-tests :refer :all])
 )
 
@@ -56,6 +49,7 @@
                                       USE_MONGER_DB
                                       TEST-CONFIG-FILE
                                       IGNORE-ENV-VARS)]
+(s/check-asserts true)
     (dampen-mongo-logging)
     (sms-is-in-test USE_MONGER_DB))
 )
@@ -70,9 +64,8 @@
 
 (defn check-specs []
   (check-data-specs)
-  (choose-db-specs)
+  (data-store-specs)
   (config-args-specs)
-  (cron-service-specs)
   (dynamo-db-specs)
   (html-render-specs)
   (fake-db-specs)
@@ -91,30 +84,27 @@
   (check-specs)
   (run-tests
    'tests-check-data
-   'tests-choose-db
+   'tests-data-store
    'tests-config-args
-   'tests-cron-service
    'tests-dynamo-db
    'tests-html-render
    'tests-mongo-db
    'tests-scrape-html
-   'tests-sms-event        ; sms-to-phones only returns a string now, need to return whole url call
+   'tests-sms-event
    'tests-web-server
    'tests-years-months)
-;
 )
 
-
-(defn do-tests []              ;;;; change to all-tests
-  (reset! *run-all-tests* true)
-  (reset! *testing-namespace* "fast-all-tests-running")
+(defn all-tests []
+  (reset! *T-REAL-DB-ASSERTIONS* true)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
   (start-tests)
-  (reset! *testing-namespace* "no-tests-running")
+  (reset! *T-ASSERTIONS-VIA-REPL* true)
 )
 
-(defn fast-tests []
-  (reset! *run-all-tests* false)
-  (reset! *testing-namespace* "fast-all-tests-running")
+(defn mock-tests []
+  (reset! *T-REAL-DB-ASSERTIONS* false)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
   (start-tests)
- (reset! *testing-namespace* "no-tests-running")
+ (reset! *T-ASSERTIONS-VIA-REPL* true)
 )

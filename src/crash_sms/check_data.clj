@@ -41,7 +41,7 @@
    FAKE-SCRAPE-SPEED))
 
 (comment
-  (derive-data  {:the-url "www.sffaudio.com",
+  (derive-data  {:the-url WWW-SFFAUDIO-COM
                  :the-date "2019-06-19-01:54:03.800Z",
                  :the-html "123456789",
                  :the-accurate true,
@@ -74,7 +74,7 @@
 
 (comment
 
- (uniquely-id 8 {:check-url "www.sffaudio.com"
+ (uniquely-id 8 {:check-url WWW-SFFAUDIO-COM
   :check-date "2019-06-19-01-54-03.800Z"
   :check-html "blah 1111"
    :check-accurate true
@@ -112,7 +112,7 @@
       dated-check)))
 
 (comment
-  (prepare-data [{:the-url "www.sffaudio.com/?",
+  (prepare-data [{:the-url WWW-SFFAUDIO-COM
                   :the-date "2019-06-19-01:54:03.800Z",
                   :the-html "blah 1111",
                   :the-accurate true,

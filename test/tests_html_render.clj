@@ -1,73 +1,51 @@
 
 
 (ns tests-html-render
-
   (:require [clojure.test :refer :all])
-  (:require [clojure.spec.alpha :as spec-alpha]
-            [clojure.spec.gen.alpha :as spec-gen]
-            [clojure.spec.test.alpha :as spec-test])
-
+  (:require [clojure.spec.alpha :as s]
+            [clojure.spec.test.alpha :as t])
   (:require [global-consts-vars  :refer :all])
-
-  (:require [crash-sms.choose-db :refer [build-db]])
+  (:require [crash-sms.data-store :refer [build-db]])
   (:require [crash-sms.scrape-html :refer [read-html]])
   (:require [crash-sms.html-render :refer :all])
-
   (:require [java-time :refer [local-date?]])
-
   (:require [prepare-tests :refer :all])
-
-  (:require [lambdaisland.deep-diff :as ddiff])
-
  (:require [text-diff :refer :all])
-
   )
 
-
-
-(alias 's 'clojure.spec.alpha)
-(alias 'h-r 'crash-sms.html-render)
-
-
-(s/fdef h-r/day-hour-min
+(s/fdef day-hour-min
   :args (s/cat :check-date  :year-mon-day-hour-min?/test-specs ) )
 
-
-
-(s/fdef h-r/get-two-months
+(s/fdef get-two-months
   :args (s/cat :my-db-obj  coll?
                :yyyy-mm   :year-month?/test-specs
                 :testing-sms? boolean?  ))
 
-
-(s/fdef h-r/get-index
+(s/fdef get-index
   :args (s/alt :unary (s/cat :my-db-obj  coll?   )
                :binary (s/cat :my-db-obj  coll?
                       :yyyy-mm   :year-month?/test-specs   )
-
                :ternary (s/cat :my-db-obj    coll?
                                :yyyy-mm      :year-month?/test-specs
                                :testing-sms? boolean?   )
-
  ))
-
 
 (defn html-render-specs []
   (print-line "Speccing html-render")
-      (spec-test/instrument)
+      (t/instrument)
+      (t/instrument 'day-hour-min)
+      (t/instrument 'get-two-months)
+      (t/instrument 'get-index)
+)
 
-      (spec-test/instrument 'day-hour-min))
-
-(deftest unit-day-hour-min
-    (console-test  "unit-day-hour-min"  "html-render")
+(deftest test-day-hour-min
+    (console-test  "test-day-hour-min"  "html-render")
     (let [expected-day-hour-min "05-06:07"
           actual-day-hour-min (day-hour-min "2019-04-05-06-07-46.173Z")]
       (is (= expected-day-hour-min actual-day-hour-min))))
 
-
-
-(deftest unit-get-index
-    (console-test  "unit-get-index"  "html-render")
+(deftest test-get-index
+    (console-test  "test-get-index"  "html-render")
     (let [[my-db-obj _ _ _] (build-db T-TEST-COLLECTION
                                       []
                                       USE_MONGER_DB
@@ -91,19 +69,16 @@
           (is (= text-diff-1 text-diff-2)))
 )))
 
-
-(defn do-tests []
-  (reset! *run-all-tests* true)
-  (reset! *testing-namespace* "fast-all-tests-running")
+(defn all-tests []
+  (reset! *T-REAL-DB-ASSERTIONS* true)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
  (html-render-specs)
   (run-tests 'tests-html-render)
-  (reset! *testing-namespace* "no-tests-running"))
-
-
+  (reset! *T-ASSERTIONS-VIA-REPL* true))
 
 (defn fast-tests []
-  (reset! *run-all-tests* false)
-  (reset! *testing-namespace* "fast-all-tests-running")
+  (reset! *T-REAL-DB-ASSERTIONS* false)
+  (reset! *T-ASSERTIONS-VIA-REPL* false)
  (html-render-specs)
   (run-tests 'tests-html-render)
-  (reset! *testing-namespace* "no-tests-running"))
+  (reset! *T-ASSERTIONS-VIA-REPL* true))

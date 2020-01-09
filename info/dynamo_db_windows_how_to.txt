@@ -17,21 +17,36 @@ dynamodb.listTables().eachPage(function(e, d) {
     if (e) { ppJson(e); } else if (d) { ppJson(d); } });
 
 //list table
-var p = { TableName: '_test_collection_'};
+var p = { TableName: '_prod_collection_'};
 docClient.scan(p, function(e, d) { if (e) ppJson(e); else ppJson(d);});
 
 
-// delete items
+// delete items    NB. the keys must be in same order as creation order
 dynamodb.deleteItem({
-    "TableName": "apple",
-    "Key" : { "id":{ "N": "11"} }
+    "TableName": "_prod_collection_",
+    "Key" : { "check-url": {"S": "www.jerkersearcher.com/?"},
+              "_id":{ "S": "2020-01-09-00-59-10.587Z+0"}}
 }, function (err, data) {
     if (err) {  console.log('FAIL:  Error deleting item from dynamodb - ' + err); }
     else { console.log("DEBUG:  deleteItem worked. "); }
 });
 
+
+dynamodb.deleteItem({
+    "TableName": "_prod_collection_",
+    "Key" : { "check-url": {"S": "www.sffaudio.com/?"},
+              "_id":{ "S": "2020-01-09-01-03-37.073Z+0"}}
+}, function (err, data) {
+    if (err) {  console.log('FAIL:  Error deleting item from dynamodb - ' + err); }
+    else { console.log("DEBUG:  deleteItem worked. "); }
+});
+
+
+
+
+
 // delete table
-var params = {     TableName: 'table_name',     };
+var params = {     TableName: '_test_collection_',     };
 dynamodb.deleteTable(params, function(err, data) {
     if (err) ppJson(err); // an error occurred
     else ppJson(data); // successful response
