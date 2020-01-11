@@ -14,29 +14,29 @@
   :args (s/cat :spawning-name string?))
 
 (s/fdef kill-services
-  :args (s/cat ))
+  :args (s/cat))
 
 (defn singular-service-specs []
-      (print-line "Speccing singular-service")
-      (t/instrument)
-      (t/instrument 'add-service)
-      (t/instrument 'remove-service)
-      (t/instrument 'kill-services))
+  (print-line "Speccing singular-service")
+  (t/instrument)
+  (t/instrument 'add-service)
+  (t/instrument 'remove-service)
+  (t/instrument 'kill-services))
 
 (deftest test-add-service
-  (console-test "test-singular-service test-add-service" )
+  (console-test "test-singular-service test-add-service")
   (let [my-kill-func (fn kill-servce [])
         test-spawn-name (add-service "my-spawn1" my-kill-func)]
     (is (= test-spawn-name "my-spawn1"))))
 
 (deftest test-remove-service
-  (console-test "test-singular-service test-remove-service" )
+  (console-test "test-singular-service test-remove-service")
   (let [test-spawn-name (remove-service "my-spawn2")]
     (is (= test-spawn-name "my-spawn2"))))
 
 ;   (clojure.test/test-vars [#'tests-singular-service/test-kill-services])
 (deftest test-kill-services
-  (console-test "test-singular-service unit-kill-services" )
+  (console-test "test-singular-service unit-kill-services")
   (let [test-spawn-name (kill-services)]))
 
 (defn all-tests []
@@ -44,12 +44,11 @@
   (reset! *T-ASSERTIONS-VIA-REPL* false)
   (singular-service-specs)
   (run-tests 'tests-singular-service)
-(reset! *T-ASSERTIONS-VIA-REPL* true))
-
+  (reset! *T-ASSERTIONS-VIA-REPL* true))
 
 (defn fast-tests []
   (reset! *T-REAL-DB-ASSERTIONS* false)
   (reset! *T-ASSERTIONS-VIA-REPL* false)
   (singular-service-specs)
   (run-tests 'tests-singular-service)
-(reset! *T-ASSERTIONS-VIA-REPL* true))
+  (reset! *T-ASSERTIONS-VIA-REPL* true))

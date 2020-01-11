@@ -33,9 +33,7 @@
   (:require   [sms-test :refer :all])
   (:require [crash-sms.data-store :refer  :all])
   (:require [crash-sms.fake-db :refer  :all])
-  (:require [prepare-tests :refer :all])
-)
-
+  (:require [prepare-tests :refer :all]))
 
 (defn check-testing []
   (let [the-check-pages (make-check-pages 0)
@@ -49,10 +47,9 @@
                                       USE_MONGER_DB
                                       TEST-CONFIG-FILE
                                       IGNORE-ENV-VARS)]
-(s/check-asserts true)
+    (s/check-asserts true)
     (dampen-mongo-logging)
-    (sms-is-in-test USE_MONGER_DB))
-)
+    (sms-is-in-test USE_MONGER_DB)))
 
 (defn console-divider []
   (print-line "............................................")
@@ -76,7 +73,6 @@
   (web-server-specs)
   (years-months-specs))
 
-
 (defn start-tests []
   (kill-services)
   (check-testing)
@@ -92,19 +88,16 @@
    'tests-scrape-html
    'tests-sms-event
    'tests-web-server
-   'tests-years-months)
-)
+   'tests-years-months))
 
 (defn all-tests []
   (reset! *T-REAL-DB-ASSERTIONS* true)
   (reset! *T-ASSERTIONS-VIA-REPL* false)
   (start-tests)
-  (reset! *T-ASSERTIONS-VIA-REPL* true)
-)
+  (reset! *T-ASSERTIONS-VIA-REPL* true))
 
 (defn mock-tests []
   (reset! *T-REAL-DB-ASSERTIONS* false)
   (reset! *T-ASSERTIONS-VIA-REPL* false)
   (start-tests)
- (reset! *T-ASSERTIONS-VIA-REPL* true)
-)
+  (reset! *T-ASSERTIONS-VIA-REPL* true))

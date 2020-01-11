@@ -17,7 +17,7 @@
                           (reset! *fake-db-records* {}))
 
         my-put-item      (fn put-item [check-record]
-  (s/assert map? check-record )
+                           (s/assert map? check-record)
                            (let [fixed-dates (prepare-data [check-record] "fake-db")   ;; table-name
                                  fixed-rec (first fixed-dates)
                                  the-id (:_id fixed-rec)
@@ -28,15 +28,15 @@
                              (reset! *fake-db-records* map-sorted)))
 
         my-put-items  (fn put-items [check-records]
-  (s/assert vector? check-records)
-  (s/assert not-empty check-records)
+                        (s/assert vector? check-records)
+                        (s/assert not-empty check-records)
                         (doseq [a-record check-records]
                           (my-put-item a-record))
                         @*fake-db-records*)
 
         my-get-all (fn get-all [begins-with]
-  (s/assert string? begins-with)
-  (s/assert not-empty begins-with)
+                     (s/assert string? begins-with)
+                     (s/assert not-empty begins-with)
                      (let [begin-date (trunc-string begins-with DATE-MAX-LENGTH)
                            db-records @*fake-db-records*
 
@@ -54,10 +54,10 @@
 
         my-get-url   (fn get-url [begins-with page-to-check]
 
-  (s/assert string? begins-with)
-  (s/assert not-empty begins-with)
-  (s/assert string? page-to-check)
-  (s/assert not-empty page-to-check)
+                       (s/assert string? begins-with)
+                       (s/assert not-empty begins-with)
+                       (s/assert string? page-to-check)
+                       (s/assert not-empty page-to-check)
 
                        (let [date-urls (my-get-all begins-with)
 

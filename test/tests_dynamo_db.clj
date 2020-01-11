@@ -9,8 +9,7 @@
   (:require [crash-sms.config-args :refer [make-config compact-hash]])
   (:require [crash-sms.dynamo-db :refer :all])
   (:require [java-time :refer [local-date?]])
-  (:require [prepare-tests :refer :all])
-)
+  (:require [prepare-tests :refer :all]))
 
 (s/check-asserts true)
 
@@ -20,10 +19,9 @@
                ::pages-to-check vector?))
 
 (defn dynamo-db-specs []
-    (print-line "Speccing dynamo-db")
-      (t/instrument)
-      (t/instrument 'dynamo-build))
-
+  (print-line "Speccing dynamo-db")
+  (t/instrument)
+  (t/instrument 'dynamo-build))
 
 (s/fdef build-empty-month?
   :args (s/cat :get-all-fn function?))
@@ -40,19 +38,19 @@
 
 (defn data-store-specs []
   (print-line "Speccing data-store")
-      (t/instrument)
-      (t/instrument 'dynamo-build))
+  (t/instrument)
+  (t/instrument 'dynamo-build))
 
 (defn all-tests []
   (reset! *T-REAL-DB-ASSERTIONS* true)
   (reset! *T-ASSERTIONS-VIA-REPL* false)
-(dynamo-db-specs)
+  (dynamo-db-specs)
   (run-tests 'tests-dynamo-db)
   (reset! *T-ASSERTIONS-VIA-REPL* true))
 
 (defn fast-tests []
   (reset! *T-REAL-DB-ASSERTIONS* false)
   (reset! *T-ASSERTIONS-VIA-REPL* false)
-(dynamo-db-specs)
+  (dynamo-db-specs)
   (run-tests 'tests-dynamo-db)
   (reset! *T-ASSERTIONS-VIA-REPL* true))

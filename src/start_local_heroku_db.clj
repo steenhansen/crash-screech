@@ -20,8 +20,8 @@
 
   ([db-type config-file environment-utilize]
    (kill-services)
-   (let [ the-check-pages (make-check-pages 0)
-           [my-db-obj web-port cron-url sms-data] (build-db PRODUCTION-COLLECTION
+   (let [the-check-pages (make-check-pages 0)
+         [my-db-obj web-port cron-url sms-data] (build-db PRODUCTION-COLLECTION
                                                           the-check-pages
                                                           db-type
                                                           config-file

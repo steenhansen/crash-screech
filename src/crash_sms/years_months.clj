@@ -171,7 +171,6 @@
   ; "2019-12-19T07:55:17.829Z"
   )
 (defn instant-time-fn []
-  "spec"
   (str (java-time.temporal/instant)))
 
 (comment
@@ -179,9 +178,7 @@
   ; "2019-12-19-07-55-17.829Z"
   )
 (defn adjusted-date [date-str]
-  "spec"
   (clj-str/replace date-str #"T|:" "-"))
-
 
 (comment
   ((date-with-now-time-fn "2019-11-10"))

@@ -2,14 +2,13 @@
 (ns crash-sms.web-server
   (:require [ring.util.response :as ring-response])
   (:require [ring.adapter.jetty :as ring-jetty])
-(:require [global-consts-vars  :refer :all])
+  (:require [global-consts-vars  :refer :all])
   (:require [ring.middleware.reload :as ring-reload])
   (:require [crash-sms.singular-service :refer [add-service remove-service]])
   (:require [crash-sms.html-render  :refer [get-index]])
   (:require [crash-sms.sms-event  :refer [sms-to-phones]])
   (:require [crash-sms.years-months  :refer [current-yyyy-mm current-month
-                                                 prev-month prev-yyyy-mm date-to-yyyy-mm]])
-  )
+                                             prev-month prev-yyyy-mm date-to-yyyy-mm]]))
 
 (defn show-data
   ([my-db-obj the-date-func]

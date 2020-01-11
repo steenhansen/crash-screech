@@ -10,11 +10,9 @@
   (:require [text-diff :refer [is-html-eq]])
   (:require [prepare-tests :refer :all]))
 
-
-
 (s/fdef prepare-data
   :args (s/cat :check-records (s/coll-of :url-date-tuple?/test-specs)
-                :table-name string?))
+               :table-name string?))
 
 (s/fdef count-string
   :args (s/cat :hay-stack string?
@@ -48,14 +46,14 @@
   (t/instrument 'prepare-data))
 
 (deftest test-count-string
-      (console-test "test-count-string" "check-data")
-    (let [occurance-count (count-string "001001001000" #"1")]
-      (is (= occurance-count 3))))
+  (console-test "test-count-string" "check-data")
+  (let [occurance-count (count-string "001001001000" #"1")]
+    (is (= occurance-count 3))))
 
 (deftest test-trunc-string
-      (console-test "test-trunc-string" "check-data")
-    (let [trunced-str (trunc-string "123456789" 3)]
-      (is (= trunced-str "123"))))
+  (console-test "test-trunc-string" "check-data")
+  (let [trunced-str (trunc-string "123456789" 3)]
+    (is (= trunced-str "123"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -74,11 +72,10 @@
                                  :check-time FAKE-SCRAPE-SPEED})
 
 (deftest test-derive-data
-      (console-test "test-derive-data" "check-data")
-    (let [derived-data (derive-data T-BEFORE-THE-DATA T-TEST-COLLECTION)
-     [diff-1 diff-2] (is-html-eq derived-data T-AFTER-CHECK-DATA)]
-    (is (= diff-1 diff-2))
-))
+  (console-test "test-derive-data" "check-data")
+  (let [derived-data (derive-data T-BEFORE-THE-DATA T-TEST-COLLECTION)
+        [diff-1 diff-2] (is-html-eq derived-data T-AFTER-CHECK-DATA)]
+    (is (= diff-1 diff-2))))
 
 (def ^:const T-BEFORE-UNIQUE-ID {:check-url WWW-SFFAUDIO-COM
                                  :check-date "2019-06-19-01:54:03.800Z",
@@ -96,9 +93,9 @@
                                    :check-time 1234})
 
 (deftest test-uniquely-id
-      (console-test  "test-uniquely-id"  "check-data")
-    (let [unique-data (uniquely-id 1 T-BEFORE-UNIQUE-ID)]
-      (is (= unique-data T-EXPECTED-UNIQUE-ID))))
+  (console-test  "test-uniquely-id"  "check-data")
+  (let [unique-data (uniquely-id 1 T-BEFORE-UNIQUE-ID)]
+    (is (= unique-data T-EXPECTED-UNIQUE-ID))))
 
 
 ;;;;;;;;;;;;;;
@@ -110,9 +107,9 @@
                             :the-time 1234})
 
 (deftest test-ensure-has-date
-      (console-test "test-ensure-has-date" "check-data")
-    (let [has-date (ensure-has-date T-ENSURE-DATA)]
-      (is (contains? has-date :the-date))))
+  (console-test "test-ensure-has-date" "check-data")
+  (let [has-date (ensure-has-date T-ENSURE-DATA)]
+    (is (contains? has-date :the-date))))
 
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -148,21 +145,21 @@
     :check-time FAKE-SCRAPE-SPEED}])
 
 (deftest test-prepare-data
-      (console-test "test-prepare-data" "check-data")
-    (let [prepared-data (prepare-data T-BEFORE-ENSURE-DATA T-TEST-COLLECTION)
-          [diff-1 diff-2] (is-html-eq prepared-data T-EXPECTED-PREPARE-DATA) ]
- (is (= diff-1 diff-2))   ;; so here we are comparaing strings, so much easier  ;; abbacab
-      (is (= prepared-data T-EXPECTED-PREPARE-DATA))))
+  (console-test "test-prepare-data" "check-data")
+  (let [prepared-data (prepare-data T-BEFORE-ENSURE-DATA T-TEST-COLLECTION)
+        [diff-1 diff-2] (is-html-eq prepared-data T-EXPECTED-PREPARE-DATA)]
+    (is (= diff-1 diff-2))   ;; so here we are comparaing strings, so much easier  ;; abbacab
+    (is (= prepared-data T-EXPECTED-PREPARE-DATA))))
 
 (defn all-tests []
- (reset! *T-REAL-DB-ASSERTIONS* true)
+  (reset! *T-REAL-DB-ASSERTIONS* true)
   (reset! *T-ASSERTIONS-VIA-REPL* false)
   (check-data-specs)
   (run-tests 'tests-check-data)
   (reset! *T-ASSERTIONS-VIA-REPL* true))
 
 (defn fast-tests []
- (reset! *T-REAL-DB-ASSERTIONS* false)
+  (reset! *T-REAL-DB-ASSERTIONS* false)
   (reset! *T-ASSERTIONS-VIA-REPL* false)
   (check-data-specs)
   (run-tests 'tests-check-data)

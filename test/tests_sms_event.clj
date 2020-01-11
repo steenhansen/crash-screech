@@ -63,8 +63,7 @@
   {:till-url "https://platform.tillmobile.com/api/send?username=abcdefghijklmnopqrstuvwxyz1234&api_key=1234567890abcdefghijklmnopqrstuvwxyz1234"
    :sms-params {:form-params {:phone ["12345678901" "12345678901" "12345678901"],
                               :text "Test sms call - https://fathomless-woodland-85635.herokuapp.com/"}
-                :content-type :json}
-   })
+                :content-type :json}})
 
 (deftest test-build-sms-send
   (console-test "sms-event test-build-sms-send")

@@ -33,12 +33,12 @@
 
   (ms-load-time 2222 T-TEST-COLLECTION)
   ; 800007
-)
+  )
 (defn ms-load-time
   [millisecond-load table-name]
   (if (= PRODUCTION-COLLECTION table-name)
     millisecond-load
-   FAKE-SCRAPE-SPEED))
+    FAKE-SCRAPE-SPEED))
 
 (comment
   (derive-data  {:the-url WWW-SFFAUDIO-COM
@@ -74,12 +74,12 @@
 
 (comment
 
- (uniquely-id 8 {:check-url WWW-SFFAUDIO-COM
-  :check-date "2019-06-19-01-54-03.800Z"
-  :check-html "blah 1111"
-   :check-accurate true
-   :check-time 1234
-  :check-bytes 9})
+  (uniquely-id 8 {:check-url WWW-SFFAUDIO-COM
+                  :check-date "2019-06-19-01-54-03.800Z"
+                  :check-html "blah 1111"
+                  :check-accurate true
+                  :check-time 1234
+                  :check-bytes 9})
   ; {:check-url "www.sffaudio.com",
   ;  :check-date "2019-06-19-01-54-03.800Z",
   ;  :check-html "blah 1111",
@@ -87,7 +87,7 @@
   ;  :check-time 1234,
   ;  :check-bytes 9,
   ;  :_id "2019-06-19-01-54-03.800Z+8"}
-)
+  )
 (defn uniquely-id
   "has test"
   [many-index many-item]
@@ -102,7 +102,7 @@
 
   (ensure-has-date {:the-date "abc"})
   ; {:the-date "abc"}
-)
+  )
 (defn ensure-has-date
   [check-record]
   (if (check-record :the-date)

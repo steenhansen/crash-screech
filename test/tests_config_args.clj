@@ -16,9 +16,6 @@
 
   (:require [prepare-tests :refer :all]))
 
-
-
-
 (s/fdef read-config-file
   :args (s/cat :config-file :edn-filename?/test-specs))
 
@@ -29,15 +26,14 @@
 (s/fdef make-config
   :args (s/cat :db-type string?
                :config-file :edn-filename?/test-specs
-               :environment-utilize string? ))
-
+               :environment-utilize string?))
 
 (defn config-args-specs []
   (print-line "Speccing config-args")
-      (t/instrument)
-      (t/instrument 'read-config-file)
-      (t/instrument 'merge-environment)
-      (t/instrument 'make-config))
+  (t/instrument)
+  (t/instrument 'read-config-file)
+  (t/instrument 'merge-environment)
+  (t/instrument 'make-config))
 
 (def ^:const TEST-MAKE-CONFIG
   {:SEND_TEST_SMS_URL "/zxc"
@@ -64,40 +60,38 @@
                  :CRON_URL_DIR "/url-for-cron-execution"
                  :TESTING_SMS true,
                  :PORT "8080"},
-  :fake-db {}
+   :fake-db {}
    :monger-db {:MONGODB_URI "mongodb://localhost:27017/local"}})
 
 ;  (clojure.test/test-vars [#'tests-config-args/t-read-config-file])
 (deftest test-read-config-file
-    (console-test "test-read-config-file" "config-args")
-    (let [config-file LOCAL_CONFIG
-          config-map (read-config-file config-file)]
-      (is (= config-map TEST-READ-CONFIG))))
+  (console-test "test-read-config-file" "config-args")
+  (let [config-file LOCAL_CONFIG
+        config-map (read-config-file config-file)]
+    (is (= config-map TEST-READ-CONFIG))))
 
 (deftest test-merge-environment
-      (console-test "test-merge-environment" "config-args")
-    (let [a-map-entry (first {:not_exist_key "a_value"})
-          start-accum {}
-          new-env (merge-environment start-accum a-map-entry)]
-      (is (= new-env {:not_exist_key "a_value"}))))
+  (console-test "test-merge-environment" "config-args")
+  (let [a-map-entry (first {:not_exist_key "a_value"})
+        start-accum {}
+        new-env (merge-environment start-accum a-map-entry)]
+    (is (= new-env {:not_exist_key "a_value"}))))
 
 (deftest test-make-config
-      (console-test "test-make-config" "config-args")
-    (let [config-map (make-config USE_MONGER_DB LOCAL_CONFIG IGNORE-ENV-VARS)]
-      (is (= config-map TEST-MAKE-CONFIG))))
+  (console-test "test-make-config" "config-args")
+  (let [config-map (make-config USE_MONGER_DB LOCAL_CONFIG IGNORE-ENV-VARS)]
+    (is (= config-map TEST-MAKE-CONFIG))))
 
 (defn all-tests []
   (reset! *T-REAL-DB-ASSERTIONS* true)
   (reset! *T-ASSERTIONS-VIA-REPL* false)
-(config-args-specs)
+  (config-args-specs)
   (run-tests 'tests-config-args)
   (reset! *T-ASSERTIONS-VIA-REPL* true))
-
-
 
 (defn fast-tests []
   (reset! *T-REAL-DB-ASSERTIONS* false)
   (reset! *T-ASSERTIONS-VIA-REPL* false)
-(config-args-specs)
+  (config-args-specs)
   (run-tests 'tests-config-args)
   (reset! *T-ASSERTIONS-VIA-REPL* true))

@@ -1,0 +1,39 @@
+
+Lein:
+        Compile, like a Heroku deploy:
+        C:\crash-sms> lein uberjar
+
+        Java run from command line:
+        C:\crash-sms> java -jar ./target/uberjar/crash-sms.jar monger-db local-config.edn
+
+        Lein run from command line:
+	C:\crash-sms> lein run amazonica-db local-config.edn
+ 	C:\crash-sms> lein run monger-db local-config.edn
+
+        Code coverage:
+        C:\crash-sms> lein cloverage
+
+        Code format:
+        C:\crash-sms> lein cljfmt fix
+
+        Code lint:
+        C:\crash-sms> lein eastwood "{:namespaces [:source-paths] :exclude-linters [:implicit-dependencies] }"
+
+        Test:
+        C:\crash-sms> lein test
+
+DynamoDb:
+        Launch:
+        c:\dynamo-db>  java "-Djava.library.path=./DynamoDBLocal_lib" -jar DynamoDBLocal.jar -sharedDb
+
+Heroku:
+        Logs:
+        C:\crash-sms>heroku logs --tail -a fathomless-woodland-85635
+
+        Page:
+        https://fathomless-woodland-85635.herokuapp.com
+
+Cron:
+        Temporize Scheduler:
+        Cron expression for 17 minutes past every 2 hours,
+        17 */2 * * *

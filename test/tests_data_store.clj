@@ -66,12 +66,16 @@
   (unit-get-db-conn-type USE_FAKE_DB))
 
 (deftest test-get-db-conn-mongoDb
-  (console-test "test-get-db-conn-mongoDb" "data-store")
-  (unit-get-db-conn-type USE_MONGER_DB))
+  (if (slow-db-tests-allowed)
+    (do
+      (console-test "test-get-db-conn-mongoDb" "data-store")
+      (unit-get-db-conn-type USE_MONGER_DB))))
 
 (deftest test-get-db-conn-dynoDb
-  (console-test "test-get-db-conn-dynoDb" "data-store")
-  (unit-get-db-conn-type    USE_AMAZONICA_DB))
+  (if (slow-db-tests-allowed)
+    (do
+      (console-test "test-get-db-conn-dynoDb" "data-store")
+      (unit-get-db-conn-type    USE_AMAZONICA_DB))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn unit-empty-month [db-type]
@@ -103,12 +107,11 @@
     (do
       (console-test "tests-data-store" "real-db-empty-month")
       (unit-empty-month USE_MONGER_DB)
-      (unit-empty-month USE_AMAZONICA_DB)
-)))
+      (unit-empty-month USE_AMAZONICA_DB))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn unit-today-error [db-type]
-(console-test "tests-data-store" "unit-today-error" db-type)
+  (console-test "tests-data-store" "unit-today-error" db-type)
   (let [the-check-pages (make-check-pages 0)
         [my-db-obj _ cron-url sms-data] (build-db T-TEST-COLLECTION
                                                   the-check-pages
@@ -136,8 +139,7 @@
     (do
       (console-test "tests-data-store" "real-db-today-error")
       (unit-today-error USE_MONGER_DB)
-      (unit-today-error USE_AMAZONICA_DB)
-)))
+      (unit-today-error USE_AMAZONICA_DB))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;
@@ -228,7 +230,7 @@
         _ (put-items TEST-MANY-PAGES)
         sff-2016 (get-url "2016" WWW-SFFAUDIO-COM)
         sff-2016-07 (get-url "2016-07" WWW-SFFAUDIO-COM)
-        sff-2016-07-08 (get-url "2016-07-08" WWW-SFFAUDIO-COM) ]
+        sff-2016-07-08 (get-url "2016-07-08" WWW-SFFAUDIO-COM)]
     (console-test "t-get-items" type-db)
     (is (= (count sff-2016) 2))
     (is (= (count sff-2016-07) 2))

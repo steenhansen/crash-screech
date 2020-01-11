@@ -1,9 +1,0 @@
-
-
-
-
-D:\> lein uberjar
-
-D:\target\uberjar> java -jar crash-sms.jar monger-db ../../local-config.edn use-environment
-
-

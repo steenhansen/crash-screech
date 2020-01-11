@@ -12,7 +12,6 @@
   (:require [crash-sms.singular-service :refer [kill-services]])
   (:require [crash-sms.sms-event :refer [build-sms-send build-web-scrape]]))
 
-
 (comment "to start"
          (-main USE_MONGER_DB HEROKU_CONFIG)
          (-main USE_MONGER_DB HEROKU_CONFIG USE_ENVIRONMENT))
@@ -20,12 +19,12 @@
   ([db-type config-file] (-main db-type config-file USE_ENVIRONMENT))
 
   ([db-type config-file environment-utilize]
-   (let [ the-check-pages (make-check-pages 0)
+   (let [the-check-pages (make-check-pages 0)
          [my-db-obj web-port cron-url sms-data] (build-db PRODUCTION-COLLECTION
-                                                                              the-check-pages
-                                                                              db-type
-                                                                              config-file
-                                                                              environment-utilize)
+                                                          the-check-pages
+                                                          db-type
+                                                          config-file
+                                                          environment-utilize)
          int-port (Integer/parseInt web-port)
          testing-sms? false
          web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)

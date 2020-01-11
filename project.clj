@@ -6,11 +6,11 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies   [[org.clojure/clojure "1.10.0"]
 
-;; july 8/stat - Copy (10) was first log4j thing
-[lambdaisland/deep-diff "0.0-47"]
-
-                   [log4j/log4j "1.2.16" :exclusions [javax.mail/mail javax.jms/jms com.sun.jdmk/jmxtools com.sun.jmx/jmxri]]
-
+                   [log4j/log4j "1.2.16" :exclusions [javax.mail/mail
+                                                      javax.jms/jms
+                                                      com.sun.jdmk/jmxtools
+                                                      com.sun.jmx/jmxri
+                                                      com.amazonaws/AmazonWebServiceClient ]]
                    [amazonica "0.3.142"]
                    [chrisjd/edn-config "0.1.1"]
                    [com.novemberain/monger "3.5.0"]
@@ -43,8 +43,8 @@
                         'clojure.main)
                (alter-var-root #'clojure.main/repl-caught
                                (constantly @#'io.aviso.repl/pretty-pst))
-               (alter-var-root #'clojure.repl/pst                    ; nicer (pst) 
-                               (constantly @#'io.aviso.repl/pretty-pst))]     ; (print stack trace) 
+               (alter-var-root #'clojure.repl/pst                    ; nicer (pst)
+                               (constantly @#'io.aviso.repl/pretty-pst))]     ; (print stack trace)
   :uberjar-name "crash-sms.jar"
   :min-lein-version "2.0.0"
   :main ^:skip-aot start-heroku            ; the main() that heroku calls

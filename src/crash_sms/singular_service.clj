@@ -1,7 +1,6 @@
 (ns crash-sms.singular-service
   (:gen-class)
-(:require [global-consts-vars  :refer :all])
-)
+  (:require [global-consts-vars  :refer :all]))
 
 (defonce ^:dynamic *windows-java-service-kill-list* (atom {}))
 

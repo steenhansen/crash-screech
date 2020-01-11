@@ -1,6 +1,6 @@
 
 
-; core> (-local-main USE_MONGER_DB LOCAL_CONFIG)
+; core> (-local-main USE_MONGER_DB LOCAL_CONFIG) (-local-main USE_MONGER_DB LOCAL_CONFIG)
 ; core> (kill-services)
 
 (ns start-local
@@ -67,7 +67,4 @@
                    :the-time 1234}]
    ; ((:put-items my-db-obj) test-many)
    ; ((:put-item my-db-obj) test-one)
-     (web-init int-port express-server-fn)
-
-
-)))
+     (web-init int-port express-server-fn))))

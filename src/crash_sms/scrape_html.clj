@@ -13,7 +13,6 @@
   (let [number-scrapes (count-string some-html #"a_countable_scrape")]
     number-scrapes))
 
-
 (defn matching-css-sections
   [pages-html css-match]
   (map enlive-html/text
@@ -53,7 +52,7 @@
 (comment
   (read-html  WWW-SFFAUDIO-COM true)
 ;
-)
+  )
 (defn read-html
   [check-page read-from-web?]
   (if read-from-web?
@@ -139,7 +138,6 @@
         _ (purge-table)
         all-sms (scrape-pages-fn my-db-obj the-check-pages instant-time-fn sms-send-fn read-from-web?)]
     [all-sms])
-
 
   (let [pages-OK-check [{:check-page "www.sffaudio.com/not-exist-404"   :enlive-keys SFFAUDIO-CHECK-KEYS :at-least HTML-OK-COUNT}]
         [my-db-obj _ _ sms-data] (build-db T-TEST-COLLECTION pages-OK-check USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)

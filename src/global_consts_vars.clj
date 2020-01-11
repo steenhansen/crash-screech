@@ -28,7 +28,6 @@
 (def ^:const LOCAL_CONFIG "./local-config.edn")
 (def ^:const HEROKU_CONFIG "../heroku-config.edn")
 
-
 (def ^:const SCRAPED-TEST-DATA "./test/test-data/")
 
 (def ^:const EMPTY-HTML "-")

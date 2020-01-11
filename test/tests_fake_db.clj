@@ -14,9 +14,9 @@
 (s/fdef fake-build
   :args (s/alt :nullary (s/cat)
                :ternary (s/cat ::mongolabs-config :mongo-config?/test-specs
-               ::table-name string?
-               ::pages-to-check vector?)  ;; for tests to match mongo's signature
- ))
+                               ::table-name string?
+                               ::pages-to-check vector?)  ;; for tests to match mongo's signature
+               ))
 
 (defn fake-db-specs []
   (print-line "Speccing fake-db")
@@ -60,9 +60,7 @@
         sff (get-url "" WWW-SFFAUDIO-COM)
         sff-2016 (get-url "2016" WWW-SFFAUDIO-COM)
         sff-2016-07 (get-url "2016-07" WWW-SFFAUDIO-COM)
-        sff-2016-07-08 (get-url "2016-07-08" WWW-SFFAUDIO-COM)
-
-]
+        sff-2016-07-08 (get-url "2016-07-08" WWW-SFFAUDIO-COM)]
     (is (= (count all-db) 4))
     (is (= (count all-2016) 4))
     (is (= (count all-2016-07) 4))

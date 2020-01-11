@@ -33,10 +33,10 @@
     (try (case db-keyword
            :amazonica-db (dynamo-build the-config table-name pages-to-check)
            :monger-db (mongolabs-build the-config table-name pages-to-check)
-:fake-db (fake-build))
+           :fake-db (fake-build))
          (catch Exception e
            (print-line " get-db-conn - " db-keyword
-                    " -caught exception: " (.getMessage e))))))
+                       " -caught exception: " (.getMessage e))))))
 
 (defn build-empty-month?
   [get-all-fn]
@@ -134,12 +134,12 @@
                    :put-item (:my-put-item my-db-funcs),
                    :put-items (:my-put-items my-db-funcs),
 
- :empty-month? (build-empty-month? get-all),
+                   :empty-month? (build-empty-month? get-all),
                    :today-error? (build-today-error? get-all)
-:type-db db-type
+                   :type-db db-type
                    :table-name table-name}]
 
- (if (not ( (:db-alive? my-db-obj)))
+    (if (not ((:db-alive? my-db-obj)))
       (throw  (Exception. (str " **** ERROR no database running : " db-type))))
     (if  (= PRODUCTION-COLLECTION table-name)
       (prt-prn/pprint the-config))

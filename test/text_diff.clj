@@ -164,7 +164,7 @@
 (comment
   (get-middle "1234567890" 3 5)
   ;"45"
-)
+  )
 (defn get-middle [str-text start-length end-pos]
   (if (or (= end-pos 0) (> start-length end-pos))
     ""
@@ -306,10 +306,10 @@
 
 (comment
   ;"  { :a 1  :b  { :two  '(4 [5]) }  :c \"three\" } "
-  (map-to-str {:a 1 :c "three" :b {:two '(4 [5])}})        )
+  (map-to-str {:a 1 :c "three" :b {:two '(4 [5])}}))
 (defn map-to-str [a-map]
-  (let [ map-sorted (into (sorted-map) (sort-by first (seq a-map)))
-         map-members (reduce variable-to-str "" map-sorted)]
+  (let [map-sorted (into (sorted-map) (sort-by first (seq a-map)))
+        map-members (reduce variable-to-str "" map-sorted)]
     (str " {" map-members "} ")))
 
 (comment

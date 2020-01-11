@@ -37,13 +37,11 @@
   (:require [crash-sms.config-args :refer :all])
   (:require [crash-sms.dynamo-db :refer :all])
 
- (:require [crash-sms.html-render :refer :all])
+  (:require [crash-sms.html-render :refer :all])
   (:require [crash-sms.mongo-db :refer :all])
   (:require [crash-sms.scrape-html :refer :all])
   (:require [crash-sms.singular-service :refer :all])
 
-   (:require [crash-sms.sms-event :refer :all])
-   (:require [crash-sms.web-server :refer :all])
-   (:require [crash-sms.years-months :refer :all])
-
-  )
+  (:require [crash-sms.sms-event :refer :all])
+  (:require [crash-sms.web-server :refer :all])
+  (:require [crash-sms.years-months :refer :all]))

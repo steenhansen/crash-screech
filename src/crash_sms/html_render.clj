@@ -32,18 +32,20 @@
 
 (declare fill-bytes)
 
-;; (defn get-two-months
-;;  [my-db-obj yyyy-mm testing-sms?]
-;; )
-
 (defn get-two-months
   "has db test"
   [my-db-obj yyyy-mm testing-sms?]     ;;; under-test?
   (let [get-all (:get-all my-db-obj)
         this-y-m (current-yyyy-mm yyyy-mm)
         last-y-m (prev-yyyy-mm yyyy-mm)
-        this-months (get-all this-y-m)
-        last-months (get-all last-y-m)]
+        inject-under-test (fn [a-record] (assoc-in a-record [:under-test?] testing-sms?))
+        this-months-no-test (get-all this-y-m)
+;_ (println "11111111111111111" this-months)
+;_ (println "2222222222222222" this-tests)
+        last-months-no-test (get-all last-y-m)
+
+        this-months (map inject-under-test this-months-no-test)
+        last-months (map inject-under-test last-months-no-test)]
     (if testing-sms?
       (let [this-sorted (sort-by :check-url this-months)
             last-sorted (sort-by :check-url last-months)
@@ -56,87 +58,83 @@
             previous-months (vec last-sorted)]
         [previous-months current-months]))))
 
+(defn fill-html
+  [under-test? check-accurate check-html]
+  (if (and under-test? (not check-accurate))
+    (enlive-html/do-> (enlive-html/content FAKE-FAIL-CONTENT))
+    (enlive-html/do-> (enlive-html/content (if check-accurate "" check-html)))))
+
+(defn fill-time
+  [under-test? check-time]
+  (if  under-test?
+    (enlive-html/do-> (enlive-html/content (str FAKE-SCRAPE-SPEED))
+                      (enlive-html/add-class "speed_test"))
+
+    (enlive-html/do-> (enlive-html/content (str check-time))
+                      (if (> check-time 2000)
+                        (enlive-html/add-class "speed_bad")
+                        (if (> check-time 1000)
+                          (enlive-html/add-class "speed_average")
+                          (enlive-html/add-class "speed_good"))))))
+
+(defn fill-date  [under-test? check-date]
+  (if  under-test?
+    (enlive-html/do-> (enlive-html/content (trunc-yyyy-mm-dd  check-date)))
+    (enlive-html/do-> (enlive-html/content (day-hour-min check-date)))))
+
+(defn fill-bytes [testing-sms? check-bytes]
+  (if  testing-sms?
+    (enlive-html/do-> (enlive-html/content (str FAKE-SCRAPE-BYTES)))
+    (enlive-html/do-> (enlive-html/content (str check-bytes)))))
+
+(enlive-html/defsnippet row-selector
+  BASE-HTML-TEMPLATE
+  [[:.month_content (enlive-html/nth-of-type 1)] :>
+   enlive-html/first-child]
+  [{:keys [check-url check-date check-bytes check-html
+           check-accurate check-time                    under-test?]}]
+  [:div.scrape_accurate]
+  (fill-accurate check-accurate)
+  [:div.scrape_time]
+  (fill-time  under-test? check-time)
+  [:div.scrape_date]
+  (fill-date  under-test? check-date)
+  [:div.scrape_url]
+  (fill-url check-url)
+  [:div.scrape_bytes]
+  (fill-bytes  under-test? check-bytes)
+  [:div.scrape_html]
+  (fill-html under-test? check-accurate check-html))
+
+(enlive-html/defsnippet month-selector
+  BASE-HTML-TEMPLATE
+  {[:.a_month] [[:.month_content
+                 (enlive-html/nth-of-type 1)]]}
+  [{:keys [month-type month-data]}]
+  [:.a_month]
+  (enlive-html/content month-type)
+  [:.month_content]
+  (enlive-html/content (map row-selector month-data)))
+
+(enlive-html/deftemplate index-page
+  BASE-HTML-TEMPLATE
+  [{:keys [page-title month-sections]}]
+  [:#title_of_page]
+  (enlive-html/content page-title)
+  [:#two_months]
+  (enlive-html/content (map month-selector
+                            month-sections)))
+
 (defn get-index
   "has db test"
   ([my-db-obj] (get-index my-db-obj (date-to-yyyy-mm (java-time.temporal/instant))))
   ([my-db-obj yyyy-mm] (get-index my-db-obj yyyy-mm false))
   ([my-db-obj yyyy-mm testing-sms?]
-
    (let [[previous-months current-months] (get-two-months my-db-obj yyyy-mm testing-sms?)       ;;; under-test? sut
          prev-name (prev-month yyyy-mm)
          cur-name (current-month yyyy-mm)
-         table-name (:table-name my-db-obj)
          db-data {:page-title "SFFaudio page checks",
                   :month-sections
                   [{:month-type prev-name, :month-data previous-months}
                    {:month-type cur-name, :month-data current-months}]}]
-
-     (defn fill-html
-       [check-accurate check-html]
-       (if (and (= T-TEST-COLLECTION table-name) (not check-accurate))
-         (enlive-html/do-> (enlive-html/content FAKE-FAIL-CONTENT))
-         (enlive-html/do-> (enlive-html/content (if check-accurate "" check-html)))))
-
-     (defn fill-time
-       [check-time]
-       (if  (= PRODUCTION-COLLECTION table-name)
-
-         (enlive-html/do-> (enlive-html/content (str check-time))
-                           (if (> check-time 2000)
-                             (enlive-html/add-class "speed_bad")
-                             (if (> check-time 1000)
-                               (enlive-html/add-class "speed_average")
-                               (enlive-html/add-class "speed_good"))))
-
-         (enlive-html/do-> (enlive-html/content (str FAKE-SCRAPE-SPEED))
-                           (enlive-html/add-class "speed_test"))))
-
-     (defn fill-date  [check-date]
-       (if  (= PRODUCTION-COLLECTION table-name)
-         (enlive-html/do-> (enlive-html/content (day-hour-min check-date)))
-         (enlive-html/do-> (enlive-html/content (trunc-yyyy-mm-dd  check-date)))))
-
-     (defn fill-bytes [check-bytes]
-       (if  (= PRODUCTION-COLLECTION table-name)
-         (enlive-html/do-> (enlive-html/content (str check-bytes)))
-         (enlive-html/do-> (enlive-html/content (str FAKE-SCRAPE-BYTES)))))
-
-     (enlive-html/defsnippet row-selector
-       BASE-HTML-TEMPLATE
-       [[:.month_content (enlive-html/nth-of-type 1)] :>
-        enlive-html/first-child]
-       [{:keys [check-url check-date check-bytes check-html
-                check-accurate check-time]}]
-       [:div.scrape_accurate]
-       (fill-accurate check-accurate)
-       [:div.scrape_time]
-       (fill-time check-time)
-       [:div.scrape_date]
-       (fill-date check-date)
-       [:div.scrape_url]
-       (fill-url check-url)
-       [:div.scrape_bytes]
-       (fill-bytes check-bytes)
-       [:div.scrape_html]
-       (fill-html check-accurate check-html))
-
-     (enlive-html/defsnippet month-selector
-       BASE-HTML-TEMPLATE
-       {[:.a_month] [[:.month_content
-                      (enlive-html/nth-of-type 1)]]}
-       [{:keys [month-type month-data]}]
-       [:.a_month]
-       (enlive-html/content month-type)
-       [:.month_content]
-       (enlive-html/content (map row-selector month-data)))
-
-     (enlive-html/deftemplate index-page
-       BASE-HTML-TEMPLATE
-       [{:keys [page-title month-sections]}]
-       [:#title_of_page]
-       (enlive-html/content page-title)
-       [:#two_months]
-       (enlive-html/content (map month-selector
-                                 month-sections)))
-
      (render-parts (index-page db-data)))))

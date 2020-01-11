@@ -1,6 +1,5 @@
 ; https://lesterhan.wordpress.com/2015/11/19/dynamodb-(-with-amazonica/
 ; https://github.com/mcohen01/amazonica#dynamodbv2
-; https://github.com/mcohen01/amazonica   put-item
 ; https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html
 
 (ns crash-sms.dynamo-db
