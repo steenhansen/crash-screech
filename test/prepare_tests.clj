@@ -58,7 +58,6 @@
   ([test-name test-1 test-2 test-3]
    (print-line "..." test-name test-1 test-2 test-3)))
 
-;  (ddiff/pretty-print (ddiff/diff expected-get-index actual-get-index) )
 (defn conform-whitespace
   [rn-text]
   (let [n-text (clj-str/replace rn-text  #"\r\n" "\n")

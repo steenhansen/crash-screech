@@ -35,22 +35,6 @@
   (:require [crash-sms.fake-db :refer  :all])
   (:require [prepare-tests :refer :all]))
 
-(defn check-testing []
-  (let [the-check-pages (make-check-pages 0)
-        [my-db-dynamo _ _ _] (build-db T-TEST-COLLECTION
-                                       the-check-pages
-                                       USE_AMAZONICA_DB
-                                       TEST-CONFIG-FILE
-                                       IGNORE-ENV-VARS)
-        [my-db-mongo _ _ _] (build-db T-TEST-COLLECTION
-                                      the-check-pages
-                                      USE_MONGER_DB
-                                      TEST-CONFIG-FILE
-                                      IGNORE-ENV-VARS)]
-    (s/check-asserts true)
-    (dampen-mongo-logging)
-    (sms-is-in-test USE_MONGER_DB)))
-
 (defn console-divider []
   (print-line "............................................")
   (print-line "............................................")
@@ -75,7 +59,9 @@
 
 (defn start-tests []
   (kill-services)
-  (check-testing)
+  (s/check-asserts true)
+  (dampen-mongo-logging)
+  (sms-is-in-test USE_FAKE_DB)
   (console-divider)
   (check-specs)
   (run-tests

@@ -9,7 +9,7 @@
 
 (def ^:dynamic  *fake-db-records* (atom {}))
 
-(defn fake-build [& _]   ;; ignore all parameters, for testing purposes
+(defn fake-build [table-name & _]   ;; ignore all parameters, for testing purposes
   (let [my-delete-table (fn delete-table []
                           (reset! *fake-db-records* {}))
 
@@ -18,7 +18,7 @@
 
         my-put-item      (fn put-item [check-record]
                            (s/assert map? check-record)
-                           (let [fixed-dates (prepare-data [check-record] "fake-db")   ;; table-name
+                           (let [fixed-dates (prepare-data [check-record] table-name)
                                  fixed-rec (first fixed-dates)
                                  the-id (:_id fixed-rec)
                                  key-id (keyword the-id)

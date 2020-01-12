@@ -20,10 +20,13 @@
 
 (comment
   (-local-main USE_MONGER_DB LOCAL_CONFIG IGNORE-ENV-VARS)   "local monger db"
+
+  (-local-main USE_FAKE_DB  LOCAL_CONFIG IGNORE-ENV-VARS)   "local memory fake db"
+
   (-local-main USE_AMAZONICA_DB LOCAL_CONFIG IGNORE-ENV-VARS)  "local amazonica db"
+
   (-local-main USE_MONGER_DB HEROKU_CONFIG IGNORE-ENV-VARS)   "real monger db, config file outside project"
-;
-  )
+)
 
 (defn -local-main
   ([db-type config-file] (-local-main db-type config-file IGNORE-ENV-VARS))
@@ -58,7 +61,7 @@
                      :the-time 12346}]
          testing-sms? true
          web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
-         under-test? true
+         under-test? false
          express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data under-test? instant-time-fn)
          test-one {:the-url WWW-SFFAUDIO-COM
                    :the-date "2019-06-19-01:54:03.804Z",

@@ -10,7 +10,6 @@
   ; 2
   )
 (defn count-string
-  "has test"
   [hay-stack needle-regex]
   (let [split-vector (clj-str/split hay-stack needle-regex)
         occurance-count (dec (count split-vector))]
@@ -21,7 +20,6 @@
   ; "12"
   )
 (defn trunc-string
-  "has test"
   [the-string num-chars]
   (if the-string
     (subs the-string 0 (min (count the-string) num-chars))
@@ -55,7 +53,6 @@
   ; :check-time 800007}
   )
 (defn derive-data
-  "has test"
   [check-record table-name]
   (let [{:keys [the-url the-date the-html the-accurate the-time]} check-record
         check-url the-url
@@ -89,7 +86,6 @@
   ;  :_id "2019-06-19-01-54-03.800Z+8"}
   )
 (defn uniquely-id
-  "has test"
   [many-index many-item]
   (let [the-date (:check-date many-item)
         extended-date (str the-date "+" many-index)

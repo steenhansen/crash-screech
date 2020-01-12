@@ -6,13 +6,11 @@
   (:require [global-consts-vars  :refer :all])
   (:require [crash-sms.years-months  :refer [current-yyyy-mm current-month  trunc-yyyy-mm-dd
                                              prev-month prev-yyyy-mm date-to-yyyy-mm]])
-;  (:require [java-time.local :as j-time])
   (:require [global-consts-vars :refer :all]))
 
 (defn render-parts [html-pieces] (clj-str/join html-pieces))
 
 (defn day-hour-min
-  "has test"
   [check-date]
   (let [dd-hh-mm (subs check-date 8 16)
         [days hours minutes] (clj-str/split dd-hh-mm #"-")
@@ -33,20 +31,17 @@
 (declare fill-bytes)
 
 (defn get-two-months
-  "has db test"
-  [my-db-obj yyyy-mm testing-sms?]     ;;; under-test?
+  [my-db-obj yyyy-mm under-test?]
   (let [get-all (:get-all my-db-obj)
         this-y-m (current-yyyy-mm yyyy-mm)
         last-y-m (prev-yyyy-mm yyyy-mm)
-        inject-under-test (fn [a-record] (assoc-in a-record [:under-test?] testing-sms?))
+        inject-under-test (fn [a-record] (assoc-in a-record [:under-test?] under-test?))
         this-months-no-test (get-all this-y-m)
-;_ (println "11111111111111111" this-months)
-;_ (println "2222222222222222" this-tests)
         last-months-no-test (get-all last-y-m)
 
         this-months (map inject-under-test this-months-no-test)
         last-months (map inject-under-test last-months-no-test)]
-    (if testing-sms?
+    (if under-test?
       (let [this-sorted (sort-by :check-url this-months)
             last-sorted (sort-by :check-url last-months)
             current-months (vec this-sorted)
@@ -82,8 +77,8 @@
     (enlive-html/do-> (enlive-html/content (trunc-yyyy-mm-dd  check-date)))
     (enlive-html/do-> (enlive-html/content (day-hour-min check-date)))))
 
-(defn fill-bytes [testing-sms? check-bytes]
-  (if  testing-sms?
+(defn fill-bytes [under-test? check-bytes]
+  (if under-test?
     (enlive-html/do-> (enlive-html/content (str FAKE-SCRAPE-BYTES)))
     (enlive-html/do-> (enlive-html/content (str check-bytes)))))
 
@@ -126,11 +121,10 @@
                             month-sections)))
 
 (defn get-index
-  "has db test"
   ([my-db-obj] (get-index my-db-obj (date-to-yyyy-mm (java-time.temporal/instant))))
   ([my-db-obj yyyy-mm] (get-index my-db-obj yyyy-mm false))
-  ([my-db-obj yyyy-mm testing-sms?]
-   (let [[previous-months current-months] (get-two-months my-db-obj yyyy-mm testing-sms?)       ;;; under-test? sut
+  ([my-db-obj yyyy-mm under-test?]
+   (let [[previous-months current-months] (get-two-months my-db-obj yyyy-mm under-test?)
          prev-name (prev-month yyyy-mm)
          cur-name (current-month yyyy-mm)
          db-data {:page-title "SFFaudio page checks",

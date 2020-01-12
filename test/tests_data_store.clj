@@ -205,18 +205,23 @@
   [(count db-object) NUM-DATA-STORE-PROPERTIES])
 
 ;   (clojure.test/test-vars [#'tests-data-store/all-t-functions])
-(deftest test-obj-functions
-  (console-test  "test-web-server all-t-functions")
+(deftest mock-obj-functions
+  (console-test  "test-web-server mock-obj-functions")
   (let [[fake-db] (build-db T-TEST-COLLECTION TEST-CHECK-PAGES USE_FAKE_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
         [func-count-1 func-count-2] (unit-functions fake-db)]
     (is (= func-count-1 func-count-2)))
+)
+
+(deftest real-obj-functions
+  (if (slow-db-tests-allowed)
+    (do
+  (console-test  "test-web-server real-obj-functions")
   (let [[mongo-db] (build-db T-TEST-COLLECTION TEST-CHECK-PAGES USE_MONGER_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
         [func-count-1 func-count-2] (unit-functions mongo-db)]
     (is (= func-count-1 func-count-2)))
   (let [[dynamo-db] (build-db T-TEST-COLLECTION TEST-CHECK-PAGES USE_AMAZONICA_DB TEST-CONFIG-FILE IGNORE-ENV-VARS)
         [func-count-1 func-count-2] (unit-functions dynamo-db)]
-    (is (= func-count-1 func-count-2))))
-
+    (is (= func-count-1 func-count-2))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

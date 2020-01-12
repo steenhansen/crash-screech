@@ -18,7 +18,7 @@
 (s/fdef get-two-months
   :args (s/cat :my-db-obj  coll?
                :yyyy-mm   :year-month?/test-specs
-               :testing-sms? boolean?))
+               :under-test? boolean?))
 
 (s/fdef get-index
   :args (s/alt :unary (s/cat :my-db-obj  coll?)

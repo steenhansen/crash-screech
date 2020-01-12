@@ -29,6 +29,6 @@
          int-port (Integer/parseInt web-port)
          testing-sms? true
          web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
-         under-test? true
+         under-test? false
          express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data under-test? instant-time-fn)]
      (web-init int-port express-server-fn))))

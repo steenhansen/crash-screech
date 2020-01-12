@@ -8,6 +8,7 @@ Compile:
 Run:
         core> (-local-main USE_MONGER_DB LOCAL_CONFIG)
         core> (-local-main USE_AMAZONICA_DB LOCAL_CONFIG)
+        core> (-local-main USE_FAKE_DB LOCAL_CONFIG)
 
 Stop http://localhost:8080/ web-server:
         core> (kill-services)

@@ -28,12 +28,12 @@
   ;  :my-purge-table ...
   )
 (defn get-db-conn
-  [table-name pages-to-check db-type the-config]             ; collection-name
+  [table-name pages-to-check db-type the-config]
   (let [db-keyword (keyword db-type)]
     (try (case db-keyword
            :amazonica-db (dynamo-build the-config table-name pages-to-check)
            :monger-db (mongolabs-build the-config table-name pages-to-check)
-           :fake-db (fake-build))
+           :fake-db (fake-build table-name))
          (catch Exception e
            (print-line " get-db-conn - " db-keyword
                        " -caught exception: " (.getMessage e))))))

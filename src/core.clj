@@ -8,11 +8,15 @@
 ; core> (-local-main USE_MONGER_DB LOCAL_CONFIG)
 ; core> (kill-services)
 
+; core> (-local-main USE_FAKE_DB LOCAL_CONFIG)
+; core> (kill-services)
+
 ; core> (-local-main USE_AMAZONICA_DB LOCAL_CONFIG)
 ; core> (kill-services)
 
-; core> (-local-heroku-main USE_MONGER_DB HEROKU_CONFIG)
-; Will use Heroku MongoDb
+; core> (-local-heroku-main USE_MONGER_DB HEROKU_CONFIG)    ;Will use Heroku MongoDb
+; core> (kill-services)
+
 
 (ns core
   (:gen-class)

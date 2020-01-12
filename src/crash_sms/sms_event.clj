@@ -43,9 +43,9 @@
     (sms-send-fn SMS-TEST-CALL)))
 
 (defn build-web-scrape
-  [scrape-pages-fn my-db-obj pages-to-check sms-data under-test? date-time-fn]
-  (let [sms-send-fn (build-sms-send sms-data under-test?)
-        read-from-web? (not under-test?)]
+  [scrape-pages-fn my-db-obj pages-to-check sms-data testing-sms? date-time-fn]
+  (let [sms-send-fn (build-sms-send sms-data testing-sms?)
+        read-from-web? (not testing-sms?)]
     (fn web-scraper
       []
       (scrape-pages-fn my-db-obj
