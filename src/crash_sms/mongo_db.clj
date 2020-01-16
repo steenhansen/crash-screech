@@ -53,11 +53,8 @@
                              (mong-coll/insert db-handle table-name fixed-rec)))
 
 
-
     ;(comment "" ((:get-all my-db-obj) "2019-06-19-01-54-03"))
     ;(comment "" ((:get-all my-db-obj) "2019-05"))
-
-
         my-get-all (fn get-all [begins-with]
                      (s/assert string? begins-with)
                      (s/assert not-empty begins-with)

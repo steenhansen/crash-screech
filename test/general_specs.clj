@@ -43,9 +43,6 @@
 (def EDN-FILE-REGEX #"^\.(\.)?/[-a-zA-Z0-9]+\.edn$")
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;changed
 
 
 (s/def :url-date-tuple?/test-specs  (s/keys :req-un []
@@ -53,8 +50,6 @@
 
 
 
-
-;;;;changed
 
 
 (s/def :data-map?/test-specs  (s/keys :req-un []
@@ -92,7 +87,6 @@
                                            ::secret-key]))
 
 
-;; {} or (first ({a: 17}))
 
 
 (s/def :map-entry-or-emtpy?/test-specs (s/or :accum-environment  map?

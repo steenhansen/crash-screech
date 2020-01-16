@@ -27,8 +27,9 @@
                                                           config-file
                                                           environment-utilize)
          int-port (Integer/parseInt web-port)
-         testing-sms? true
-         web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
+         testing-sms? false
          under-test? false
-         express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data under-test? instant-time-fn)]
+         web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? under-test? instant-time-fn)
+         express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data
+                              testing-sms? under-test? instant-time-fn)]
      (web-init int-port express-server-fn))))

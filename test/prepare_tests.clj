@@ -10,18 +10,18 @@
 ; http://www.paullegato.com/blog/logging-clojure-clj-logging-config/
 
 (ns prepare-tests
-  (:require [clj-logging-config.log4j :as log-config]
-            [clojure.tools.logging :as log])
+  (:require [clj-logging-config.log4j :as log-config])
   (:require [clj-http.client :as http-client])
 
   (:require [clojure.string :as clj-str])
 
   (:require [global-consts-vars  :refer :all])
 
-;  (:require [core-test  :refer :all])
-
   (:require [crash-sms.data-store :refer :all])
   (:require [general-specs :refer :all]))
+
+
+(def ^:const SYSTEM-UNDER-TEST true)
 
 (def TEST-CHECK-PAGES [{:check-page WWW-SFFAUDIO-COM
                         :enlive-keys [:article :div.blog-item-wrap],
@@ -77,15 +77,10 @@
          "logs/foo.log"
          true)))
 
-
-;; reset-expected-to-actual-data
-
-
-(defn reset-test-to-actual-data
+(defn reset-expected-to-actual-data
   [test-file actual-data]
   (let  [test-path (str SCRAPED-TEST-DATA test-file)]
     (print-line test-file test-path)
- ; (spit test-path actual-data)
     ))
 
 (defn print-block

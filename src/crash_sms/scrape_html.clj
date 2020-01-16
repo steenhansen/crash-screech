@@ -173,4 +173,4 @@
       (Thread/sleep LOCAL-DATA-MOCKED-DELAY)          ; when doing a mocked test of data in file system, timestamps can be the same
       )
     (let [sms-mess-result (send-sms-message prev-errors-today? my-db-obj send-hello-sms? sms-send-fn)]
-      sms-mess-result)))   ;; testing looks at array returned
+      sms-mess-result)))

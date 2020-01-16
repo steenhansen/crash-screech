@@ -14,10 +14,6 @@
   (:require [crash-sms.years-months :refer [instant-time-fn]])
   (:require [crash-sms.sms-event :refer [build-sms-send build-web-scrape]]))
 
-; dev main, has scrape-pages-fn as an at-at scheduled job
-; (kill-services) will delete web-server and at-at-scheduled job
-
-
 (comment
   (-local-main USE_MONGER_DB LOCAL_CONFIG IGNORE-ENV-VARS)   "local monger db"
 
@@ -60,9 +56,9 @@
                      :the-accurate false,
                      :the-time 12346}]
          testing-sms? true
-         web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? instant-time-fn)
          under-test? false
-         express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data under-test? instant-time-fn)
+         web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? under-test? instant-time-fn)
+         express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data testing-sms? under-test? instant-time-fn)
          test-one {:the-url WWW-SFFAUDIO-COM
                    :the-date "2019-06-19-01:54:03.804Z",
                    :the-html "blah 5555",

@@ -12,8 +12,8 @@
   (:require [crash-sms.sms-event :refer [sms-to-phones]]))
 
 (comment "to send sms message to phone"
-         (-sms-test HEROKU_CONFIG)
-         (-sms-test HEROKU_CONFIG USE_ENVIRONMENT))
+         (-test-sms HEROKU_CONFIG)
+         (-test-sms HEROKU_CONFIG USE_ENVIRONMENT))
 
 (defn -test-sms
   ([config-file] (-test-sms config-file true))

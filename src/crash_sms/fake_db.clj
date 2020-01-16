@@ -1,7 +1,5 @@
 (ns crash-sms.fake-db
-
   (:require [clojure.spec.alpha :as s])
-
   (:require [clojure.string :as clj-str])
   (:require [crash-sms.config-args :refer [compact-hash]])
   (:require [crash-sms.check-data :refer [prepare-data trunc-string]])
@@ -39,13 +37,11 @@
                      (s/assert not-empty begins-with)
                      (let [begin-date (trunc-string begins-with DATE-MAX-LENGTH)
                            db-records @*fake-db-records*
-
                            filter-by-date (fn [a-record]
                                             (let [[id-key value] a-record
                                                   the-id (name id-key)]
                                               (clojure.string/starts-with? the-id begins-with)))
                            filtered-recs (filter filter-by-date db-records)
-
                            filtered-vals (vals filtered-recs)]
                        filtered-vals))
 

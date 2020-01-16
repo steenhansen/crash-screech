@@ -6,26 +6,30 @@ Compile:
         cider-ns-refresh
 
 Run:
-        core> (-local-main USE_MONGER_DB LOCAL_CONFIG)
+        core> (-local-main USE_MONGER_DB    LOCAL_CONFIG)
         core> (-local-main USE_AMAZONICA_DB LOCAL_CONFIG)
-        core> (-local-main USE_FAKE_DB LOCAL_CONFIG)
+        core> (-local-main USE_FAKE_DB      LOCAL_CONFIG)
+        core> (-local-main USE_MONGER_DB    HEROKU_CONFIG)
 
 Stop http://localhost:8080/ web-server:
-        core> (kill-services)
+        core> (kill-webserver)
 
 Test:
         cider-repl-set-ns core-test.clj
         cider-ns-reload-all
         cider-ns-refresh
 
-        Test project without a real database:
+        Test project quickly without a real database:
         core-test> (mock-tests)
 
         Test project with real Mongo & DynamoDb databases:
         core-test> (all-tests)
 
         Test single file
+        tests-web-server> (mock-tests)
+
+        Test single function
         tests-web-server> (clojure.test/test-vars [#'tests-web-server/real-html-correct])
 
 SMS:
-        core> (-sms-test HEROKU_CONFIG)        ; NB heroku-config.edn is outside project
+        core> (-test-sms HEROKU_CONFIG)        ; NB heroku-config.edn is outside project

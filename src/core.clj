@@ -27,7 +27,7 @@
   ; (kill-services) - kills cron and ring
  ; (:require [crash-sms.singular-service :refer [kill-services]])
 
-  ; (-local-heroku-main USE_MONGER_DB LOCAL_CONFIG)
+  ; (-local-heroku-main USE_MONGER_DB HEROKU_CONFIG)
   (:require [start-local-heroku-db :refer [-local-heroku-main]])
 
   ; (-local-main USE_MONGER_DB LOCAL_CONFIG)

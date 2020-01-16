@@ -142,8 +142,6 @@
       (unit-today-error USE_AMAZONICA_DB))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;
-
 
 (defn unit-put-item [db-object]
   (let [purge-table (:purge-table db-object)
@@ -188,9 +186,6 @@
 ;;;;;;;;;;;;;;;;
 
 
-;;;;;;;;;;;;;
-
-
 (defn unit-functions [db-object]
   (is (function? (:delete-table db-object)))
   (is (function? (:db-alive? db-object)))
@@ -223,7 +218,6 @@
         [func-count-1 func-count-2] (unit-functions dynamo-db)]
     (is (= func-count-1 func-count-2))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 (defn unit-get-items [db-object]

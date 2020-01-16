@@ -81,7 +81,6 @@
   (t/instrument 'first-error-today?)
   (t/instrument 'send-sms-message)
   (t/instrument 'scrape-pages-fn)
-
 ;
   )
 
@@ -123,12 +122,15 @@
                          :at-least fail-to-large}]
         [sms-data unit-get-actual-sms] (unit-sms-send-init pages-to-check db-type)
         read-from-web? false
-        expected-sms (make-api-call sms-data  SMS-FOUND-ERROR)]
+        expected-sms  {:till-url "https://platform.tillmobile.com/api/send?username=abcdefghijklmnopqrstuvwxyz1234&api_key=1234567890abcdefghijklmnopqrstuvwxyz1234",
+                       :sms-params {:form-params {:phone ["12345678901" "12345678901" "12345678901"],
+                                                  :text "Found an error - https://fathomless-woodland-85635.herokuapp.com/"},
+                                    :content-type :json}}]
     (let [actual-sms (unit-get-actual-sms read-from-web?)
           [text-diff-1 text-diff-2] (is-html-eq actual-sms expected-sms)]
       [text-diff-1 text-diff-2])))
 
-; (clojure.test/test-vars [#'tests-scrape-html/test-sms-send-fn])
+; (clojure.test/test-vars [#'tests-scrape-html/test-sms-send-fn-error])
 (deftest test-sms-send-fn-error
   (console-test  "scrape-html" "test-sms-send-fn-error")
   (let [[text-diff-1 text-diff-2] (unit-sms-send-fn-error  USE_FAKE_DB)]
@@ -150,14 +152,15 @@
                          :at-least pass-small}]
         [sms-data unit-get-actual-sms]  (unit-sms-send-init pages-to-check db-type)
         read-from-web? false
-        expected-sms (make-api-call sms-data SMS-NEW-MONTH)]
+        expected-sms  {:till-url "https://platform.tillmobile.com/api/send?username=abcdefghijklmnopqrstuvwxyz1234&api_key=1234567890abcdefghijklmnopqrstuvwxyz1234",
+                       :sms-params {:form-params {:phone ["12345678901" "12345678901" "12345678901"],
+                                                  :text "Start of a new month test! - https://fathomless-woodland-85635.herokuapp.com/"},
+                                    :content-type :json}}]
     (let [actual-sms (unit-get-actual-sms read-from-web?)
           [text-diff-1 text-diff-2] (is-html-eq actual-sms expected-sms)]
       [text-diff-1 text-diff-2])))
 
 ; (clojure.test/test-vars [#'tests-scrape-html/test-sms-send-fn-ok])
-
-
 (deftest test-sms-send-fn-ok
   (console-test "test-sms-send-fn-ok" "scrape-html")
   (let [[text-diff-1 text-diff-2] (unit-sms-send-fn-ok  USE_FAKE_DB)]

@@ -36,14 +36,14 @@
   (t/instrument 'make-config))
 
 (def ^:const TEST-MAKE-CONFIG
-  {:SEND_TEST_SMS_URL "/zxc"
+  {:SEND_TEST_SMS_URL "/sms-send-test"
    :PHONE_NUMBERS "12345678901,12345678901,12345678901"
    :HEROKU_APP_NAME "https://fathomless-woodland-85635.herokuapp.com/"
    :MONGODB_URI "mongodb://localhost:27017/local"
    :TILL_USERNAME "abcdefghijklmnopqrstuvwxyz1234"
    :TILL_API_KEY "1234567890abcdefghijklmnopqrstuvwxyz1234"
    :TILL_URL "https://platform.tillmobile.com/api/send"
-   :CRON_URL_DIR "/url-for-cron-execution"
+   :CRON_URL_DIR "/cron-execution-test"
    :TESTING_SMS true
    :PORT "8080"})
 
@@ -51,21 +51,18 @@
   {:amazonica-db {:access-key "local-access"
                   :endpoint "http://localhost:8000"
                   :secret-key "local-secret"}
-   :heroku-vars {:SEND_TEST_SMS_URL "/zxc",
+   :heroku-vars {:SEND_TEST_SMS_URL "/sms-send-test",
                  :PHONE_NUMBERS "12345678901,12345678901,12345678901",
                  :HEROKU_APP_NAME "https://fathomless-woodland-85635.herokuapp.com/"
                  :TILL_USERNAME "abcdefghijklmnopqrstuvwxyz1234"
                  :TILL_API_KEY "1234567890abcdefghijklmnopqrstuvwxyz1234"
                  :TILL_URL "https://platform.tillmobile.com/api/send"
-                 :CRON_URL_DIR "/url-for-cron-execution"
+                 :CRON_URL_DIR "/cron-execution-test"
                  :TESTING_SMS true,
+
                  :PORT "8080"},
    :fake-db {}
    :monger-db {:MONGODB_URI "mongodb://localhost:27017/local"}})
-
- ;; {:amazonica-db {:access-key "local-access",
- ;;                :endpoint "http://localhost:8000",
- ;;                :secret-key "local-secret"}, :heroku-vars {:SEND_TEST_SMS_URL "/zxc", :PHONE_NUMBERS "12345678901,12345678901,12345678901", :HEROKU_APP_NAME "https://fathomless-woodland-85635.herokuapp.com/", :TILL_USERNAME "abcdefghijklmnopqrstuvwxyz1234", :TILL_API_KEY "1234567890abcdefghijklmnopqrstuvwxyz1234", :TILL_URL "https://platform.tillmobile.com/api/send", :CRON_URL_DIR "/url-for-cron-execution", :TESTING_SMS true, :PORT "8080"}, :fake-db {}, :monger-db {:MONGODB_URI "mongodb://localhost:27017/local"}})
 
 ;  (clojure.test/test-vars [#'tests-config-args/t-read-config-file])
 (deftest test-read-config-file

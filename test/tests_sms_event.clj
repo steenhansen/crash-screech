@@ -29,6 +29,7 @@
                :my-db-obj map?
                :pages-to-check vector?
                :sms-data :sms-data?/test-specs
+               :testing-sms? boolean?
                :under-test? boolean?
                :date-time-fn function?))
 
@@ -114,7 +115,8 @@
                                            TEST-CONFIG-FILE
                                            USE_ENVIRONMENT)
         testing-sms? true
-        web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? (adjusted-date "2019-07-04T04:18:46.173Z"))]
+        under-test? true
+        web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? under-test? (adjusted-date "2019-07-04T04:18:46.173Z"))]
     (is (function? web-scraper-fn))))
 
 (defn all-tests []

@@ -2,7 +2,6 @@
 (ns tests-web-server
   (:require [clojure.test :refer :all])
   (:require [clojure.spec.alpha :as s]
-
             [clojure.spec.test.alpha :as t])
   (:require [global-consts-vars  :refer :all])
   (:require [crash-sms.data-store :refer [build-db]])
@@ -34,6 +33,7 @@
                :my-db-obj map?
                :cron-url string?
                :sms-data :sms-data?/test-specs  :sms-data :sms-data?/test-specs
+:testing-sms? boolean?
                :under-test? boolean?
                :the-date-func function?))
 
@@ -64,10 +64,10 @@
         purge-table (:purge-table my-db-obj)
         _ (purge-table)
         testing-sms? true
-        test-date-func (date-with-now-time-fn "2017-05-31")
-        web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? test-date-func)
         under-test? true
-        express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data under-test? test-date-func)
+        test-date-func (date-with-now-time-fn "2017-05-31")
+        web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? under-test? test-date-func)
+        express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data testing-sms? under-test? test-date-func)
         send-test-sms-url (:send-test-sms-url sms-data)
         web-page (express-server-fn  {:uri cron-url})
         the-body (:body web-page)
@@ -109,10 +109,10 @@
         purge-table (:purge-table my-db-obj)
         _   (purge-table)
         testing-sms? true
-        test-date-func (date-with-now-time-fn "2019-10-01")
-        web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? test-date-func)
         under-test? true
-        express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data under-test? test-date-func)
+        test-date-func (date-with-now-time-fn "2019-10-01")
+        web-scraper-fn (build-web-scrape scrape-pages-fn my-db-obj the-check-pages sms-data testing-sms? under-test? test-date-func)
+        express-server-fn (build-express-serve web-scraper-fn my-db-obj cron-url sms-data testing-sms? under-test? test-date-func)
         send-test-sms-url (:send-test-sms-url sms-data)
         web-page (express-server-fn  {:uri cron-url})
         the-body (:body web-page)
@@ -121,7 +121,7 @@
         conformed-actual (conform-whitespace the-body)
         conformed-expected (conform-whitespace file-expected)]
     (let [[text-diff-1 text-diff-2] (is-html-eq conformed-actual conformed-expected)]
-      [text-diff-1 text-diff-2] ;;;(is (= text-diff-1 text-diff-2))
+      [text-diff-1 text-diff-2]
       )))
 
 ;   (clojure.test/test-vars [#'tests-web-server/mock-db-html-wrong])
@@ -149,13 +149,15 @@
                     :enlive-keys SFFAUDIO-CHECK-KEYS
                     :at-least SFFAUDIO-AMOUNT}]
         testing-sms? true
+        under-test? true
         record-date (date-with-now-time-fn yyyy-mm-dd)
-        scrape-web (build-web-scrape scrape-pages-fn my-db-obj sff-audio sms-data testing-sms? record-date)]
+        scrape-web (build-web-scrape scrape-pages-fn my-db-obj sff-audio sms-data testing-sms? under-test? record-date)]
     (scrape-web)))
 
 (defn unit-make-pair [last-month-date this-month-date html-test-file db-type]
   (console-test  "web-server"  "unit-make-pair" db-type)
-  (let [under-test? true
+  (let [testing-sms? true
+          under-test? true
         sff-audio [{:check-page WWW-SFFAUDIO-COM
                     :enlive-keys SFFAUDIO-CHECK-KEYS
                     :at-least SFFAUDIO-AMOUNT}]
@@ -170,7 +172,7 @@
         _  (unit-save-record this-month-date my-db-obj sms-data db-type)
         test-date-func (date-with-now-time-fn this-month-date)
         web-scraper (fn [] ())
-        express-server-fn (build-express-serve web-scraper my-db-obj cron-url sms-data under-test? test-date-func)
+        express-server-fn (build-express-serve web-scraper my-db-obj cron-url sms-data testing-sms? under-test? test-date-func)
         send-test-sms-url (:send-test-sms-url sms-data)
         web-page (express-server-fn  {:uri cron-url})
         the-body (:body web-page)

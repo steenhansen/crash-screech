@@ -4,6 +4,9 @@
 ; C. in core_test.clj hit [F4] for cider-ns-reload-all
 ; B. in core_test.clj hit [F3] for cider-repl-set-ns
 
+; core-test> (mock-tests)
+
+
 ; core-test> (all-tests)
 
 ; core-test> (test-sms HEROKU_CONFIG)

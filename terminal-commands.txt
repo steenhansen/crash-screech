@@ -3,7 +3,7 @@ Lein:
         Compile, like a Heroku deploy:
         C:\crash-sms> lein uberjar
 
-        Java run from command line:
+        Run from command line:
         C:\crash-sms> java -jar ./target/uberjar/crash-sms.jar monger-db local-config.edn
 
         Lein run from command line:
