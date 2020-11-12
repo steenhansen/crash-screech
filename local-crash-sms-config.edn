@@ -3,14 +3,14 @@
 
 ; NB no dashes in HEROKU config vars
 
-; NB to use a real Heroku config file, with real passwords use, "../heroku-config.edn" which is outside of the repository
+; NB to use a real Heroku config file, with real passwords use, "../heroku-crash-sms-config.edn" which is outside of the repository
 
 {
   :amazonica-db {
     :access-key "local-access",
     :endpoint "http://localhost:8000",                 ; not used by Heroku
     :secret-key "local-secret"
-  },
+  }
 
   :heroku-vars {
     :CRON_URL_DIR "/cron-execution-test",                                ;re-written by Heroku config var
@@ -22,10 +22,11 @@
     :TILL_URL "https://platform.tillmobile.com/api/send"                 ;re-written by Heroku config var
     :TILL_USERNAME "abcdefghijklmnopqrstuvwxyz1234"                      ;re-written by Heroku config var
     :TESTING_SMS true
-  },
+  }
 
   :fake-db {}
 
-  :monger-db {
-    :MONGODB_URI "mongodb://localhost:27017/local"}   ;re-written by Heroku config var
+  :monger-db {    ;re-written by Heroku config var
+  	    :MONGODB_URI "mongodb+srv://_MY_ATLAS_USER_NAME_:_MY_ATLAS_PASSWORD_@_MY_ATLAS_DATABASE_NAME_.nbp4j.mongodb.net/_MY_ATLAS_COLLECTION_NAME_?retryWrites=true&w=majority"
+  }   
 }

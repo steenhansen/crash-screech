@@ -32,4 +32,4 @@ Test:
         tests-web-server> (clojure.test/test-vars [#'tests-web-server/real-html-correct])
 
 SMS:
-        core> (-test-sms HEROKU_CONFIG)        ; NB heroku-config.edn is outside project
+        core> (-test-sms HEROKU_CONFIG)        ; NB heroku-crash-sms-config.edn is outside project

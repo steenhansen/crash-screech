@@ -25,8 +25,8 @@
 (def ^:const USE_FAKE_DB "fake-db")
 (def ^:const USE_AMAZONICA_DB "amazonica-db")
 
-(def ^:const LOCAL_CONFIG "./local-config.edn")
-(def ^:const HEROKU_CONFIG "../heroku-config.edn")
+(def ^:const LOCAL_CONFIG "./local-crash-sms-config.edn")
+(def ^:const HEROKU_CONFIG "../heroku-crash-sms-config.edn")
 
 (def ^:const SCRAPED-TEST-DATA "./test/test-data/")
 
@@ -147,5 +147,5 @@
                          SFF-MEDIA]]
     the-check-pages))
 
-(def ^:const TEST-CONFIG-FILE "./local-config.edn")
+(def ^:const TEST-CONFIG-FILE "./local-crash-sms-config.edn")
 (def ^:const SMS-NO-ERROR [])

@@ -4,11 +4,11 @@ Lein:
         C:\crash-sms> lein uberjar
 
         Run from command line:
-        C:\crash-sms> java -jar ./target/uberjar/crash-sms.jar monger-db local-config.edn
+        C:\crash-sms> java -jar ./target/uberjar/crash-sms.jar monger-db local-crash-sms-config.edn
 
         Lein run from command line:
-	C:\crash-sms> lein run amazonica-db local-config.edn
- 	C:\crash-sms> lein run monger-db local-config.edn
+	C:\crash-sms> lein run amazonica-db local-crash-sms-config.edn
+ 	C:\crash-sms> lein run monger-db local-crash-sms-config.edn
 
         Code coverage:
         C:\crash-sms> lein cloverage
