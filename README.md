@@ -1,8 +1,10 @@
 ### Crash-sms ﻿﻿﻿
 
-Crash-sms is a Clojure program that runs on Heroku at https://fathomless-woodland-85635.herokuapp.com/ which checks a list of websites every 2 hours and texts a list of phones when a website does not conform to a valid state. Non cached website pages are checked for database, WordPress, and Node.js errors and or crashes. The Heroku add-on Till Mobile handles the SMS messaging, while Temporize Scheduler add-on handles the cron jobs.
 
 <a name='fast-start'></a>
+
+Crash-sms is a Clojure program that runs on Heroku at https://fathomless-woodland-85635.herokuapp.com/ which checks a list of websites every 2 hours and texts a list of phones when a website does not conform to a valid state. Non cached website pages are checked for database, WordPress, and Node.js errors and or crashes. The Heroku add-on Till Mobile handles the SMS messaging, while Temporize Scheduler add-on handles the cron jobs.
+
 
 System Setup:
 
