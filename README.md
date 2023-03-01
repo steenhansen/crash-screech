@@ -1,4 +1,4 @@
-### Crash-sms ﻿﻿﻿
+### Crash-sms - Deprecated
 
 
 <a name='fast-start'></a>
